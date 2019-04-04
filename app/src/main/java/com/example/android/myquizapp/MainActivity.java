@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -23,15 +25,20 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mListener;
     private String mUsername;
-   // private FirebaseDatabase mFirebaseDatabase;
-   // private DatabaseReference mDatabaseReference;
+    private String uniqueUserId;
+
+   private FirebaseDatabase mFirebaseDatabase;
+   private DatabaseReference mDatabaseReference;
+    //remove when add to database from results screen
+   private Button testButt;
     //Sign in Request code
     private static final int RC_SIGN_IN = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //remove when add to database from results screen
+        testButt = (Button) findViewById(R.id.testDatabaseAddition);
         mUsername = "ANON";
 
         mRecyclerView = (RecyclerView) findViewById(R.id.category_recycler_view);
@@ -41,13 +48,14 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         mRecyclerView.setHasFixedSize(true);
         mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(), QuizQuestionClass.getUserHighScores(), QuizQuestionClass.getGlobalHighScores(), this);
         mRecyclerView.setAdapter(mCategoryAdapter);
-       // mFirebaseDatabase = FirebaseDatabase.getInstance();
+       mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
-       // mDatabaseReference = mFirebaseDatabase.getReference().child("scores");
+
         mListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+                uniqueUserId = user.getUid();
                 if (user != null) {
                     onSignedInInit(user.getDisplayName());
                 } else {
@@ -57,6 +65,14 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
                 }
             }
         };
+        testButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDatabaseReference = mFirebaseDatabase.getReference().child(uniqueUserId);
+                QuizResult qr = new QuizResult("Sport", 60);
+                mDatabaseReference.push().setValue(qr);
+            }
+        });
     }
 
     //Helper methods to help sign in
