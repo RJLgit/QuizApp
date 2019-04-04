@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -16,13 +17,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
     private ArrayList<String> categories;
     private ArrayList<String> topUserScores;
     private ArrayList<String> topGlobalScores;
+    final private ListItemClickListener mListItemClickListener;
 
-    public CategoryAdapter(Context c, ArrayList<String> cat, ArrayList<String> topUser, ArrayList<String> topGlobal) {
+    public CategoryAdapter(Context c, ArrayList<String> cat, ArrayList<String> topUser, ArrayList<String> topGlobal, ListItemClickListener listener) {
         this.mContext = c;
         this.categories = cat;
         this.topUserScores = topUser;
         this.topGlobalScores = topGlobal;
-
+        mListItemClickListener = listener;
+    }
+    public interface ListItemClickListener {
+        void onListItemCLick (String cat);
     }
 
     @NonNull
@@ -47,7 +52,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
         return categories.size();
     }
 
-    public class CatViewHolder extends RecyclerView.ViewHolder {
+    public class CatViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mCategoryTextView;
         private TextView mUserHighScoreTextView;
         private TextView mGlobalHighScoreTextView;
@@ -57,6 +62,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
             mCategoryTextView = itemView.findViewById(R.id.CategoryNameTextView);
             mUserHighScoreTextView = itemView.findViewById(R.id.userHighScoreValueTextView);
             mGlobalHighScoreTextView = itemView.findViewById(R.id.globalHighScoreValueTextView);
+            itemView.setOnClickListener(this);
         }
 
         void bind(String cat, String userHigh, String globalHigh) {
@@ -65,6 +71,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
             mGlobalHighScoreTextView.setText(globalHigh);
         }
 
+        @Override
+        public void onClick(View view) {
+            int clickedPosition = getAdapterPosition();
+            String categoryClicked = categories.get(clickedPosition);
 
+            mListItemClickListener.onListItemCLick(categoryClicked);
+        }
     }
 }
