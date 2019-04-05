@@ -62,10 +62,15 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
                 if (user != null) {
                     uniqueUserId = user.getUid();
                     onSignedInInit(user.getDisplayName());
+                    updateActionBar();
                 } else {
                     startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
                             .setAvailableProviders(Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build(), new AuthUI.IdpConfig.EmailBuilder().build()))
                             .setIsSmartLockEnabled(false).build(), RC_SIGN_IN);
+                    if (user != null) {
+                        uniqueUserId = user.getUid();
+                        onSignedInInit(user.getDisplayName());
+                    }
                 }
             }
         };
@@ -77,6 +82,10 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
                 mDatabaseReference.push().setValue(qr);
             }
         });
+    }
+
+    void updateActionBar() {
+
     }
 
     @Override
