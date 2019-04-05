@@ -109,7 +109,10 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
             case R.id.sign_out_menu:
                 AuthUI.getInstance().signOut(this);
                 return true;
-            default:
+            case R.id.top_scores_menu:
+
+                return true;
+                default:
                 return super.onOptionsItemSelected(item);
         }
     }

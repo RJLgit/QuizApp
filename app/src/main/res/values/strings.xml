@@ -6,4 +6,5 @@
     <string name="global_high_score_label">Global high score</string>
     <string name="default_web_client_id">213505988047-60is1v76m78dle0sepc642u2uqm1rqb5.apps.googleusercontent.com</string>
     <string name="sign_out">Sign Out</string>
+    <string name="your_top_scores">Your top scores</string>
 </resources>
