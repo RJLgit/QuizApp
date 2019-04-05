@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="395dp"
+    android:layout_height="105dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="395dp"
+        android:layout_height="105dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/categoryScoresLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:padding="10dp"
+            android:text="@string/category_label"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/CategoryScoresNameTextView"
+            android:layout_width="273dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="@string/category_name"
+            android:textSize="20sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/categoryScoresLabelTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/categoryScoresLabelTextView" />
+
+        <TextView
+            android:id="@+id/userScoresHighScoreLabelTextView"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/user_high_score_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/categoryScoresLabelTextView" />
+
+        <TextView
+            android:id="@+id/dateHighScoreLabelTextView"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/date_obtained"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/userScoresHighScoreLabelTextView"
+            app:layout_constraintTop_toBottomOf="@+id/categoryScoresLabelTextView" />
+
+        <TextView
+            android:id="@+id/userScoresHighScoreValueTextView"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="44dp"
+            android:text="@string/score"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userScoresHighScoreLabelTextView" />
+
+        <TextView
+            android:id="@+id/dateHighScoreValueTextView"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Score"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/userScoresHighScoreValueTextView"
+            app:layout_constraintTop_toBottomOf="@+id/dateHighScoreLabelTextView" />
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>

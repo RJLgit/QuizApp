@@ -46,5 +46,18 @@ public class QuizQuestionClass {
         res.add("34");
         return res;
     }
-
+    public static ArrayList<String> getDates() {
+        ArrayList<String> res = new ArrayList<>();
+        res.add("12th Feb");
+        res.add("16th Mar");
+        res.add("23rd Sep");
+        res.add("1st Apr");
+        res.add("6th May");
+        res.add("24th Dec");
+        res.add("18th Jul");
+        res.add("26th Jan");
+        res.add("13th Feb");
+        res.add("28th Oct");
+        return res;
+    }
 }

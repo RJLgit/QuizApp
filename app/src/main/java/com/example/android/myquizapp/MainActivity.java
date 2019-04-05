@@ -110,7 +110,8 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
                 AuthUI.getInstance().signOut(this);
                 return true;
             case R.id.top_scores_menu:
-
+                Intent intent = new Intent(MainActivity.this, ScoresActivity.class);
+                startActivity(intent);
                 return true;
                 default:
                 return super.onOptionsItemSelected(item);
