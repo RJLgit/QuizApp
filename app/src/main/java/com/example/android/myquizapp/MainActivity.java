@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
                 return true;
             case R.id.top_scores_menu:
                 Intent intent = new Intent(MainActivity.this, ScoresActivity.class);
+                intent.putExtra("Username", mUsername);
                 startActivity(intent);
                 return true;
                 default:
