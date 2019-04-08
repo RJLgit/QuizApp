@@ -32,7 +32,7 @@ public class ScoresActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
         Intent i = getIntent();
-        if (i.hasExtra("Username")) {
+        if (i.hasExtra("Username") && (i.getStringExtra("Username") != null)) {
             ab.setSubtitle("Logged in as " + i.getStringExtra("Username").toString());
         }
     }
@@ -53,6 +53,7 @@ public class ScoresActivity extends AppCompatActivity {
                 return true;
             case R.id.top_scores_menu:
                 Intent intent = new Intent(this, ScoresActivity.class);
+                intent.putExtra("Username", getIntent().getStringExtra("Username"));
                 startActivity(intent);
                 return true;
             default:
