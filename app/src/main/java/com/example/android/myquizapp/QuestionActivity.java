@@ -38,6 +38,10 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
+        answerOne.setEnabled(false);
+        answerTwo.setEnabled(false);
+        answerThree.setEnabled(false);
+        answerFour.setEnabled(false);
         showCorrectAnswer();
 
         Button buttonPressed = (Button) view;
@@ -203,16 +207,6 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
         return answers;
     }
 
-    private void initButtons(Button b, Button b2, Button b3, Button b4) {
-        ArrayList<Button> buttons = new ArrayList<>();
-        buttons.add(b);
-        buttons.add(b2);
-        buttons.add(b3);
-        buttons.add(b4);
-        Collections.shuffle(buttons);
-        for (int j = 0; j < 4; j++) {
 
-        }
-    }
 }
 
