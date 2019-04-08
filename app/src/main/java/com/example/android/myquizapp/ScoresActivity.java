@@ -13,15 +13,19 @@ import android.view.MenuItem;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class ScoresActivity extends AppCompatActivity {
+public class ScoresActivity extends AppCompatActivity implements ScoresAdapter.ListItemClickListener {
 
-
+    private boolean mSplitScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scores);
-
+        if (findViewById(R.id.globalScoresFragmentContainer) != null) {
+            mSplitScreen = true;
+        } else {
+            mSplitScreen = false;
+        }
 
         TopScoresFragment topScoresFragment = new TopScoresFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -35,12 +39,30 @@ public class ScoresActivity extends AppCompatActivity {
         if (i.hasExtra("Username") && (i.getStringExtra("Username") != null)) {
             ab.setSubtitle("Logged in as " + i.getStringExtra("Username").toString());
         }
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
+    }
+
+    @Override
+    public void onListItemCLick(String cat) {
+        if (mSplitScreen) {
+            GlobalScoreFragment gbf = new GlobalScoreFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.globalScoresFragmentContainer, gbf)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, GlobalScoreActivity.class);
+            intent.putExtra("Category", cat);
+            intent.putExtra("Username", getIntent().getStringExtra("Username"));
+            startActivity(intent);
+        }
+        //Toast.makeText(getActivity(), "Category clicked " + cat, Toast.LENGTH_SHORT).show();
     }
 
     @Override

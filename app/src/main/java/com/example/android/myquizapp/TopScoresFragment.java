@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-public class TopScoresFragment extends Fragment implements ScoresAdapter.ListItemClickListener {
+public class TopScoresFragment extends Fragment {
 
     public TopScoresFragment() {
     }
@@ -27,17 +27,17 @@ public class TopScoresFragment extends Fragment implements ScoresAdapter.ListIte
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        ScoresAdapter mScoresAdapter = new ScoresAdapter(getActivity().getApplicationContext(), QuizQuestionClass.getCategories(), QuizQuestionClass.getUserHighScores(), QuizQuestionClass.getDates(), this);
+        ScoresAdapter mScoresAdapter = new ScoresAdapter(getActivity().getApplicationContext(), QuizQuestionClass.getCategories(), QuizQuestionClass.getUserHighScores(), QuizQuestionClass.getDates(), (ScoresActivity)getActivity());
         mRecyclerView.setAdapter(mScoresAdapter);
         return fView;
     }
 
-    @Override
+ /*   @Override
     public void onListItemCLick(String cat) {
         Intent intent = new Intent(getActivity(), GlobalScoreActivity.class);
         intent.putExtra("Category", cat);
         intent.putExtra("Username", getActivity().getIntent().getStringExtra("Username"));
         startActivity(intent);
         //Toast.makeText(getActivity(), "Category clicked " + cat, Toast.LENGTH_SHORT).show();
-    }
+    }*/
 }
