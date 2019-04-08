@@ -60,4 +60,84 @@ public class QuizQuestionClass {
         res.add("28th Oct");
         return res;
     }
+    public static ArrayList<String> getQuizQuestions() {
+        ArrayList<String> res = new ArrayList<>();
+        res.add("Who did this");
+        res.add("Who said this");
+        res.add("Who saw this");
+        res.add("Who landed here");
+        res.add("Who ran there");
+        res.add("Why did this happen");
+        res.add("How many of this");
+        res.add("What is the point of this");
+        res.add("How many did this");
+        res.add("Where was this");
+        return res;
+    }
+    public static ArrayList<String> getCorrectAnswers() {
+        ArrayList<String> res = new ArrayList<>();
+        res.add("Correct answer");
+        res.add("Correct answer");
+        res.add("Correct answer");
+        res.add("Correct answer");
+        res.add("Correct answer");
+        res.add("Correct answer");
+        res.add("Correct answer");
+        res.add("Correct answer");
+        res.add("Correct answer");
+        res.add("Correct answer");
+
+        return res;
+    }
+    public static ArrayList<String> getFirstFalseAnswer() {
+        ArrayList<String> res = new ArrayList<>();
+
+        res.add("false answer 1");
+        res.add("false answer 1");
+        res.add("false answer 1");
+        res.add("false answer 1");
+        res.add("false answer 1");
+        res.add("false answer 1");
+        res.add("false answer 1");
+        res.add("false answer 1");
+        res.add("false answer 1");
+        res.add("false answer 1");
+
+
+        return res;
+    }
+    public static ArrayList<String> getSecondFalseAnswer() {
+        ArrayList<String> res = new ArrayList<>();
+
+        res.add("false answer 2");
+        res.add("false answer 2");
+        res.add("false answer 2");
+        res.add("false answer 2");
+        res.add("false answer 2");
+        res.add("false answer 2");
+        res.add("false answer 2");
+        res.add("false answer 2");
+        res.add("false answer 2");
+        res.add("false answer 2");
+
+
+        return res;
+    }
+    public static ArrayList<String> getThirdFalseAnswer() {
+        ArrayList<String> res = new ArrayList<>();
+
+        res.add("false answer 3");
+        res.add("false answer 3");
+        res.add("false answer 3");
+        res.add("false answer 3");
+        res.add("false answer 3");
+        res.add("false answer 3");
+        res.add("false answer 3");
+        res.add("false answer 3");
+        res.add("false answer 3");
+        res.add("false answer 3");
+
+
+        return res;
+    }
 }
