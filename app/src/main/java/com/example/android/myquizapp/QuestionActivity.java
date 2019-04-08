@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class QuestionActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,7 +41,7 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
         showCorrectAnswer();
 
         Button buttonPressed = (Button) view;
-        if (buttonPressed.getId() == answerOne.getId()) {
+        if (buttonPressed.getText().equals(mCorrectAnswers.get(0))) {
             mCurrentScore++;
 
         }
@@ -70,22 +71,76 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void showCorrectAnswer() {
-        answerOne.getBackground().setColorFilter(ContextCompat.getColor
-                        (this, android.R.color.holo_green_light),
-                PorterDuff.Mode.MULTIPLY);
-        answerOne.setTextColor(Color.WHITE);
-        answerTwo.getBackground().setColorFilter(ContextCompat.getColor
-                        (this, android.R.color.holo_red_light),
-                PorterDuff.Mode.MULTIPLY);
+
+        if (answerOne.getText().equals(mCorrectAnswers.get(0))) {
+            answerOne.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_green_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerOne.setTextColor(Color.WHITE);
+            answerTwo.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_red_light),
+                    PorterDuff.Mode.MULTIPLY);
             answerTwo.setTextColor(Color.WHITE);
-        answerThree.getBackground().setColorFilter(ContextCompat.getColor
-                        (this, android.R.color.holo_red_light),
-                PorterDuff.Mode.MULTIPLY);
-        answerThree.setTextColor(Color.WHITE);
-        answerFour.getBackground().setColorFilter(ContextCompat.getColor
-                        (this, android.R.color.holo_red_light),
-                PorterDuff.Mode.MULTIPLY);
-        answerFour.setTextColor(Color.WHITE);
+            answerThree.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_red_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerThree.setTextColor(Color.WHITE);
+            answerFour.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_red_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerFour.setTextColor(Color.WHITE);
+        } else if (answerTwo.getText().equals(mCorrectAnswers.get(0))) {
+            answerTwo.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_green_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerTwo.setTextColor(Color.WHITE);
+            answerOne.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_red_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerOne.setTextColor(Color.WHITE);
+            answerThree.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_red_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerThree.setTextColor(Color.WHITE);
+            answerFour.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_red_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerFour.setTextColor(Color.WHITE);
+        } else if (answerThree.getText().equals(mCorrectAnswers.get(0))) {
+            answerThree.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_green_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerThree.setTextColor(Color.WHITE);
+            answerTwo.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_red_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerTwo.setTextColor(Color.WHITE);
+            answerOne.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_red_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerOne.setTextColor(Color.WHITE);
+            answerFour.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_red_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerFour.setTextColor(Color.WHITE);
+        } else if (answerFour.getText().equals(mCorrectAnswers.get(0))) {
+            answerFour.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_green_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerFour.setTextColor(Color.WHITE);
+            answerTwo.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_red_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerTwo.setTextColor(Color.WHITE);
+            answerThree.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_red_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerThree.setTextColor(Color.WHITE);
+            answerOne.getBackground().setColorFilter(ContextCompat.getColor
+                            (this, android.R.color.holo_red_light),
+                    PorterDuff.Mode.MULTIPLY);
+            answerOne.setTextColor(Color.WHITE);
+        }
     }
 
 
@@ -125,10 +180,11 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
         }
 
         questionTextView.setText(mRemainingQuestions.get(0));
-        answerOne.setText(mCorrectAnswers.get(0));
-        answerTwo.setText(mFalseAnswersOne.get(0));
-        answerThree.setText(mFalseAnswersTwo.get(0));
-        answerFour.setText(mFalseAnswersThree.get(0));
+        ArrayList<String> mAnswers = initAnswers();
+        answerOne.setText(mAnswers.get(0));
+        answerTwo.setText(mAnswers.get(1));
+        answerThree.setText(mAnswers.get(2));
+        answerFour.setText(mAnswers.get(3));
         answerOne.setOnClickListener(this);
         answerTwo.setOnClickListener(this);
         answerThree.setOnClickListener(this);
@@ -136,4 +192,27 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
 
 
     }
+
+    private ArrayList<String> initAnswers() {
+        ArrayList<String> answers = new ArrayList<String>();
+        answers.add(mCorrectAnswers.get(0));
+        answers.add(mFalseAnswersOne.get(0));
+        answers.add(mFalseAnswersTwo.get(0));
+        answers.add(mFalseAnswersThree.get(0));
+        Collections.shuffle(answers);
+        return answers;
+    }
+
+    private void initButtons(Button b, Button b2, Button b3, Button b4) {
+        ArrayList<Button> buttons = new ArrayList<>();
+        buttons.add(b);
+        buttons.add(b2);
+        buttons.add(b3);
+        buttons.add(b4);
+        Collections.shuffle(buttons);
+        for (int j = 0; j < 4; j++) {
+
+        }
+    }
 }
+
