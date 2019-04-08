@@ -35,6 +35,8 @@ public class TopScoresFragment extends Fragment implements ScoresAdapter.ListIte
     @Override
     public void onListItemCLick(String cat) {
         Intent intent = new Intent(getActivity(), GlobalScoreActivity.class);
+        intent.putExtra("Category", cat);
+        intent.putExtra("Username", getActivity().getIntent().getStringExtra("Username"));
         startActivity(intent);
         //Toast.makeText(getActivity(), "Category clicked " + cat, Toast.LENGTH_SHORT).show();
     }
