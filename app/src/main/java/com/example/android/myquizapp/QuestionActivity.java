@@ -23,10 +23,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class QuestionActivity extends AppCompatActivity implements View.OnClickListener {
 
 private static final String REMAINING_QUESTIONS_KEY = "remaining_questions";
+    private static final String CURRENT_QUESTION_KEY = "current_question";
+    private static final String QUESTIONS_TO_ASK_KEY = "all_questions";
 private static final int CORRECT_ANSWER_DELAY_MILLIS = 1000;
 private static final String TAG = "QuestionActivity";
 
@@ -40,7 +43,9 @@ private static final String TAG = "QuestionActivity";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference myRef = db.collection("QuizQuestions").document("Sport").collection("SportQuestions");
     public static int totalQuestions = 5;
-    private int currentQuestionNumber;
+    private int currentQuestionIndex;
+    private int questionsLeft;
+    private ArrayList<Integer> questionsToAsk;
 
 
     @Override
@@ -58,7 +63,8 @@ private static final String TAG = "QuestionActivity";
         }
         QuizUtils.setCurrentScore(getApplicationContext(), mCurrentScore);
         Toast.makeText(this, "Current score is " + QuizUtils.getCurrentScore(getApplicationContext()), Toast.LENGTH_SHORT).show();
-        currentQuestionNumber++;
+        questionsLeft--;
+        currentQuestionIndex++;
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -66,7 +72,9 @@ private static final String TAG = "QuestionActivity";
             public void run() {
 
                 Intent nextQuestionIntent = new Intent(QuestionActivity.this, QuestionActivity.class);
-                nextQuestionIntent.putExtra(REMAINING_QUESTIONS_KEY, currentQuestionNumber);
+                nextQuestionIntent.putExtra(QUESTIONS_TO_ASK_KEY, questionsToAsk);
+                nextQuestionIntent.putExtra(REMAINING_QUESTIONS_KEY, questionsLeft);
+                nextQuestionIntent.putExtra(CURRENT_QUESTION_KEY, currentQuestionIndex);
                 finish();
                 startActivity(nextQuestionIntent);
             }
@@ -161,23 +169,25 @@ private static final String TAG = "QuestionActivity";
 
         if (isNewGame) {
             QuizUtils.setCurrentScore(getApplicationContext(), 0);
-            currentQuestionNumber = 1;
+            questionsToAsk = generateQuestionsToAsk();
+            currentQuestionIndex = 0;
+            questionsLeft = QuestionActivity.totalQuestions;
 
 
         } else {
-            Log.d(TAG, "onCreate: no questions");
-
-            currentQuestionNumber = getIntent().getIntExtra(REMAINING_QUESTIONS_KEY, 1);
+            currentQuestionIndex = getIntent().getIntExtra(CURRENT_QUESTION_KEY, 1);
+            questionsLeft = getIntent().getIntExtra(REMAINING_QUESTIONS_KEY, 0);
+            questionsToAsk = getIntent().getIntegerArrayListExtra(QUESTIONS_TO_ASK_KEY);
         }
 
         mCurrentScore = QuizUtils.getCurrentScore(getApplicationContext());
 
-        if (currentQuestionNumber > QuestionActivity.totalQuestions) {
+        if (questionsLeft == 0) {
             Intent intent = new Intent(this, ResultActivity.class);
             intent.putExtra("CurrentScore", mCurrentScore);
             startActivity(intent);
         } else {
-            myRef.document("SportQuestion" + currentQuestionNumber).get()
+            myRef.document("SportQuestion" + questionsToAsk.get(currentQuestionIndex)).get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -205,6 +215,20 @@ private static final String TAG = "QuestionActivity";
             answerFour.setOnClickListener(this);
 
         }
+    }
+
+    private ArrayList<Integer> generateQuestionsToAsk() {
+        ArrayList<Integer> results = new ArrayList<>();
+
+        while (results.size() < totalQuestions) {
+            Random rn = new Random();
+            int answer = rn.nextInt(10) + 1;
+            Integer myInt = new Integer(answer);
+            if (!results.contains(myInt)) {
+                results.add(myInt);
+            }
+        }
+        return results;
     }
 
     private ArrayList<String> initAnswers(QuizQuestion question) {
