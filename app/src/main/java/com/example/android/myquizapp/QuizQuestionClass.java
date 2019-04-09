@@ -243,4 +243,20 @@ public class QuizQuestionClass {
 
         return res;
     }
+
+    public static int getNumberQuestions(String category) {
+        switch (category) {
+            case "History":
+                return 7;
+
+            case "Sport":
+                return 10;
+
+            default:
+                return 0;
+
+
+        }
+
+    }
 }

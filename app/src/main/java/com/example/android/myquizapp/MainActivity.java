@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     @Override
     public void onListItemCLick(String cat) {
         Intent i = new Intent(this, QuestionActivity.class);
+        i.putExtra("CategoryClicked", cat);
         startActivity(i);
         Toast.makeText(this, "Category clicked " + cat, Toast.LENGTH_SHORT).show();
     }
