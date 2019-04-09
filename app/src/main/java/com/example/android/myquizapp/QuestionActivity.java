@@ -199,6 +199,11 @@ private static final String TAG = "QuestionActivity";
                                 answerTwo.setText(mAnswers.get(1));
                                 answerThree.setText(mAnswers.get(2));
                                 answerFour.setText(mAnswers.get(3));
+
+                                answerOne.setOnClickListener(QuestionActivity.this);
+                                answerTwo.setOnClickListener(QuestionActivity.this);
+                                answerThree.setOnClickListener(QuestionActivity.this);
+                                answerFour.setOnClickListener(QuestionActivity.this);
                             }
                         }
                     })
@@ -209,10 +214,7 @@ private static final String TAG = "QuestionActivity";
                         }
                     });
 
-            answerOne.setOnClickListener(this);
-            answerTwo.setOnClickListener(this);
-            answerThree.setOnClickListener(this);
-            answerFour.setOnClickListener(this);
+
 
         }
     }
