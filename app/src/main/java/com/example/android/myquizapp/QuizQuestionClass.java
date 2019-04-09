@@ -1,8 +1,26 @@
 package com.example.android.myquizapp;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 public class QuizQuestionClass {
+    private static final String TAG = "QuizQuestionClass";
+    private static final String KEY_QUESTION = "Question";
+    private static final String KEY_CORRECT = "CorrectAnswer";
+    private static final String KEY_FALSE_ONE = "FalseAnswerOne";
+    private static final String KEY_FALSE_TWO = "FalseAnswerTwo";
+    private static final String KEY_FALSE_THREE = "FalseAnswerThree";
+    private static ArrayList<QuizQuestion> result = new ArrayList<>();
 
     public static ArrayList<String> getCategories() {
         ArrayList<String> res = new ArrayList<>();
@@ -60,8 +78,91 @@ public class QuizQuestionClass {
         res.add("28th Oct");
         return res;
     }
-    public static ArrayList<String> getQuizQuestions() {
-        ArrayList<String> res = new ArrayList<>();
+
+    public static ArrayList<QuizQuestion> getQuizQuestions() {
+        result.clear();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference myRef = db.collection("QuizQuestions").document("Sport").collection("SportQuestions");
+        //final ArrayList<QuizQuestion> res = new ArrayList<>();
+        //put this in a loop
+
+
+                myRef.document("SportQuestion1").get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    QuizQuestion quizQuestion = documentSnapshot.toObject(QuizQuestion.class);
+                            /*String q = documentSnapshot.getString(KEY_QUESTION);
+                            String correctA = documentSnapshot.getString(KEY_CORRECT);
+                            String falseOne = documentSnapshot.getString(KEY_FALSE_ONE);
+                            String falseTwo = documentSnapshot.getString(KEY_FALSE_TWO);
+                            String falseThree = documentSnapshot.getString(KEY_FALSE_THREE);
+                            QuizQuestion quizQuestion = new QuizQuestion(q, correctA, falseOne, falseTwo, falseThree);*/
+                                    result.add(quizQuestion);
+
+                                    Log.d(TAG, "onSuccess: happened" + result);
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(TAG, "onFailure: faileddd");
+                            }
+                        });
+
+                myRef.document("SportQuestion2").get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    QuizQuestion quizQuestion = documentSnapshot.toObject(QuizQuestion.class);
+                            /*String q = documentSnapshot.getString(KEY_QUESTION);
+                            String correctA = documentSnapshot.getString(KEY_CORRECT);
+                            String falseOne = documentSnapshot.getString(KEY_FALSE_ONE);
+                            String falseTwo = documentSnapshot.getString(KEY_FALSE_TWO);
+                            String falseThree = documentSnapshot.getString(KEY_FALSE_THREE);
+                            QuizQuestion quizQuestion = new QuizQuestion(q, correctA, falseOne, falseTwo, falseThree);*/
+                                    result.add(quizQuestion);
+
+                                    Log.d(TAG, "onSuccess: happened" + result);
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                myRef.document("SportQuestion3").get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    QuizQuestion quizQuestion = documentSnapshot.toObject(QuizQuestion.class);
+                            /*String q = documentSnapshot.getString(KEY_QUESTION);
+                            String correctA = documentSnapshot.getString(KEY_CORRECT);
+                            String falseOne = documentSnapshot.getString(KEY_FALSE_ONE);
+                            String falseTwo = documentSnapshot.getString(KEY_FALSE_TWO);
+                            String falseThree = documentSnapshot.getString(KEY_FALSE_THREE);
+                            QuizQuestion quizQuestion = new QuizQuestion(q, correctA, falseOne, falseTwo, falseThree);*/
+                                    result.add(quizQuestion);
+
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                Log.d(TAG, "getQuizQuestions: " + result);
+
+        return result;
+        /*ArrayList<String> res = new ArrayList<>();
         res.add("Who did this");
         res.add("Who said this");
         res.add("Who saw this");
@@ -72,8 +173,10 @@ public class QuizQuestionClass {
         res.add("What is the point of this");
         res.add("How many did this");
         res.add("Where was this");
-        return res;
+        return res;*/
     }
+
+
     public static ArrayList<String> getCorrectAnswers() {
         ArrayList<String> res = new ArrayList<>();
         res.add("Correct answer");

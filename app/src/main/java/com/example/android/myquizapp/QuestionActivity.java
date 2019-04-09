@@ -7,10 +7,15 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,8 +28,8 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
     private static final String FALSE_ANSWERS_TWO_KEY = "remaining_false_answers_two";
     private static final String FALSE_ANSWERS_THREE_KEY = "remaining_false_answers_three";
     private static final int CORRECT_ANSWER_DELAY_MILLIS = 1000;
-
-    private ArrayList<String> mRemainingQuestions;
+    private static final String TAG = "QuestionActivity";
+    private ArrayList<QuizQuestion> mRemainingQuestions;
     private ArrayList<String> mCorrectAnswers;
     private ArrayList<String> mFalseAnswersOne;
     private ArrayList<String> mFalseAnswersTwo;
@@ -35,6 +40,10 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
     private Button answerTwo;
     private Button answerThree;
     private Button answerFour;
+    private QuizQuestion currentQuestion;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference myRef = db.collection("QuizQuestions").document("Sport").collection("SportQuestions");
+
 
     @Override
     public void onClick(View view) {
@@ -63,6 +72,7 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
             public void run() {
 
                 Intent nextQuestionIntent = new Intent(QuestionActivity.this, QuestionActivity.class);
+
                 nextQuestionIntent.putExtra(REMAINING_QUESTIONS_KEY, mRemainingQuestions);
                 nextQuestionIntent.putExtra(CORRECT_ANSWERS_KEY, mCorrectAnswers);
                 nextQuestionIntent.putExtra(FALSE_ANSWERS_ONE_KEY, mFalseAnswersOne);
@@ -162,13 +172,16 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
 
         if (isNewGame) {
             QuizUtils.setCurrentScore(getApplicationContext(), 0);
+
             mRemainingQuestions = QuizQuestionClass.getQuizQuestions();
+            Log.d(TAG, "onCreate: " + mRemainingQuestions);
             mCorrectAnswers = QuizQuestionClass.getCorrectAnswers();
             mFalseAnswersOne = QuizQuestionClass.getFirstFalseAnswer();
             mFalseAnswersThree = QuizQuestionClass.getThirdFalseAnswer();
             mFalseAnswersTwo = QuizQuestionClass.getSecondFalseAnswer();
         } else {
-            mRemainingQuestions = getIntent().getStringArrayListExtra(REMAINING_QUESTIONS_KEY);
+            Log.d(TAG, "onCreate: no questions");
+            mRemainingQuestions = (ArrayList<QuizQuestion>) getIntent().getSerializableExtra(REMAINING_QUESTIONS_KEY);
             mCorrectAnswers = getIntent().getStringArrayListExtra(CORRECT_ANSWERS_KEY);
             mFalseAnswersOne = getIntent().getStringArrayListExtra(FALSE_ANSWERS_ONE_KEY);
             mFalseAnswersTwo = getIntent().getStringArrayListExtra(FALSE_ANSWERS_TWO_KEY);
@@ -181,30 +194,42 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
             Intent intent = new Intent(this, ResultActivity.class);
             intent.putExtra("CurrentScore", mCurrentScore);
             startActivity(intent);
+        } else {
+            Log.d(TAG, "onCreate: this code else");
+            currentQuestion = mRemainingQuestions.get(0);
+            questionTextView.setText(currentQuestion.getQuestion());
+            ArrayList<String> mAnswers = initAnswers(currentQuestion);
+            answerOne.setText(mAnswers.get(0));
+            answerTwo.setText(mAnswers.get(1));
+            answerThree.setText(mAnswers.get(2));
+            answerFour.setText(mAnswers.get(3));
+            answerOne.setOnClickListener(this);
+            answerTwo.setOnClickListener(this);
+            answerThree.setOnClickListener(this);
+            answerFour.setOnClickListener(this);
         }
+        //questionTextView.setText(mRemainingQuestions.get(0));
 
-        questionTextView.setText(mRemainingQuestions.get(0));
-        ArrayList<String> mAnswers = initAnswers();
-        answerOne.setText(mAnswers.get(0));
-        answerTwo.setText(mAnswers.get(1));
-        answerThree.setText(mAnswers.get(2));
-        answerFour.setText(mAnswers.get(3));
-        answerOne.setOnClickListener(this);
-        answerTwo.setOnClickListener(this);
-        answerThree.setOnClickListener(this);
-        answerFour.setOnClickListener(this);
 
 
     }
 
-    private ArrayList<String> initAnswers() {
+    private ArrayList<String> initAnswers(QuizQuestion question) {
         ArrayList<String> answers = new ArrayList<String>();
+        answers.add(question.getCorrectAnswer());
+        answers.add(question.getFalseAnswerOne());
+        answers.add(question.getFalseAnswerTwo());
+        answers.add(question.getFalseAnswerThree());
+        Collections.shuffle(answers);
+        return answers;
+
+       /* ArrayList<String> answers = new ArrayList<String>();
         answers.add(mCorrectAnswers.get(0));
         answers.add(mFalseAnswersOne.get(0));
         answers.add(mFalseAnswersTwo.get(0));
         answers.add(mFalseAnswersThree.get(0));
         Collections.shuffle(answers);
-        return answers;
+        return answers;*/
     }
 
 
