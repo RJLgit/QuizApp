@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     public void onListItemCLick(String cat) {
         Intent i = new Intent(this, QuestionActivity.class);
         i.putExtra("CategoryClicked", cat);
+        i.putExtra("Username", mUsername);
         startActivity(i);
         Toast.makeText(this, "Category clicked " + cat, Toast.LENGTH_SHORT).show();
     }

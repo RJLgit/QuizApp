@@ -6,14 +6,20 @@ import android.graphics.PorterDuff;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -47,7 +53,31 @@ private String category;
     private int currentQuestionIndex;
     private int questionsLeft;
     private ArrayList<Integer> questionsToAsk;
+    private String mUsername;
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sign_out_menu:
+                AuthUI.getInstance().signOut(this);
+                return true;
+            case R.id.top_scores_menu:
+                Intent intent = new Intent(QuestionActivity.this, ScoresActivity.class);
+                intent.putExtra("Username", mUsername);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public void onClick(View view) {
@@ -77,6 +107,7 @@ private String category;
                 nextQuestionIntent.putExtra(REMAINING_QUESTIONS_KEY, questionsLeft);
                 nextQuestionIntent.putExtra(CURRENT_QUESTION_KEY, currentQuestionIndex);
                 nextQuestionIntent.putExtra("CategoryClicked", category);
+                nextQuestionIntent.putExtra("Username", mUsername);
                 finish();
                 startActivity(nextQuestionIntent);
             }
@@ -168,7 +199,14 @@ private String category;
         answerFour = findViewById(R.id.buttonC);
         boolean isNewGame = !getIntent().hasExtra(REMAINING_QUESTIONS_KEY);
 
-
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_question);
+        myToolbar.setTitle("Answer this question");
+        setSupportActionBar(myToolbar);
+        ActionBar ab = getSupportActionBar();
+        if (getIntent().hasExtra("Username") && (getIntent().getStringExtra("Username") != null)) {
+            mUsername = getIntent().getStringExtra("Username");
+            ab.setSubtitle("Logged in as " + getIntent().getStringExtra("Username").toString());
+        }
         if (isNewGame) {
             QuizUtils.setCurrentScore(getApplicationContext(), 0);
 
@@ -192,6 +230,7 @@ private String category;
 
         if (questionsLeft == 0) {
             Intent intent = new Intent(this, ResultActivity.class);
+            intent.putExtra("Username", mUsername);
             intent.putExtra("CurrentScore", mCurrentScore);
             startActivity(intent);
         } else {
