@@ -101,8 +101,8 @@ public class ResultActivity extends AppCompatActivity {
                     res.setText(toDisplay);
                     if (yourHighScore) {
                         Map<String, Object> upd = new HashMap<>();
-                        upd.put(category, intPercentScore);
-                        myRes.setScoreByCategory(category, intPercentScore);
+                        upd.put(category.toLowerCase(), intPercentScore);
+
                         documentReference.set(upd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -140,8 +140,8 @@ public class ResultActivity extends AppCompatActivity {
                                 res.setText(toDisplay);
                                 if (yourHighScore) {
                                     Map<String, Object> upd = new HashMap<>();
-                                    upd.put(category, intPercentScore);
-                                    myRes.setScoreByCategory(category, intPercentScore);
+                                    upd.put(category.toLowerCase(), intPercentScore);
+                                    
                                     documentReference.set(upd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
