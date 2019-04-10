@@ -6,21 +6,27 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
 
 public class ResultActivity extends AppCompatActivity {
-
+    private static final String TAG = "ResultActivity";
     TextView res;
     private String mUsername;
     private String uniqueUserId;
@@ -29,50 +35,83 @@ public class ResultActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mListener;
     private float percentScore;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private DocumentReference documentReference;
     private static final int RC_SIGN_IN = 1;
-
+    private int myScore;
+    private String category;
+    private int intPercentScore;
+    boolean yourHighScore = false;
+    boolean globalHighScore = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
+        mFirebaseAuth = FirebaseAuth.getInstance();
+
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        uniqueUserId = user.getUid();
+
         res = findViewById(R.id.resultsTextView);
         Intent intent = getIntent();
+        category = intent.getStringExtra("Category");
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_results);
         myToolbar.setTitle("Here is your result");
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
 
-        percentScore = (intent.getIntExtra("CurrentScore", 0)/QuestionActivity.totalQuestions) * 100;
-        int intPercentScore = Math.round(percentScore);
+        myScore = intent.getIntExtra("CurrentScore", 0);
+
+        Log.d(TAG, "onCreate: " + myScore);
+        percentScore =  ((float) myScore/ (float) QuestionActivity.totalQuestions) * 100;
+        Log.d(TAG, "onCreate: " + percentScore);
+        intPercentScore = Math.round(percentScore);
+        Log.d(TAG, "onCreate: " + intPercentScore);
+
+        documentReference = db.collection("TopScores").document(uniqueUserId);
+
+        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    String toDisplay;
+                    TopScores myRes = documentSnapshot.toObject(TopScores.class);
+                    int highScore = myRes.getScoreByCategory(category);
+                    Log.d(TAG, "onSuccess: " + intPercentScore);
+                    if (intPercentScore > highScore) {
+                        yourHighScore = true;
+                    }
+                    if (yourHighScore && !globalHighScore) {
+                        toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is your new top score!";
+
+                    } else if (globalHighScore) {
+                        toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is the highest score ever achieved!";
+                    } else {
+                        toDisplay = "Your Score was " + intPercentScore + " percent!" + "\n" + "This is not a high score.";
+                    }
+                    res.setText(toDisplay);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
 
         if (intent.hasExtra("Username") && (intent.getStringExtra("Username") != null)) {
             mUsername = intent.getStringExtra("Username");
             ab.setSubtitle("Logged in as " + intent.getStringExtra("Username").toString());
         }
-        if (intent.hasExtra("CurrentScore")) {
-            boolean yourHighScore = false;
-            boolean globalHighScore = false;
-            String toDisplay;
-            if (yourHighScore && !globalHighScore) {
-                toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is your new top score!";
-            } else if (globalHighScore) {
-                toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is the highest score ever achieved!";
-            } else {
-                toDisplay = "Your Score was " + intPercentScore + " percent!" + "\n" + "This is not a high score.";
-            }
-                res.setText(toDisplay);
-        }
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        FirebaseUser user = mFirebaseAuth.getCurrentUser();
-        uniqueUserId = user.getUid();
+        
 
 
 
-        mDatabaseReference = mFirebaseDatabase.getReference().child(uniqueUserId);
+
+        /*mDatabaseReference = mFirebaseDatabase.getReference().child(uniqueUserId);
         QuizResult qr = new QuizResult(intent.getStringExtra("Category"), intPercentScore);
-        mDatabaseReference.push().setValue(qr);
+        mDatabaseReference.push().setValue(qr);*/
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
