@@ -68,4 +68,10 @@ public class ResultActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ResultActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
 }
