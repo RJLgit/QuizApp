@@ -232,6 +232,7 @@ private String category;
             Intent intent = new Intent(this, ResultActivity.class);
             intent.putExtra("Username", mUsername);
             intent.putExtra("CurrentScore", mCurrentScore);
+            intent.putExtra("Category", category);
             startActivity(intent);
         } else {
             myRef.document(category + "Question" + questionsToAsk.get(currentQuestionIndex)).get()
