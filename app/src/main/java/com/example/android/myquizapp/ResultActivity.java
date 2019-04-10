@@ -23,8 +23,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ResultActivity extends AppCompatActivity {
     private static final String TAG = "ResultActivity";
@@ -93,8 +96,10 @@ public class ResultActivity extends AppCompatActivity {
                     }
                     res.setText(toDisplay);
                     if (yourHighScore) {
+                        Map<String, Object> upd = new HashMap<>();
+                        upd.put(category, intPercentScore);
                         myRes.setScoreByCategory(category, intPercentScore);
-                        documentReference.set(myRes).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        documentReference.set(upd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(ResultActivity.this, "Updated db", Toast.LENGTH_SHORT).show();
