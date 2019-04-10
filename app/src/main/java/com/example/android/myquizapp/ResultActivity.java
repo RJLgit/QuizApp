@@ -74,10 +74,10 @@ public class ResultActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: " + intPercentScore);
 
         documentReference = db.collection("TopScores").document(uniqueUserId);
-        if (documentReference == null) {
+        /*if (documentReference.get() == null) {
             TopScores nTopScores = new TopScores(0, 0,0 , 0, 0, 0, 0, 0, 0, 0);
             db.collection("TopScores").document(uniqueUserId).set(nTopScores);
-        }
+        }*/
 
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -115,14 +115,59 @@ public class ResultActivity extends AppCompatActivity {
                             }
                         });
                     }
+                } else {
+                    TopScores nTopScores = new TopScores(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                    db.collection("TopScores").document(uniqueUserId).set(nTopScores);
+                    documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                String toDisplay;
+                                TopScores myRes = documentSnapshot.toObject(TopScores.class);
+                                int highScore = myRes.getScoreByCategory(category);
+                                Log.d(TAG, "onSuccess: " + intPercentScore);
+                                if (intPercentScore > highScore) {
+                                    yourHighScore = true;
+                                }
+                                if (yourHighScore && !globalHighScore) {
+                                    toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is your new top score!";
+
+                                } else if (globalHighScore) {
+                                    toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is the highest score ever achieved!";
+                                } else {
+                                    toDisplay = "Your Score was " + intPercentScore + " percent!" + "\n" + "This is not a high score.";
+                                }
+                                res.setText(toDisplay);
+                                if (yourHighScore) {
+                                    Map<String, Object> upd = new HashMap<>();
+                                    upd.put(category, intPercentScore);
+                                    myRes.setScoreByCategory(category, intPercentScore);
+                                    documentReference.set(upd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(ResultActivity.this, "Updated db", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
+
+
                 }
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-            }
         });
+
 
         if (intent.hasExtra("Username") && (intent.getStringExtra("Username") != null)) {
             mUsername = intent.getStringExtra("Username");
