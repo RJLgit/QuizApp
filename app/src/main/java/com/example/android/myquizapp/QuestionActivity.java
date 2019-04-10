@@ -68,6 +68,8 @@ private String category;
         switch (item.getItemId()) {
             case R.id.sign_out_menu:
                 AuthUI.getInstance().signOut(this);
+                Intent i = new Intent(QuestionActivity.this, MainActivity.class);
+                startActivity(i);
                 return true;
             case R.id.top_scores_menu:
                 Intent intent = new Intent(QuestionActivity.this, ScoresActivity.class);

@@ -74,6 +74,10 @@ public class ResultActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: " + intPercentScore);
 
         documentReference = db.collection("TopScores").document(uniqueUserId);
+        if (documentReference == null) {
+            TopScores nTopScores = new TopScores(0, 0,0 , 0, 0, 0, 0, 0, 0, 0);
+            db.collection("TopScores").document(uniqueUserId).set(nTopScores);
+        }
 
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -145,6 +149,8 @@ public class ResultActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.sign_out_menu:
                 AuthUI.getInstance().signOut(this);
+                Intent i = new Intent(ResultActivity.this, MainActivity.class);
+                startActivity(i);
                 return true;
             case R.id.top_scores_menu:
                 Intent intent = new Intent(ResultActivity.this, ScoresActivity.class);
