@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -91,6 +92,20 @@ public class ResultActivity extends AppCompatActivity {
                         toDisplay = "Your Score was " + intPercentScore + " percent!" + "\n" + "This is not a high score.";
                     }
                     res.setText(toDisplay);
+                    if (yourHighScore) {
+                        myRes.setScoreByCategory(category, intPercentScore);
+                        documentReference.set(myRes).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(ResultActivity.this, "Updated db", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                    }
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {

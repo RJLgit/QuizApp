@@ -1,5 +1,7 @@
 package com.example.android.myquizapp;
 
+import android.util.Log;
+
 public class TopScores {
     private int Sport;
     private int Music;
@@ -132,5 +134,32 @@ public class TopScores {
 
     public void setTV(int TV) {
         this.TV = TV;
+    }
+
+    public void setScoreByCategory(String cat, int intPercentScore) {
+        switch (cat) {
+            case "Sport":
+                setSport(intPercentScore);
+            case "Music":
+                setMusic(intPercentScore);
+            case "Nature":
+                setNature(intPercentScore);
+            case "History":
+                setHistory(intPercentScore);
+            case "Geography":
+                setGeography(intPercentScore);
+            case "Technology":
+                setTechnology(intPercentScore);
+            case "People":
+                setPeople(intPercentScore);
+            case "Pictures":
+                setPictures(intPercentScore);
+            case "Films":
+                setFilms(intPercentScore);
+            case "TV":
+                setTV(intPercentScore);
+            default:
+                Log.d("Top Scores", "setScoreByCategory: default reached");
+        }
     }
 }
