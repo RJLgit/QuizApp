@@ -1,6 +1,7 @@
 package com.example.android.myquizapp;
 
 import android.content.Intent;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,7 @@ public class ResultActivity extends AppCompatActivity {
     private float percentScore;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DocumentReference documentReference;
+    private DocumentReference globalDocumentReference;
     private static final int RC_SIGN_IN = 1;
     private int myScore;
     private String category;
@@ -73,7 +75,7 @@ public class ResultActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: " + percentScore);
         intPercentScore = Math.round(percentScore);
         Log.d(TAG, "onCreate: " + intPercentScore);
-
+        globalDocumentReference = db.collection("TopScores").document(category.toLowerCase());
         documentReference = db.collection("TopScores").document(uniqueUserId);
         /*if (documentReference.get() == null) {
             TopScores nTopScores = new TopScores(0, 0,0 , 0, 0, 0, 0, 0, 0, 0);
@@ -84,62 +86,20 @@ public class ResultActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
-                    String toDisplay;
+
                     TopScores myRes = documentSnapshot.toObject(TopScores.class);
-                    int highScore = myRes.getScoreByCategory(category);
+                    final int highScore = myRes.getScoreByCategory(category);
                     Log.d(TAG, "onSuccess: " + intPercentScore);
-                    if (intPercentScore > highScore) {
-                        yourHighScore = true;
-                    }
-                    if (yourHighScore && !globalHighScore) {
-                        toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is your new top score!";
-
-                    } else if (globalHighScore) {
-                        toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is the highest score ever achieved!";
-                    } else {
-                        toDisplay = "Your Score was " + intPercentScore + " percent!" + "\n" + "This is not a high score.";
-                    }
-                    res.setText(toDisplay);
-                    if (yourHighScore) {
-                        Map<String, Object> upd = new HashMap<>();
-                        upd.put(category.toLowerCase(), intPercentScore);
-
-                        documentReference.set(upd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(ResultActivity.this, "Updated db", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
-                        Map<String, Object> upd2 = new HashMap<>();
-                        upd2.put(category.toLowerCase() + "dateUpdated", new Date().toString());
-                        documentReference.set(upd2, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(ResultActivity.this, "Updated db date", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
-                    }
-                } else {
-                    TopScores nTopScores = new TopScores(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-                    db.collection("TopScores").document(uniqueUserId).set(nTopScores);
-                    documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    globalDocumentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists()) {
                                 String toDisplay;
-                                TopScores myRes = documentSnapshot.toObject(TopScores.class);
-                                int highScore = myRes.getScoreByCategory(category);
-                                Log.d(TAG, "onSuccess: " + intPercentScore);
+                                GlobalScores gblScores = documentSnapshot.toObject(GlobalScores.class);
+                                int topS = gblScores.getScore();
+                                if (intPercentScore > topS) {
+                                    globalHighScore = true;
+                                }
                                 if (intPercentScore > highScore) {
                                     yourHighScore = true;
                                 }
@@ -155,7 +115,7 @@ public class ResultActivity extends AppCompatActivity {
                                 if (yourHighScore) {
                                     Map<String, Object> upd = new HashMap<>();
                                     upd.put(category.toLowerCase(), intPercentScore);
-                                    
+
                                     documentReference.set(upd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
@@ -167,12 +127,12 @@ public class ResultActivity extends AppCompatActivity {
 
                                         }
                                     });
-                                    Map<String, Object> upd2 = new HashMap<>();
-                                    upd2.put(category.toLowerCase() + "dateUpdated", new Date().toString());
-                                    documentReference.set(upd2, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    Map<String, Object> updateDate = new HashMap<>();
+                                    updateDate.put(category.toLowerCase() + "dateUpdated", new Date().toString());
+                                    documentReference.set(updateDate, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Toast.makeText(ResultActivity.this, "Updated db date", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(ResultActivity.this, "Updated db", Toast.LENGTH_SHORT).show();
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
@@ -181,6 +141,93 @@ public class ResultActivity extends AppCompatActivity {
                                         }
                                     });
                                 }
+                                if (globalHighScore) {
+                                    GlobalScores updGlobal = new GlobalScores(new Date().toString(), intPercentScore, mFirebaseAuth.getCurrentUser().getDisplayName());
+                                    globalDocumentReference.set(updGlobal, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(ResultActivity.this, "Updated global", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+
+                } else {
+                    TopScores nTopScores = new TopScores(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                    db.collection("TopScores").document(uniqueUserId).set(nTopScores);
+                    documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+
+                                TopScores myRes = documentSnapshot.toObject(TopScores.class);
+                                final int highScore = myRes.getScoreByCategory(category);
+                                Log.d(TAG, "onSuccess: " + intPercentScore);
+                                globalDocumentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot.exists()) {
+                                            String toDisplay;
+                                            GlobalScores gblScores = documentSnapshot.toObject(GlobalScores.class);
+                                            int topS = gblScores.getScore();
+                                            if (intPercentScore > topS) {
+                                                globalHighScore = true;
+                                            }
+                                            if (intPercentScore > highScore) {
+                                                yourHighScore = true;
+                                            }
+                                            if (yourHighScore && !globalHighScore) {
+                                                toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is your new top score!";
+
+                                            } else if (globalHighScore) {
+                                                toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is the highest score ever achieved!";
+                                            } else {
+                                                toDisplay = "Your Score was " + intPercentScore + " percent!" + "\n" + "This is not a high score.";
+                                            }
+                                            res.setText(toDisplay);
+                                            if (yourHighScore) {
+                                                Map<String, Object> upd = new HashMap<>();
+                                                upd.put(category.toLowerCase(), intPercentScore);
+
+                                                documentReference.set(upd, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Toast.makeText(ResultActivity.this, "Updated db", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+
+                                                    }
+                                                });
+                                                Map<String, Object> updateDate = new HashMap<>();
+                                                updateDate.put(category.toLowerCase() + "dateUpdated", new Date().toString());
+                                                documentReference.set(updateDate, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Toast.makeText(ResultActivity.this, "Updated db", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+
+                                                    }
+                                                });
+                                            }
+                                            if (globalHighScore) {
+                                                GlobalScores updGlobal = new GlobalScores(new Date().toString(), intPercentScore, mFirebaseAuth.getCurrentUser().getDisplayName());
+                                                globalDocumentReference.set(updGlobal, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Toast.makeText(ResultActivity.this, "Updated global", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }
+                                });
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -209,6 +256,7 @@ public class ResultActivity extends AppCompatActivity {
         QuizResult qr = new QuizResult(intent.getStringExtra("Category"), intPercentScore);
         mDatabaseReference.push().setValue(qr);*/
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
