@@ -8,7 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ScoresAdapter extends RecyclerView.Adapter<ScoresAdapter.ScoresViewHolder> {
 
@@ -17,6 +26,10 @@ public class ScoresAdapter extends RecyclerView.Adapter<ScoresAdapter.ScoresView
     private ArrayList<String> topUserScores;
     private ArrayList<String> dates;
     final private ScoresAdapter.ListItemClickListener mListItemClickListener;
+    FirebaseFirestore db;
+    private DocumentReference myRef;
+    private FirebaseAuth mFirebaseAuth;
+    private String uniqueUserId;
 
     public ScoresAdapter(Context c, ArrayList<String> cat, ArrayList<String> topUser, ArrayList<String> d, ScoresAdapter.ListItemClickListener listener) {
         this.mContext = c;
@@ -35,11 +48,38 @@ public class ScoresAdapter extends RecyclerView.Adapter<ScoresAdapter.ScoresView
         int layoutForListItem = R.layout.top_scores_item;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(layoutForListItem, viewGroup, false);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        uniqueUserId = user.getUid();
+        db = FirebaseFirestore.getInstance();
+        myRef = db.collection("TopScores").document(uniqueUserId);
         return new ScoresAdapter.ScoresViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ScoresAdapter.ScoresViewHolder scoresViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ScoresAdapter.ScoresViewHolder scoresViewHolder, final int i) {
+        myRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            TopScores myScores = documentSnapshot.toObject(TopScores.class);
+                            int scor = myScores.getScoreByCategory(categories.get(i));
+                            String myScore = scor + "";
+                            String dte = documentSnapshot.getString(categories.get(i).toLowerCase() + "dateUpdated");
+                            if (dte != null) {
+
+                                scoresViewHolder.bind(categories.get(i), myScore, dte);
+                            } else {
+                                scoresViewHolder.bind(categories.get(i), myScore, "Not set");
+                            }
+                        } else {
+                            TopScores newScores = new TopScores(0, 0, 0, 0, 0, 0 , 0, 0 , 0, 0);
+                            myRef.set(newScores);
+                            scoresViewHolder.bind(categories.get(i), "0", "Not set");
+                        }
+                    }
+                });
         scoresViewHolder.bind(categories.get(i), topUserScores.get(i), dates.get(i));
     }
 
