@@ -28,6 +28,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
     final private ListItemClickListener mListItemClickListener;
     FirebaseFirestore db;
     private DocumentReference myRef;
+    private CollectionReference globalRef;
     private FirebaseAuth mFirebaseAuth;
     private String uniqueUserId;
 
@@ -53,7 +54,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         uniqueUserId = user.getUid();
         myRef = db.collection("TopScores").document(uniqueUserId);
-
+        globalRef = db.collection("TopScores");
         View view = inflater.inflate(layoutForListItem, viewGroup, false);
         return new CatViewHolder(view);
     }
@@ -67,12 +68,36 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
                         if (documentSnapshot.exists()) {
                             TopScores myScores = documentSnapshot.toObject(TopScores.class);
                             int scor = myScores.getScoreByCategory(categories.get(i));
-                            String myScore = scor + "";
-                            catViewHolder.bind(categories.get(i), myScore, topGlobalScores.get(i));
+                            final String myScore = scor + "";
+                            DocumentReference globalDocRef = globalRef.document(categories.get(i).toLowerCase());
+                            globalDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if (documentSnapshot.exists()) {
+                                        GlobalScores gblScores = documentSnapshot.toObject(GlobalScores.class);
+                                        int gblScore = gblScores.getScore();
+                                        String globalScore = gblScore + "";
+                                        catViewHolder.bind(categories.get(i), myScore, globalScore);
+                                    }
+                                }
+                            });
+
                         } else {
                             TopScores newScores = new TopScores(0, 0, 0, 0, 0, 0 , 0, 0 , 0, 0);
                             myRef.set(newScores);
-                            catViewHolder.bind(categories.get(i), "0", topGlobalScores.get(i));
+                            DocumentReference globalDocRef = globalRef.document(categories.get(i).toLowerCase());
+                            globalDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if (documentSnapshot.exists()) {
+                                        GlobalScores gblScores = documentSnapshot.toObject(GlobalScores.class);
+                                        int gblScore = gblScores.getScore();
+                                        String globalScore = gblScore + "";
+                                        catViewHolder.bind(categories.get(i), "0", globalScore);
+                                    }
+                                }
+                            });
+                            
                         }
                     }
                 });
