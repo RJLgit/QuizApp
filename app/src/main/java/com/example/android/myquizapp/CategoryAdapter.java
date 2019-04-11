@@ -9,6 +9,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatViewHolder> {
@@ -18,6 +26,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
     private ArrayList<String> topUserScores;
     private ArrayList<String> topGlobalScores;
     final private ListItemClickListener mListItemClickListener;
+    FirebaseFirestore db;
+    private DocumentReference myRef;
+    private FirebaseAuth mFirebaseAuth;
+    private String uniqueUserId;
 
     public CategoryAdapter(Context c, ArrayList<String> cat, ArrayList<String> topUser, ArrayList<String> topGlobal, ListItemClickListener listener) {
         this.mContext = c;
@@ -35,13 +47,36 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
     public CatViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         int layoutForListItem = R.layout.recycler_view_item;
         LayoutInflater inflater = LayoutInflater.from(mContext);
+        db = FirebaseFirestore.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        uniqueUserId = user.getUid();
+        myRef = db.collection("TopScores").document(uniqueUserId);
+
         View view = inflater.inflate(layoutForListItem, viewGroup, false);
         return new CatViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CatViewHolder catViewHolder, int i) {
-        catViewHolder.bind(categories.get(i), topUserScores.get(i), topGlobalScores.get(i));
+    public void onBindViewHolder(@NonNull final CatViewHolder catViewHolder, final int i) {
+        myRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            TopScores myScores = documentSnapshot.toObject(TopScores.class);
+                            int scor = myScores.getScoreByCategory(categories.get(i));
+                            String myScore = scor + "";
+                            catViewHolder.bind(categories.get(i), myScore, topGlobalScores.get(i));
+                        } else {
+                            TopScores newScores = new TopScores(0, 0, 0, 0, 0, 0 , 0, 0 , 0, 0);
+                            myRef.set(newScores);
+                            catViewHolder.bind(categories.get(i), "0", topGlobalScores.get(i));
+                        }
+                    }
+                });
+
     }
 
     @Override
