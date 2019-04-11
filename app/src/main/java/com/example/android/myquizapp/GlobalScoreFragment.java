@@ -14,10 +14,20 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.w3c.dom.Text;
 
 public class GlobalScoreFragment extends Fragment {
-
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private DocumentReference documentReference;
+    private FirebaseAuth mFirebaseAuth;
+    private String uniqueUserId;
 
     public GlobalScoreFragment() {
     }
@@ -26,12 +36,39 @@ public class GlobalScoreFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fView = inflater.inflate(R.layout.fragment_global_scores, container, false);
-        TextView value = fView.findViewById(R.id.globalScoreValue);
-        TextView person = fView.findViewById(R.id.globalScorePerson);
-        TextView date = fView.findViewById(R.id.globalScoreDate);
+        final TextView value = fView.findViewById(R.id.globalScoreValue);
+        final TextView person = fView.findViewById(R.id.globalScorePerson);
+        final TextView date = fView.findViewById(R.id.globalScoreDate);
 
         Button backToMain = fView.findViewById(R.id.backToMainActButt);
         Button startQuizRound = fView.findViewById(R.id.startQuizButton);
+        Intent i = getActivity().getIntent();
+       /* mFirebaseAuth = FirebaseAuth.getInstance();
+        uniqueUserId = mFirebaseAuth.getCurrentUser().getUid();*/
+        documentReference = db.collection("TopScores").document(i.getStringExtra("Category").toLowerCase());
+        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    GlobalScores glbScores = documentSnapshot.toObject(GlobalScores.class);
+                    value.setText(glbScores.getScore() + "");
+                    person.setText("by " + glbScores.getUser());
+                    date.setText("Set on " + glbScores.getDate());
+                } else {
+                    GlobalScores glbScoress = new GlobalScores("Not set", 0, "Not set");
+                    documentReference.set(glbScoress);
+                    value.setText(glbScoress.getScore() + "");
+                    person.setText("by " + glbScoress.getUser());
+                    date.setText("Set on " + glbScoress.getDate());
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
 
         backToMain.setOnClickListener(new View.OnClickListener() {
             @Override
