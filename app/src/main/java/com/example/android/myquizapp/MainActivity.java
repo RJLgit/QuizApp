@@ -21,7 +21,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements CategoryAdapter.ListItemClickListener {
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     private FirebaseAuth.AuthStateListener mListener;
     private String mUsername;
     private String uniqueUserId;
+    private FirebaseFirestore db;
 
    private FirebaseDatabase mFirebaseDatabase;
    private DatabaseReference mDatabaseReference;
@@ -55,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         mRecyclerView.setAdapter(mCategoryAdapter);
        mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
-
+        db = FirebaseFirestore.getInstance();
         mListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -88,8 +93,22 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle("The Ultimate Quiz App");
         setSupportActionBar(myToolbar);
-
+        batchWriteToAddQuestions();
     }
+
+    private void batchWriteToAddQuestions() {
+        WriteBatch batch = db.batch();
+        String batchCategory = "Nature";
+        ArrayList<QuizQuestion> lst = QuizQuestionClass.getNatureQuestions();
+        for (int i = 1; i < 11; i++) {
+            DocumentReference myRef = db.collection("QuizQuestions")
+                    .document(batchCategory).collection(batchCategory + "Questions")
+                    .document(batchCategory + "Question" + i);
+            batch.set(myRef, lst.get(i - 1));
+        }
+        batch.commit();
+    }
+
 
     void updateActionBar() {
         ActionBar ab = getSupportActionBar();
