@@ -43,6 +43,9 @@ public class GlobalScoreFragment extends Fragment {
         Button backToMain = fView.findViewById(R.id.backToMainActButt);
         Button startQuizRound = fView.findViewById(R.id.startQuizButton);
         Intent i = getActivity().getIntent();
+        final String category = i.getStringExtra("Category");
+        final String mUsername = i.getStringExtra("Username");
+
        /* mFirebaseAuth = FirebaseAuth.getInstance();
         uniqueUserId = mFirebaseAuth.getCurrentUser().getUid();*/
         documentReference = db.collection("TopScores").document(i.getStringExtra("Category").toLowerCase());
@@ -80,7 +83,10 @@ public class GlobalScoreFragment extends Fragment {
         startQuizRound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Clicked to start quiz round", Toast.LENGTH_LONG).show();
+                Intent intentQuiz = new Intent(getContext(), QuestionActivity.class);
+                intentQuiz.putExtra("CategoryClicked", category);
+                intentQuiz.putExtra("Username", mUsername);
+                startActivity(intentQuiz);
             }
         });
 
