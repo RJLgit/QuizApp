@@ -253,6 +253,8 @@ public class QuizQuestionClass {
                 return 10;
             case "Nature":
                 return 10;
+            case "Geography":
+                return 10;
 
             default:
                 return 0;
@@ -285,5 +287,30 @@ public class QuizQuestionClass {
         res.add(q9);
         res.add(q10);
                 return res;
+    }
+
+    public static ArrayList<QuizQuestion> getGeographyQuestions() {
+        ArrayList<QuizQuestion> res = new ArrayList<>();
+        QuizQuestion q1 = new QuizQuestion("What does the suez canal link with the Meditarrean Sea?", "Red sea", "Dead sea", "Black sea", "Caspian sea");
+        QuizQuestion q2 = new QuizQuestion("What is the capital of Bolivia?", "Sucre", "La Paz", "Santa Cruz de la Sierra", "Montero");
+        QuizQuestion q3 = new QuizQuestion("Which of these is biggest?", "Gobi desert", "Kalahari desert", "Great Victoria Desert", "Patagonian desert");
+        QuizQuestion q4 = new QuizQuestion("Which of these is oldest?", "The cairn of Barnenez", "Knap of Howar", "Pyramid of Djoser", "Stone henge");
+        QuizQuestion q5 = new QuizQuestion("Which of these is largest?", "Colombia", "Ethiopia", "Bolivia", "Egypt");
+        QuizQuestion q6 = new QuizQuestion("Which of these had the highest population in 2017?", "Germany", "Iran", "Turkey", "South Africa");
+        QuizQuestion q7 = new QuizQuestion("Which of these islands is largest?", "Great Britain", "Sulawesi", "South island - nz", "Java");
+        QuizQuestion q8 = new QuizQuestion("What of these is the biggest by area?", "Illinois", "Iowa", "New york", "North Carolina");
+        QuizQuestion q9 = new QuizQuestion("Which of these has the most people?", "Milton Keynes", "Northampton", "Luton", "York");
+        QuizQuestion q10 = new QuizQuestion("Which of these has the most people?", "Stuttgart", "Dusseldorf", "Dortmound", "Essen");
+        res.add(q1);
+        res.add(q2);
+        res.add(q3);
+        res.add(q4);
+        res.add(q5);
+        res.add(q6);
+        res.add(q7);
+        res.add(q8);
+        res.add(q9);
+        res.add(q10);
+        return res;
     }
 }

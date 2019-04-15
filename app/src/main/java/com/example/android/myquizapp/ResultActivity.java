@@ -82,6 +82,24 @@ public class ResultActivity extends AppCompatActivity {
             db.collection("TopScores").document(uniqueUserId).set(nTopScores);
         }*/
 
+       updateDatabaseScores();
+
+
+        if (intent.hasExtra("Username") && (intent.getStringExtra("Username") != null)) {
+            mUsername = intent.getStringExtra("Username");
+            ab.setSubtitle("Logged in as " + intent.getStringExtra("Username").toString());
+        }
+        
+
+
+
+
+        /*mDatabaseReference = mFirebaseDatabase.getReference().child(uniqueUserId);
+        QuizResult qr = new QuizResult(intent.getStringExtra("Category"), intPercentScore);
+        mDatabaseReference.push().setValue(qr);*/
+    }
+
+    private void updateDatabaseScores() {
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -241,20 +259,6 @@ public class ResultActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-        if (intent.hasExtra("Username") && (intent.getStringExtra("Username") != null)) {
-            mUsername = intent.getStringExtra("Username");
-            ab.setSubtitle("Logged in as " + intent.getStringExtra("Username").toString());
-        }
-        
-
-
-
-
-        /*mDatabaseReference = mFirebaseDatabase.getReference().child(uniqueUserId);
-        QuizResult qr = new QuizResult(intent.getStringExtra("Category"), intPercentScore);
-        mDatabaseReference.push().setValue(qr);*/
     }
 
     @Override
