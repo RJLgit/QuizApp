@@ -3,6 +3,7 @@ package com.example.android.myquizapp;
 import android.content.Intent;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +25,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.Transaction;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -81,8 +84,38 @@ public class ResultActivity extends AppCompatActivity {
             TopScores nTopScores = new TopScores(0, 0,0 , 0, 0, 0, 0, 0, 0, 0);
             db.collection("TopScores").document(uniqueUserId).set(nTopScores);
         }*/
+        //Dont update UI in this.
+        db.runTransaction(new Transaction.Function<String>() {
+            @Override
+            public String apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+                DocumentSnapshot documentSnapshot = transaction.get(documentReference);
+                DocumentSnapshot myGlobalSnapshot = transaction.get(globalDocumentReference);
+                String s = "";
+                if (documentSnapshot.exists()) {
+                    s = updateDataHelperMethod(documentSnapshot, myGlobalSnapshot, transaction);
+                } else {
+                    TopScores nTopScores = new TopScores(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                    db.collection("TopScores").document(uniqueUserId).set(nTopScores);
+                    documentSnapshot = transaction.get(documentReference);
+                    s = updateDataHelperMethod(documentSnapshot, myGlobalSnapshot, transaction);
+                }
+                Log.d(TAG, "apply: " + s);
+            return s;
 
-       updateDatabaseScores();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<String>() {
+            @Override
+            public void onSuccess(String toDisplay) {
+                Log.d(TAG, "onSuccess: " + toDisplay);
+                res.setText(toDisplay);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: ", e);
+            }
+        });
+      //updateDatabaseScores();
 
 
         if (intent.hasExtra("Username") && (intent.getStringExtra("Username") != null)) {
@@ -97,6 +130,40 @@ public class ResultActivity extends AppCompatActivity {
         /*mDatabaseReference = mFirebaseDatabase.getReference().child(uniqueUserId);
         QuizResult qr = new QuizResult(intent.getStringExtra("Category"), intPercentScore);
         mDatabaseReference.push().setValue(qr);*/
+    }
+
+    private String updateDataHelperMethod(DocumentSnapshot documentSnapshot, DocumentSnapshot myGlobalSnapshot, Transaction transaction) {
+        TopScores myRes = documentSnapshot.toObject(TopScores.class);
+        final int highScore = myRes.getScoreByCategory(category);
+        String toDisplay;
+        GlobalScores gblScores = myGlobalSnapshot.toObject(GlobalScores.class);
+        int topS = gblScores.getScore();
+
+        if (intPercentScore > topS) {
+            globalHighScore = true;
+        }
+        if (intPercentScore > highScore) {
+            yourHighScore = true;
+        }
+        if (yourHighScore && !globalHighScore) {
+            toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is your new top score!";
+
+        } else if (globalHighScore) {
+            toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is the highest score ever achieved!";
+        } else {
+            toDisplay = "Your Score was " + intPercentScore + " percent!" + "\n" + "This is not a high score.";
+        }
+        if (yourHighScore) {
+            Map<String, Object> upd = new HashMap<>();
+            upd.put(category.toLowerCase(), intPercentScore);
+
+            transaction.set(documentReference, upd, SetOptions.merge());
+        }
+        if (globalHighScore) {
+            GlobalScores updGlobal = new GlobalScores(new Date().toString(), intPercentScore, mFirebaseAuth.getCurrentUser().getDisplayName());
+            transaction.set(globalDocumentReference , updGlobal, SetOptions.merge());
+        }
+        return toDisplay;
     }
 
     private void updateDatabaseScores() {
