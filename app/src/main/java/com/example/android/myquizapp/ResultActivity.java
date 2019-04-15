@@ -162,6 +162,9 @@ public class ResultActivity extends AppCompatActivity {
             upd.put(category.toLowerCase(), intPercentScore);
 
             transaction.set(documentReference, upd, SetOptions.merge());
+            Map<String, Object> updateDate = new HashMap<>();
+            updateDate.put(category.toLowerCase() + "dateUpdated", new Date().toString());
+            transaction.set(documentReference, updateDate, SetOptions.merge());
         }
         if (globalHighScore) {
             GlobalScores updGlobal = new GlobalScores(new Date().toString(), intPercentScore, mFirebaseAuth.getCurrentUser().getDisplayName());
