@@ -153,6 +153,10 @@ public class ResultActivity extends AppCompatActivity {
         } else {
             toDisplay = "Your Score was " + intPercentScore + " percent!" + "\n" + "This is not a high score.";
         }
+        //So all data references are written to during the transaction
+        String lastChecked = "";
+        transaction.update(documentReference, "LastTimeChecked", lastChecked);
+        transaction.update(globalDocumentReference, "LastTimeChecked", lastChecked);
         if (yourHighScore) {
             Map<String, Object> upd = new HashMap<>();
             upd.put(category.toLowerCase(), intPercentScore);
