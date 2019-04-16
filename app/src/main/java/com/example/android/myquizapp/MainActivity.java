@@ -39,16 +39,13 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
 
    private FirebaseDatabase mFirebaseDatabase;
    private DatabaseReference mDatabaseReference;
-    //remove when add to database from results screen
-   private Button testButt;
+
     //Sign in Request code
     private static final int RC_SIGN_IN = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //remove when add to database from results screen
-        testButt = (Button) findViewById(R.id.testDatabaseAddition);
         mUsername = "ANON";
 
         mRecyclerView = (RecyclerView) findViewById(R.id.category_recycler_view);
@@ -82,14 +79,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
                 }
             }
         };
-        testButt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mDatabaseReference = mFirebaseDatabase.getReference().child(uniqueUserId);
-                QuizResult qr = new QuizResult("Sport", 60);
-                mDatabaseReference.push().setValue(qr);
-            }
-        });
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle("The Ultimate Quiz App");
         setSupportActionBar(myToolbar);
