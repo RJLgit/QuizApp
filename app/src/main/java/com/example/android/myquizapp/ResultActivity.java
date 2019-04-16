@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,7 @@ public class ResultActivity extends AppCompatActivity {
     private static final String TAG = "ResultActivity";
     TextView res;
     private String mUsername;
+    private ProgressBar mProgressBar;
     private String uniqueUserId;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
@@ -64,6 +67,7 @@ public class ResultActivity extends AppCompatActivity {
         uniqueUserId = user.getUid();
 
         res = findViewById(R.id.resultsTextView);
+        mProgressBar = findViewById(R.id.progressBar3);
         Intent intent = getIntent();
         category = intent.getStringExtra("Category");
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_results);
@@ -107,7 +111,10 @@ public class ResultActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String toDisplay) {
                 Log.d(TAG, "onSuccess: " + toDisplay);
+
                 res.setText(toDisplay);
+                res.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

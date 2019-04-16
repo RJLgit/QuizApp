@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -95,12 +96,14 @@ public class ScoresAdapter extends RecyclerView.Adapter<ScoresAdapter.ScoresView
         private TextView mCategoryTextView;
         private TextView mUserHighScoreTextView;
         private TextView mDateTextView;
+        private ProgressBar mProgressBar;
 
         public ScoresViewHolder(@NonNull View itemView) {
             super(itemView);
             mCategoryTextView = itemView.findViewById(R.id.CategoryScoresNameTextView);
             mUserHighScoreTextView = itemView.findViewById(R.id.userScoresHighScoreValueTextView);
             mDateTextView = itemView.findViewById(R.id.dateHighScoreValueTextView);
+            mProgressBar = itemView.findViewById(R.id.progressBar2);
             itemView.setOnClickListener(this);
         }
 
@@ -108,6 +111,10 @@ public class ScoresAdapter extends RecyclerView.Adapter<ScoresAdapter.ScoresView
             mCategoryTextView.setText(cat);
             mUserHighScoreTextView.setText(userHigh);
             mDateTextView.setText(date);
+            mCategoryTextView.setVisibility(View.VISIBLE);
+            mUserHighScoreTextView.setVisibility(View.VISIBLE);
+            mDateTextView.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.INVISIBLE);
         }
 
         @Override
