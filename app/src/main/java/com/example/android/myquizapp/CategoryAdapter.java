@@ -41,7 +41,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
     }
     public interface ListItemClickListener {
         void onListItemCLick (String cat);
+        void showRecyclerView();
     }
+
 
     @NonNull
     @Override
@@ -56,6 +58,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
         myRef = db.collection("TopScores").document(uniqueUserId);
         globalRef = db.collection("TopScores");
         View view = inflater.inflate(layoutForListItem, viewGroup, false);
+
         return new CatViewHolder(view);
     }
 
@@ -99,6 +102,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
                             });
 
                         }
+
                     }
                 });
 
@@ -129,6 +133,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
             mCategoryTextView.setText(cat);
             mUserHighScoreTextView.setText(userHigh);
             mGlobalHighScoreTextView.setText(globalHigh);
+            mListItemClickListener.showRecyclerView();
         }
 
         @Override

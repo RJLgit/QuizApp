@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     private String mUsername;
     private String uniqueUserId;
     private FirebaseFirestore db;
-
+    private ProgressBar progressBar;
    private FirebaseDatabase mFirebaseDatabase;
    private DatabaseReference mDatabaseReference;
 
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mUsername = "ANON";
-
+        progressBar = findViewById(R.id.mainProgressBar);
         mRecyclerView = (RecyclerView) findViewById(R.id.category_recycler_view);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         mRecyclerView.setHasFixedSize(true);
         mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(), QuizQuestionClass.getUserHighScores(), QuizQuestionClass.getGlobalHighScores(), this);
         mRecyclerView.setAdapter(mCategoryAdapter);
+
+
        mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -83,7 +86,12 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle("The Ultimate Quiz App");
         setSupportActionBar(myToolbar);
-        batchWriteToAddQuestions();
+        //batchWriteToAddQuestions();
+    }
+    @Override
+    public void showRecyclerView() {
+        mRecyclerView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     private void batchWriteToAddQuestions() {
