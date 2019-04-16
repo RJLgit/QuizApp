@@ -212,19 +212,26 @@ private String category;
             mUsername = getIntent().getStringExtra("Username");
             ab.setSubtitle("Logged in as " + getIntent().getStringExtra("Username").toString());
         }
+
+        category = getIntent().getStringExtra("CategoryClicked");
+        if (category.equals("Pictures")) {
+            questionTextView.setVisibility(View.INVISIBLE);
+            questionImageView.setVisibility(View.VISIBLE);
+        }
+
         if (isNewGame) {
             QuizUtils.setCurrentScore(getApplicationContext(), 0);
 
             currentQuestionIndex = 0;
             questionsLeft = QuestionActivity.totalQuestions;
-            category = getIntent().getStringExtra("CategoryClicked");
+
             questionsToAsk = generateQuestionsToAsk();
 
         } else {
             currentQuestionIndex = getIntent().getIntExtra(CURRENT_QUESTION_KEY, 1);
             questionsLeft = getIntent().getIntExtra(REMAINING_QUESTIONS_KEY, 0);
             questionsToAsk = getIntent().getIntegerArrayListExtra(QUESTIONS_TO_ASK_KEY);
-            category = getIntent().getStringExtra("CategoryClicked");
+
         }
 
 
