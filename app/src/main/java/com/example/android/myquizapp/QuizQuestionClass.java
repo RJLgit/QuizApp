@@ -255,6 +255,8 @@ public class QuizQuestionClass {
                 return 10;
             case "Geography":
                 return 10;
+            case "Films":
+                return 8;
 
             default:
                 return 0;
@@ -311,6 +313,29 @@ public class QuizQuestionClass {
         res.add(q8);
         res.add(q9);
         res.add(q10);
+        return res;
+    }
+
+    public static ArrayList<QuizQuestion> getFilmsQuestions() {
+        ArrayList<QuizQuestion> res = new ArrayList<>();
+        QuizQuestion q1 = new QuizQuestion("Who directed GoodWill hunting?", "Gus Van Sant", "Matt Damon", "Ben Affleck", "Lawrence Bender");
+        QuizQuestion q2 = new QuizQuestion("Which of these de Niro films came first?", "Taxi Driver", "New York, New York", "The Deer Hunter", "Raging bull");
+        QuizQuestion q3 = new QuizQuestion("Who has won the most acting oscars?", "Katharine Hepburn", "Jack Nicholson", "Meryl Streep", "Ingrid Bergman");
+        QuizQuestion q4 = new QuizQuestion("What is the film with the largest ever budget After inflation?", "Pirates of the caribeean: On Stranger tides", "Titanic", "Spider-man 3", "Tangled");
+        QuizQuestion q5 = new QuizQuestion("In the Wizard of Oz, what is Dorothy's surname?", "Gale", "Hank", "Green", "Smith");
+        QuizQuestion q6 = new QuizQuestion("Francis Gumm is the real name of who?", "Judy Garland", "Meryl Streep", "Katherine Hepburn", "Ingrid Bergman");
+        QuizQuestion q7 = new QuizQuestion("Which of these was not a Corleone in the Godfather?", "Luca", "Sonny", "Michael", "Fredo");
+        QuizQuestion q8 = new QuizQuestion("Which disney film came first?", "Snow White", "Pinnocchio", "Fantasia", "Bambi");
+
+        res.add(q1);
+        res.add(q2);
+        res.add(q3);
+        res.add(q4);
+        res.add(q5);
+        res.add(q6);
+        res.add(q7);
+        res.add(q8);
+
         return res;
     }
 }
