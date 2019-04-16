@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ private String category;
 
     private int mCurrentScore;
     private TextView questionTextView;
+    private ImageView questionImageView;
     private Button answerOne;
     private Button answerTwo;
     private Button answerThree;
@@ -195,6 +197,7 @@ private String category;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
         questionTextView = findViewById(R.id.questionView);
+        questionImageView = findViewById(R.id.imageView);
         answerOne = findViewById(R.id.buttonA);
         answerTwo = findViewById(R.id.buttonD);
         answerThree = findViewById(R.id.buttonB);
