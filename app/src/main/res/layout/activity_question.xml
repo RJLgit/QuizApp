@@ -7,6 +7,19 @@
     tools:context="com.example.android.myquizapp.QuestionActivity"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="81dp">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="409dp"
+        android:layout_height="308dp"
+        app:srcCompat="@android:drawable/btn_dialog"
+        android:contentDescription="@string/image_for_picture_round"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalHalf"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar_question"
+        android:visibility="invisible"/>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar_question"
         android:layout_width="match_parent"
