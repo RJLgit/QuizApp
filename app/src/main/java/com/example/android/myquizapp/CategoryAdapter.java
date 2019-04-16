@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -120,12 +121,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
         private TextView mCategoryTextView;
         private TextView mUserHighScoreTextView;
         private TextView mGlobalHighScoreTextView;
+        private ProgressBar mProgressBar;
 
         public CatViewHolder(@NonNull View itemView) {
             super(itemView);
             mCategoryTextView = itemView.findViewById(R.id.CategoryNameTextView);
             mUserHighScoreTextView = itemView.findViewById(R.id.userHighScoreValueTextView);
             mGlobalHighScoreTextView = itemView.findViewById(R.id.globalHighScoreValueTextView);
+            mProgressBar = itemView.findViewById(R.id.progressBar);
             itemView.setOnClickListener(this);
         }
 
@@ -133,6 +136,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
             mCategoryTextView.setText(cat);
             mUserHighScoreTextView.setText(userHigh);
             mGlobalHighScoreTextView.setText(globalHigh);
+            mCategoryTextView.setVisibility(View.VISIBLE);
+            mUserHighScoreTextView.setVisibility(View.VISIBLE);
+            mGlobalHighScoreTextView.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.INVISIBLE);
             mListItemClickListener.showRecyclerView();
         }
 
