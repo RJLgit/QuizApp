@@ -258,7 +258,7 @@ public class QuizQuestionClass {
             case "Films":
                 return 8;
             case "Pictures":
-                return 10;
+                return 5;
 
             default:
                 return 0;
@@ -295,26 +295,18 @@ public class QuizQuestionClass {
 
     public static ArrayList<QuizQuestion> getPictureQuestions() {
         ArrayList<QuizQuestion> res = new ArrayList<>();
-        QuizQuestion q1 = new QuizQuestion("Picture1?", "8", "6", "4", "10");
-        QuizQuestion q2 = new QuizQuestion("Picture2?", "Cheetah", "Pronghorn", "Spingbok", "Lion");
-        QuizQuestion q3 = new QuizQuestion("Picture3?", "Carbon Dioxide", "Nitrogen", "Oxygen", "Helium");
-        QuizQuestion q4 = new QuizQuestion("Picture4?", "Sirius", "Canopus", "Rigil Kentaurus", "Arcturus");
-        QuizQuestion q5 = new QuizQuestion("Picture5?", "Thermosphere", "Stratosphere", "Troposphere", "Mesosphere");
-        QuizQuestion q6 = new QuizQuestion("Picture6?", "K2", "Kangchenjunga", "Lhotse", "Broad Peak");
-        QuizQuestion q7 = new QuizQuestion("Picture7?", "Russia", "Congo", "Canada", "Brazil");
-        QuizQuestion q8 = new QuizQuestion("Picture8?", "Lincolnshire", "Cumbria", "Devon", "Norfolk");
-        QuizQuestion q9 = new QuizQuestion("Picture9?", "Charles Conrad", "Alan Shepard", "Alan Bean", "Edgar Mitchell");
-        QuizQuestion q10 = new QuizQuestion("Picture10?", "Whale Shark", "Basking Shark", "Great White Shark", "Tiger shark");
+        QuizQuestion q1 = new QuizQuestion("Where is this?", "Copenhagen", "Oslo", "Stockholm", "Vienna");
+        QuizQuestion q2 = new QuizQuestion("Where is this?", "Bavaria", "Just outside paris", "Bilboa", "Japan");
+        QuizQuestion q3 = new QuizQuestion("Where is this?", "Edinburugh", "Warwick", "Dover", "Durham");
+        QuizQuestion q4 = new QuizQuestion("Where is this?", "Florence", "Rome", "Milan", "Marseille");
+        QuizQuestion q5 = new QuizQuestion("where is this??", "London", "Paris", "Berlin", "St.Petersburg");
+
         res.add(q1);
         res.add(q2);
         res.add(q3);
         res.add(q4);
         res.add(q5);
-        res.add(q6);
-        res.add(q7);
-        res.add(q8);
-        res.add(q9);
-        res.add(q10);
+
         return res;
     }
 

@@ -1,10 +1,16 @@
 package com.example.android.myquizapp;
 
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +33,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -56,6 +67,8 @@ private String category;
     private int questionsLeft;
     private ArrayList<Integer> questionsToAsk;
     private String mUsername;
+    private TextView pictureQuestionTextView;
+    StorageReference mStorageReference;
 
 
     @Override
@@ -198,6 +211,8 @@ private String category;
         setContentView(R.layout.activity_question);
         questionTextView = findViewById(R.id.questionView);
         questionImageView = findViewById(R.id.imageView);
+        pictureQuestionTextView = findViewById(R.id.pictureQuestionTextView);
+        mStorageReference = FirebaseStorage.getInstance().getReference();
         answerOne = findViewById(R.id.buttonA);
         answerTwo = findViewById(R.id.buttonD);
         answerThree = findViewById(R.id.buttonB);
@@ -217,6 +232,28 @@ private String category;
         if (category.equals("Pictures")) {
             questionTextView.setVisibility(View.INVISIBLE);
             questionImageView.setVisibility(View.VISIBLE);
+            pictureQuestionTextView.setVisibility(View.VISIBLE);
+            try {
+                final File localFile = File.createTempFile("pictures", "jpg");
+                StorageReference myRef = mStorageReference.child("pictures/PictureQuestion1.jpg");
+                myRef.getFile(localFile)
+                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                String toURI = localFile.toURI().toString();
+                                Uri uri = Uri.parse(toURI);
+                                questionImageView.setImageURI(uri);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
         if (isNewGame) {
