@@ -233,26 +233,7 @@ private String category;
             questionTextView.setVisibility(View.INVISIBLE);
             questionImageView.setVisibility(View.VISIBLE);
             pictureQuestionTextView.setVisibility(View.VISIBLE);
-            try {
-                final File localFile = File.createTempFile("pictures", "jpg");
-                StorageReference myRef = mStorageReference.child("pictures/PictureQuestion1.jpg");
-                myRef.getFile(localFile)
-                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                String toURI = localFile.toURI().toString();
-                                Uri uri = Uri.parse(toURI);
-                                questionImageView.setImageURI(uri);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
 
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
         }
 
@@ -284,6 +265,28 @@ private String category;
             intent.putExtra("Category", category);
             startActivity(intent);
         } else {
+            if (category.equals("Pictures")) {
+                try {
+                    final File localFile = File.createTempFile("pictures", "jpg");
+                    StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".jpg");
+                    myRef.getFile(localFile)
+                            .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                    String toURI = localFile.toURI().toString();
+                                    Uri uri = Uri.parse(toURI);
+                                    questionImageView.setImageURI(uri);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             myRef.document(category + "Question" + questionsToAsk.get(currentQuestionIndex)).get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
