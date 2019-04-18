@@ -334,9 +334,9 @@ private String category;
         }
         if (category.equals("Music")) {
             questionTextView.setVisibility(View.INVISIBLE);
-            questionImageView.setVisibility(View.VISIBLE);
+            pictureQuestionTextView.setVisibility(View.VISIBLE);
             mPlayerView.setVisibility(View.VISIBLE);
-
+            pictureQuestionTextView.setText("Who wrote this music?");
         }
 
         if (isNewGame) {
