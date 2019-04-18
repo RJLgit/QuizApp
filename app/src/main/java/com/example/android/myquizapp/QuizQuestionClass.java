@@ -259,6 +259,8 @@ public class QuizQuestionClass {
                 return 8;
             case "Pictures":
                 return 5;
+            case "Music":
+                return 5;
 
             default:
                 return 0;
@@ -300,6 +302,23 @@ public class QuizQuestionClass {
         QuizQuestion q3 = new QuizQuestion("Where is this?", "Edinburugh", "Warwick", "Dover", "Durham");
         QuizQuestion q4 = new QuizQuestion("Where is this?", "Florence", "Rome", "Milan", "Marseille");
         QuizQuestion q5 = new QuizQuestion("where is this??", "London", "Paris", "Berlin", "St.Petersburg");
+
+        res.add(q1);
+        res.add(q2);
+        res.add(q3);
+        res.add(q4);
+        res.add(q5);
+
+        return res;
+    }
+
+    public static ArrayList<QuizQuestion> getMusicQuestions() {
+        ArrayList<QuizQuestion> res = new ArrayList<>();
+        QuizQuestion q1 = new QuizQuestion("Who wrote this music?", "Wagner", "Schubert", "Brahms", "Chopin");
+        QuizQuestion q2 = new QuizQuestion("Who wrote this music?", "Beethoven", "Bach", "Brahms", "Haydn");
+        QuizQuestion q3 = new QuizQuestion("Who wrote this music?", "Tchaikovsky", "Handel", "Beethoven", "Mozart");
+        QuizQuestion q4 = new QuizQuestion("Who wrote this music?", "Vivaldi", "Debussy", "Schumann", "Mahler");
+        QuizQuestion q5 = new QuizQuestion("Who wrote this music?", "Beethoven", "Verdi", "Schoenberg", "Gershwin");
 
         res.add(q1);
         res.add(q2);

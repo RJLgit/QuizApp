@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle("The Ultimate Quiz App");
         setSupportActionBar(myToolbar);
-        //batchWriteToAddQuestions();
+       //batchWriteToAddQuestions();
         //addPicsToStorage();
     }
 
@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
 
     private void batchWriteToAddQuestions() {
         WriteBatch batch = db.batch();
-        String batchCategory = "Pictures";
-        ArrayList<QuizQuestion> lst = QuizQuestionClass.getPictureQuestions();
+        String batchCategory = "Music";
+        ArrayList<QuizQuestion> lst = QuizQuestionClass.getMusicQuestions();
         for (int i = 1; i < 6; i++) {
             DocumentReference myRef = db.collection("QuizQuestions")
                     .document(batchCategory).collection(batchCategory + "Questions")
