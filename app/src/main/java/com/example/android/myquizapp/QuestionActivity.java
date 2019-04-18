@@ -153,11 +153,19 @@ private String category;
     }
 
     private void releasePlayer() {
-        mExoPlayer.stop();
+        if (mExoPlayer != null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
+    }
+
+/*    @Override
+    protected void onStop() {
+        super.onStop();
         mExoPlayer.release();
         mExoPlayer = null;
-
-    }
+    }*/
 
     @Override
     protected void onDestroy() {
