@@ -157,6 +157,7 @@ private String category;
         if (mExoPlayer != null) {
             mExoPlayer.stop();
             mExoPlayer.release();
+
             mExoPlayer = null;
         }
     }
@@ -170,9 +171,14 @@ private String category;
 
     @Override
     protected void onDestroy() {
+
         super.onDestroy();
         releasePlayer();
-        mMediaSession.setActive(false);
+        if (category.equals("Music")) {
+            mMediaSession.setActive(false);
+        }
+
+
     }
 
     @Override

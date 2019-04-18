@@ -54,7 +54,8 @@
         app:layout_constraintBottom_toTopOf="@+id/horizontalHalf"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_toolbar_question" />
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar_question"
+        android:background="@drawable/question_mark"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/horizontalHalf"
