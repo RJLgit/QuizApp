@@ -261,6 +261,8 @@ public class QuizQuestionClass {
                 return 5;
             case "Music":
                 return 5;
+            case "Technology":
+                return 7;
 
             default:
                 return 0;
@@ -373,6 +375,28 @@ public class QuizQuestionClass {
         res.add(q6);
         res.add(q7);
         res.add(q8);
+
+        return res;
+    }
+    public static ArrayList<QuizQuestion> getTechnologyQuestions() {
+        ArrayList<QuizQuestion> res = new ArrayList<>();
+        QuizQuestion q1 = new QuizQuestion("What programming language is used to give webstie's behaviour?", "Javascript", "Python", "C#", "Java");
+        QuizQuestion q2 = new QuizQuestion("What programming language is used to make android products?", "Java", "Python", "C++", "C#");
+        QuizQuestion q3 = new QuizQuestion("What scripting language is used to style web pages?", "CSS", "HTML", "javascript", "Java");
+        QuizQuestion q4 = new QuizQuestion("How many bits in a byte?", "1024", "1000", "16", "640");
+        QuizQuestion q5 = new QuizQuestion("Who invented the logarithm table?", "John Napier", "George Friend", "Henry Simpson", "Joe Fraser");
+        QuizQuestion q6 = new QuizQuestion("What is the biggest tech company in the world by market cap (as of March 2019)?", "Microsoft", "Apple", "Amazon", "Alphabet Inc (google)");
+        QuizQuestion q7 = new QuizQuestion("Who published their thesis on jet engines in 1929?", "Frank Whittle", "Wilhelm Pape", "Hans Van Ohain", "Maxime Guillaume");
+
+
+        res.add(q1);
+        res.add(q2);
+        res.add(q3);
+        res.add(q4);
+        res.add(q5);
+        res.add(q6);
+        res.add(q7);
+
 
         return res;
     }
