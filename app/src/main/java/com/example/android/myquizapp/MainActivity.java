@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
 
     private void batchWriteToAddQuestions() {
         WriteBatch batch = db.batch();
-        String batchCategory = "Technology";
-        ArrayList<QuizQuestion> lst = QuizQuestionClass.getTechnologyQuestions();
+        String batchCategory = "People";
+        ArrayList<QuizQuestion> lst = QuizQuestionClass.getPeopleQuestions();
         for (int i = 1; i < 8; i++) {
             DocumentReference myRef = db.collection("QuizQuestions")
                     .document(batchCategory).collection(batchCategory + "Questions")

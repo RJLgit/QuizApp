@@ -263,6 +263,8 @@ public class QuizQuestionClass {
                 return 5;
             case "Technology":
                 return 7;
+            case "People":
+                return 7;
 
             default:
                 return 0;
@@ -387,6 +389,28 @@ public class QuizQuestionClass {
         QuizQuestion q5 = new QuizQuestion("Who invented the logarithm table?", "John Napier", "George Friend", "Henry Simpson", "Joe Fraser");
         QuizQuestion q6 = new QuizQuestion("What is the biggest tech company in the world by market cap (as of March 2019)?", "Microsoft", "Apple", "Amazon", "Alphabet Inc (google)");
         QuizQuestion q7 = new QuizQuestion("Who published their thesis on jet engines in 1929?", "Frank Whittle", "Wilhelm Pape", "Hans Van Ohain", "Maxime Guillaume");
+
+
+        res.add(q1);
+        res.add(q2);
+        res.add(q3);
+        res.add(q4);
+        res.add(q5);
+        res.add(q6);
+        res.add(q7);
+
+
+        return res;
+    }
+    public static ArrayList<QuizQuestion> getPeopleQuestions() {
+        ArrayList<QuizQuestion> res = new ArrayList<>();
+        QuizQuestion q1 = new QuizQuestion("Which modern day country was Florence Nightingale born?", "Italy", "Ireland", "England", "Germany");
+        QuizQuestion q2 = new QuizQuestion("What club did Geoff Boycott and Dickie Bird both play for?", "Barnsley", "Harragote", "Pickering", "Leeds");
+        QuizQuestion q3 = new QuizQuestion("In which European city was actress Zsa Zsa Gabor born?", "Budapest", "Prague", "Florence", "Belgrade");
+        QuizQuestion q4 = new QuizQuestion("Who introduced the policies of glasnost?", "Gorbachev", "Chernenko", "Lenin", "Putin");
+        QuizQuestion q5 = new QuizQuestion("Which woman fameously campaigned for prison reform?", "Elizabeth Fry", "Jane Austen", "Emily Pankhurst", "Marie Stopes");
+        QuizQuestion q6 = new QuizQuestion("Where was Mother Teresa born (modern day country)?", "Macedonia", "Greece", "Turkey", "Serbia");
+        QuizQuestion q7 = new QuizQuestion("Where was Stalin born (modern day country)?", "Georgia", "Ukraine", "Russia", "Latvia");
 
 
         res.add(q1);
