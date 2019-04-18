@@ -330,6 +330,9 @@ private String category;
         answerFour = findViewById(R.id.buttonC);
         boolean isNewGame = !getIntent().hasExtra(REMAINING_QUESTIONS_KEY);
 
+        questionTextView.setBackgroundResource(R.drawable.question_mark);
+        questionTextView.getBackground().setAlpha(30);
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_question);
         myToolbar.setTitle("Answer this question");
         setSupportActionBar(myToolbar);
