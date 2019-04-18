@@ -1,6 +1,7 @@
 package com.example.android.myquizapp;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -344,6 +345,9 @@ private String category;
             questionTextView.setVisibility(View.INVISIBLE);
             pictureQuestionTextView.setVisibility(View.VISIBLE);
             mPlayerView.setVisibility(View.VISIBLE);
+            mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(
+                    getResources(), R.drawable.question_mark
+            ));
             pictureQuestionTextView.setText("Who wrote this music?");
         }
 
