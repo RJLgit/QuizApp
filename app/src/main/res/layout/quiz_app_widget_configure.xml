@@ -24,6 +24,13 @@
         android:layout_marginTop="8dp"
         android:text="@string/add_widget" />
 
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/category_arrays"
+        android:prompt="@string/category_prompt" />
+
 
 
 </LinearLayout>
