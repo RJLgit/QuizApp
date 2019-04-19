@@ -10,6 +10,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 /**
  * The configuration screen for the {@link QuizAppWidget QuizAppWidget} AppWidget.
  */
@@ -20,23 +27,45 @@ public class QuizAppWidgetConfigureActivity extends Activity {
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     EditText mAppWidgetText;
     Spinner mSpinner;
+    FirebaseFirestore db;
+    private DocumentReference myRef;
+    private FirebaseAuth mFirebaseAuth;
+    private String uniqueUserId;
+    int highScore;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = QuizAppWidgetConfigureActivity.this;
-            String spinText = mSpinner.getSelectedItem().toString();
+            final String spinText = mSpinner.getSelectedItem().toString();
             // When the button is clicked, store the string locally
             //String widgetText = mAppWidgetText.getText().toString();
             saveTitlePref(context, mAppWidgetId, spinText);
+            mFirebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = mFirebaseAuth.getCurrentUser();
+            uniqueUserId = user.getUid();
+            db = FirebaseFirestore.getInstance();
+            myRef = db.collection("TopScores").document(uniqueUserId);
 
+                myRef.get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    TopScores myScores = documentSnapshot.toObject(TopScores.class);
+                                    highScore = myScores.getScoreByCategory(spinText);
+                                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                                    //maybe load from db here
+                                    QuizAppWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId, highScore);
+
+                                    // Make sure we pass back the original appWidgetId
+                                    Intent resultValue = new Intent();
+                                    resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                                    setResult(RESULT_OK, resultValue);
+                                    finish();
+                                }
+                            }
+                        });
             // It is the responsibility of the configuration activity to update the app widget
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            QuizAppWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
 
-            // Make sure we pass back the original appWidgetId
-            Intent resultValue = new Intent();
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-            setResult(RESULT_OK, resultValue);
-            finish();
         }
     };
 
