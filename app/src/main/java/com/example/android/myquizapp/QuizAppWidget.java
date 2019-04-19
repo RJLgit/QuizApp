@@ -3,6 +3,7 @@ package com.example.android.myquizapp;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,6 +23,7 @@ public class QuizAppWidget extends AppWidgetProvider {
     private FirebaseAuth mFirebaseAuth;
     private String uniqueUserId;
     int score;
+    private static final String TAG = "QuizAppWidget";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId, int s) {
@@ -39,9 +41,9 @@ public class QuizAppWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onUpdate(final Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-
+        Log.d(TAG, "onUpdate: ");
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         uniqueUserId = user.getUid();
@@ -55,11 +57,11 @@ public class QuizAppWidget extends AppWidgetProvider {
                             if (documentSnapshot.exists()) {
                                 TopScores myScores = documentSnapshot.toObject(TopScores.class);
                                 score = myScores.getScoreByCategory(QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId).toString());
-
+                                updateAppWidget(context, appWidgetManager, appWidgetId, score);
                             }
                         }
                     });
-            updateAppWidget(context, appWidgetManager, appWidgetId, score);
+
         }
     }
 
