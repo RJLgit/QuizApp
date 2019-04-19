@@ -13,4 +13,18 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
+
+    <string-array name="category_arrays">
+        <item>TV</item>
+        <item>Nature</item>
+        <item>Music</item>
+        <item>Films</item>
+        <item>Technology</item>
+        <item>History</item>
+        <item>Sport</item>
+        <item>Geography</item>
+        <item>People</item>
+        <item>Pictures</item>
+
+    </string-array>
 </resources>
