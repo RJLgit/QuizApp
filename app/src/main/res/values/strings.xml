@@ -10,4 +10,7 @@
     <string name="date_obtained">Date obtained</string>
     <string name="score">Score</string>
     <string name="image_for_picture_round">Image for picture round</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
 </resources>
