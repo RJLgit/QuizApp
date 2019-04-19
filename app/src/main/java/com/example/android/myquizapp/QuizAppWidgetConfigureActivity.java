@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 /**
  * The configuration screen for the {@link QuizAppWidget QuizAppWidget} AppWidget.
@@ -18,13 +19,14 @@ public class QuizAppWidgetConfigureActivity extends Activity {
     private static final String PREF_PREFIX_KEY = "appwidget_";
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     EditText mAppWidgetText;
+    Spinner mSpinner;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = QuizAppWidgetConfigureActivity.this;
-
+            String spinText = mSpinner.getSelectedItem().toString();
             // When the button is clicked, store the string locally
-            String widgetText = mAppWidgetText.getText().toString();
-            saveTitlePref(context, mAppWidgetId, widgetText);
+            //String widgetText = mAppWidgetText.getText().toString();
+            saveTitlePref(context, mAppWidgetId, spinText);
 
             // It is the responsibility of the configuration activity to update the app widget
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -77,6 +79,7 @@ public class QuizAppWidgetConfigureActivity extends Activity {
 
         setContentView(R.layout.quiz_app_widget_configure);
         mAppWidgetText = (EditText) findViewById(R.id.appwidget_text);
+        mSpinner = findViewById(R.id.spinner1);
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
 
         // Find the widget id from the intent.
