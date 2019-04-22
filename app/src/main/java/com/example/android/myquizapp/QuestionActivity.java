@@ -50,6 +50,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -94,6 +95,7 @@ private String category;
     private SimpleExoPlayer mExoPlayer;
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
+    private FirebaseAuth mFirebaseAuth;
 
 
     @Override
@@ -340,6 +342,9 @@ private String category;
         if (getIntent().hasExtra("Username") && (getIntent().getStringExtra("Username") != null)) {
             mUsername = getIntent().getStringExtra("Username");
             ab.setSubtitle("Logged in as " + getIntent().getStringExtra("Username").toString());
+        } else {
+            mFirebaseAuth = FirebaseAuth.getInstance();
+            mUsername = mFirebaseAuth.getCurrentUser().getDisplayName();
         }
 
         category = getIntent().getStringExtra("CategoryClicked");
