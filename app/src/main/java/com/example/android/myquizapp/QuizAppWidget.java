@@ -15,6 +15,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 /**
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in {@link QuizAppWidgetConfigureActivity QuizAppWidgetConfigureActivity}
@@ -25,6 +27,7 @@ public class QuizAppWidget extends AppWidgetProvider {
     private FirebaseAuth mFirebaseAuth;
     private String uniqueUserId;
     int score;
+    public static ArrayList<String> topScores = new ArrayList<>();
     private static final String TAG = "QuizAppWidget";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
@@ -37,6 +40,7 @@ public class QuizAppWidget extends AppWidgetProvider {
 
             Intent serviceIntent = new Intent(context, QuizAppWidgetService.class);
             serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+
             serviceIntent.setData(Uri. parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
 
@@ -59,7 +63,7 @@ public class QuizAppWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
 
 
@@ -69,12 +73,27 @@ public class QuizAppWidget extends AppWidgetProvider {
             uniqueUserId = user.getUid();
             db = FirebaseFirestore.getInstance();
             myRef = db.collection("TopScores").document(uniqueUserId);
-            for (final int appWidgetId : appWidgetIds) {
-                CharSequence widgetMode = QuizAppWidgetConfigureActivity.loadModePref(context, appWidgetId);
-                updateAppWidget(context, appWidgetManager, appWidgetId, widgetMode.toString());
+        myRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            TopScores myScores = documentSnapshot.toObject(TopScores.class);
+                            for (int i = 0; i < QuizQuestionClass.getCategories().size(); i++) {
+                                int score = myScores.getScoreByCategory(QuizQuestionClass.getCategories().get(i));
+                                topScores.add("" + score);
+                                for (final int appWidgetId : appWidgetIds) {
+                                    CharSequence widgetMode = QuizAppWidgetConfigureActivity.loadModePref(context, appWidgetId);
+                                    updateAppWidget(context, appWidgetManager, appWidgetId, widgetMode.toString());
 
 
-            }
+                                }
+                            }
+
+                        }
+                    }
+                });
+
 
     }
 

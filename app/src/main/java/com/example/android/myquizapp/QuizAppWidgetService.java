@@ -49,21 +49,18 @@ public class QuizAppWidgetService extends RemoteViewsService {
             uniqueUserId = user.getUid();
             db = FirebaseFirestore.getInstance();
             myRef = db.collection("TopScores").document(uniqueUserId);
+            topScores.add(0 + "");
+            topScores.add(0 + "");
+            topScores.add(0 + "");
+            topScores.add(0 + "");
+            topScores.add(0 + "");
+            topScores.add(0 + "");
+            topScores.add(0 + "");
+            topScores.add(0 + "");
+            topScores.add(0 + "");
+            topScores.add(0 + "");
 
-                myRef.get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    TopScores myScores = documentSnapshot.toObject(TopScores.class);
-                                    for (int i = 0; i < data.size(); i++) {
-                                        int score = myScores.getScoreByCategory(data.get(i));
-                                        topScores.add("" + score);
 
-                                    }
-                                }
-                            }
-                        });
 
 
         }
@@ -86,7 +83,11 @@ public class QuizAppWidgetService extends RemoteViewsService {
         @Override
         public RemoteViews getViewAt(int i) {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget_item);
-            views.setTextViewText(R.id.widget_textview_item, data.get(i)); /*+ "\n" + topScores.get(i));*/
+            if (QuizAppWidget.topScores != null) {
+                views.setTextViewText(R.id.widget_textview_item, data.get(i) + QuizAppWidget.topScores.get(i));
+            } else {
+                views.setTextViewText(R.id.widget_textview_item, data.get(i));
+            }
 
             return views;
         }
