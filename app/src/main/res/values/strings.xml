@@ -15,6 +15,7 @@
     <string name="add_widget">Add widget</string>
     <string name="category_prompt">Choose a category</string>
     <string name="quiz_app">Quiz App</string>
+    <string name="refresh_widget">Refresh</string>
 
     <string-array name="category_arrays">
         <item>TV</item>

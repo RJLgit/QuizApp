@@ -1,5 +1,6 @@
 package com.example.android.myquizapp;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -61,9 +62,20 @@ public class QuizAppWidgetService extends RemoteViewsService {
         @Override
         public void onDataSetChanged() {
             topScores.clear();
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            /*topScores.clear();
             for (int i = 0; i < QuizAppWidget.topScores.size(); i++) {
                 topScores.add(QuizAppWidget.topScores.get(i));
-            }
+            }*/
         }
 
         @Override
@@ -84,6 +96,7 @@ public class QuizAppWidgetService extends RemoteViewsService {
             } else {
                 views.setTextViewText(R.id.widget_textview_item, data.get(i));
             }
+
 
             return views;
         }

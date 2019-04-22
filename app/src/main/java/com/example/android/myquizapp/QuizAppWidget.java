@@ -1,11 +1,13 @@
 package com.example.android.myquizapp;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.RemoteViews;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,12 +33,18 @@ public class QuizAppWidget extends AppWidgetProvider {
     public static ArrayList<String> topScores = new ArrayList<>();
     private static final String TAG = "QuizAppWidget";
 
+
+
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId, String s) {
         RemoteViews views;
         if (s.equals("Simple")) {
             views = new RemoteViews(context.getPackageName(), R.layout.simple_quiz_app_widget);
             views.setTextViewText(R.id.simple_widget_textview, "Quiz App");
+            Intent loadIntent = new Intent(context, MainActivity.class);
+            PendingIntent loadPendingIntent = PendingIntent.getActivity(context, 0, loadIntent, 0);
+            views.setOnClickPendingIntent(R.id.simple_widget_textview, loadPendingIntent);
         } else {
 
             Intent serviceIntent = new Intent(context, QuizAppWidgetService.class);
@@ -44,16 +52,21 @@ public class QuizAppWidget extends AppWidgetProvider {
 
             serviceIntent.setData(Uri. parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
+            Intent refreshIntent = new Intent(context, QuizAppWidget.class);
+            refreshIntent.setAction(ACTION_UPDATE_WIDGET);
+            refreshIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, 0);
 
 
             /*CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
             // Construct the RemoteViews object*/
             views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget);
-
+            views.setOnClickPendingIntent(R.id.refresh_widget, refreshPendingIntent);
            /* views.setTextViewText(R.id.appwidget_text, widgetText);
             views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);*/
             views.setRemoteAdapter(R.id.widget_stack_view, serviceIntent);
             views.setEmptyView(R.id.widget_stack_view, R.id.empty_widget_view);
+            views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
         }
 
@@ -107,6 +120,7 @@ public class QuizAppWidget extends AppWidgetProvider {
                             }
                             for (final int appWidgetId : appWidgetIds) {
                                 CharSequence widgetMode = QuizAppWidgetConfigureActivity.loadModePref(context, appWidgetId);
+
                                 updateAppWidget(context, appWidgetManager, appWidgetId, widgetMode.toString());
 
 
@@ -142,9 +156,9 @@ public class QuizAppWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (ACTION_UPDATE_WIDGET.equals(intent.getAction())) {
-            int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_ID);
+            int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_stack_view);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
         }
 
         super.onReceive(context, intent);
