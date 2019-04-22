@@ -24,6 +24,7 @@ public class QuizAppWidgetConfigureActivity extends Activity {
 
     private static final String PREFS_NAME = "com.example.android.myquizapp.QuizAppWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
+    private static final String PREF_MODE_KEY = "appwidget_simple_detailed";
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     EditText mAppWidgetText;
     Spinner mSpinner;
@@ -38,8 +39,14 @@ public class QuizAppWidgetConfigureActivity extends Activity {
             final String spinText = mSpinner.getSelectedItem().toString();
             // When the button is clicked, store the string locally
             //String widgetText = mAppWidgetText.getText().toString();
-            saveTitlePref(context, mAppWidgetId, spinText);
-            mFirebaseAuth = FirebaseAuth.getInstance();
+            saveModePref(context, mAppWidgetId, spinText);
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            QuizAppWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId, spinText);
+            Intent resultValue = new Intent();
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+            setResult(RESULT_OK, resultValue);
+            finish();
+            /*mFirebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mFirebaseAuth.getCurrentUser();
             uniqueUserId = user.getUid();
             db = FirebaseFirestore.getInstance();
@@ -63,11 +70,35 @@ public class QuizAppWidgetConfigureActivity extends Activity {
                                     finish();
                                 }
                             }
-                        });
+                        });*/
             // It is the responsibility of the configuration activity to update the app widget
 
         }
     };
+
+    static void saveModePref(Context context, int appWidgetId, String text) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.putString(PREF_MODE_KEY + appWidgetId, text);
+        prefs.apply();
+    }
+
+    // Read the prefix from the SharedPreferences object for this widget.
+    // If there is no preference saved, get the default from a resource
+    static String loadModePref(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        String titleValue = prefs.getString(PREF_MODE_KEY + appWidgetId, null);
+        if (titleValue != null) {
+            return titleValue;
+        } else {
+            return context.getString(R.string.appwidget_text);
+        }
+    }
+
+    static void deleteModePref(Context context, int appWidgetId) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.remove(PREF_MODE_KEY + appWidgetId);
+        prefs.apply();
+    }
 
     public QuizAppWidgetConfigureActivity() {
         super();

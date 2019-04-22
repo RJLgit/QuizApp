@@ -26,43 +26,44 @@ public class QuizAppWidget extends AppWidgetProvider {
     private static final String TAG = "QuizAppWidget";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId, int s) {
-
-        CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
-        views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);
-
+                                int appWidgetId, String s) {
+        RemoteViews views;
+        if (s.equals("Simple")) {
+            views = new RemoteViews(context.getPackageName(), R.layout.simple_quiz_app_widget);
+            views.setTextViewText(R.id.simple_widget_textview, "Quiz App");
+        } else {
+            CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
+            // Construct the RemoteViews object
+            views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget);
+            views.setTextViewText(R.id.appwidget_text, widgetText);
+            views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);
+        }
 
 
         // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        if (views != null) {
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+        }
     }
 
     @Override
     public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        Log.d(TAG, "onUpdate: ");
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mFirebaseAuth.getCurrentUser();
-        uniqueUserId = user.getUid();
-        db = FirebaseFirestore.getInstance();
-        myRef = db.collection("TopScores").document(uniqueUserId);
-        for (final int appWidgetId : appWidgetIds) {
-            myRef.get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-                                TopScores myScores = documentSnapshot.toObject(TopScores.class);
-                                score = myScores.getScoreByCategory(QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId).toString());
-                                updateAppWidget(context, appWidgetManager, appWidgetId, score);
-                            }
-                        }
-                    });
 
-        }
+
+            Log.d(TAG, "onUpdate: ");
+            mFirebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = mFirebaseAuth.getCurrentUser();
+            uniqueUserId = user.getUid();
+            db = FirebaseFirestore.getInstance();
+            myRef = db.collection("TopScores").document(uniqueUserId);
+            for (final int appWidgetId : appWidgetIds) {
+                CharSequence widgetMode = QuizAppWidgetConfigureActivity.loadModePref(context, appWidgetId);
+                updateAppWidget(context, appWidgetManager, appWidgetId, widgetMode.toString());
+
+
+            }
+
     }
 
     @Override
