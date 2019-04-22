@@ -60,7 +60,10 @@ public class QuizAppWidgetService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
-
+            topScores.clear();
+            for (int i = 0; i < QuizAppWidget.topScores.size(); i++) {
+                topScores.add(QuizAppWidget.topScores.get(i));
+            }
         }
 
         @Override

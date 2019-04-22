@@ -22,6 +22,7 @@ import java.util.ArrayList;
  * App Widget Configuration implemented in {@link QuizAppWidgetConfigureActivity QuizAppWidgetConfigureActivity}
  */
 public class QuizAppWidget extends AppWidgetProvider {
+    public static final String ACTION_UPDATE_WIDGET = "QuizAppWidget_Update_Action";
     FirebaseFirestore db;
     private DocumentReference myRef;
     private FirebaseAuth mFirebaseAuth;
@@ -53,6 +54,7 @@ public class QuizAppWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);*/
             views.setRemoteAdapter(R.id.widget_stack_view, serviceIntent);
             views.setEmptyView(R.id.widget_stack_view, R.id.empty_widget_view);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
         }
 
 
@@ -62,7 +64,13 @@ public class QuizAppWidget extends AppWidgetProvider {
         }
     }
 
-    public static void newTopScore() {
+    public static void newTopScore(String category, int newScore) {
+        if (topScores.size() != 0) {
+            int index = topScores.indexOf(category);
+            if (index >= 0) {
+                topScores.set(index, newScore + "");
+            }
+        }
 
     }
 
@@ -129,6 +137,17 @@ public class QuizAppWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (ACTION_UPDATE_WIDGET.equals(intent.getAction())) {
+            int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_ID);
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_stack_view);
+        }
+
+        super.onReceive(context, intent);
     }
 }
 

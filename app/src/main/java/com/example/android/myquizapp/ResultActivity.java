@@ -1,5 +1,8 @@
 package com.example.android.myquizapp;
 
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -14,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -157,6 +161,7 @@ public class ResultActivity extends AppCompatActivity {
 
         } else if (globalHighScore) {
             toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is the highest score ever achieved!";
+
         } else {
             toDisplay = "Your Score was " + intPercentScore + " percent!" + "\n" + "This is not a high score.";
         }
