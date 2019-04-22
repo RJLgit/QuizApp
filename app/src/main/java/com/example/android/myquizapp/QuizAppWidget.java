@@ -70,7 +70,12 @@ public class QuizAppWidget extends AppWidgetProvider {
     public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
 
-
+            final boolean topScoresExists;
+            if (topScores.size() == 0) {
+                topScoresExists = false;
+            } else {
+                topScoresExists = true;
+            }
             Log.d(TAG, "onUpdate: ");
             mFirebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mFirebaseAuth.getCurrentUser();
@@ -85,15 +90,19 @@ public class QuizAppWidget extends AppWidgetProvider {
                             TopScores myScores = documentSnapshot.toObject(TopScores.class);
                             for (int i = 0; i < QuizQuestionClass.getCategories().size(); i++) {
                                 int score = myScores.getScoreByCategory(QuizQuestionClass.getCategories().get(i));
-                                topScores.add("" + score);
-                                for (final int appWidgetId : appWidgetIds) {
-                                    CharSequence widgetMode = QuizAppWidgetConfigureActivity.loadModePref(context, appWidgetId);
-                                    updateAppWidget(context, appWidgetManager, appWidgetId, widgetMode.toString());
-
-
+                                if (topScoresExists) {
+                                    topScores.set(i, "" + score);
+                                } else {
+                                    topScores.add("" + score);
                                 }
-                            }
 
+                            }
+                            for (final int appWidgetId : appWidgetIds) {
+                                CharSequence widgetMode = QuizAppWidgetConfigureActivity.loadModePref(context, appWidgetId);
+                                updateAppWidget(context, appWidgetManager, appWidgetId, widgetMode.toString());
+
+
+                            }
                         }
                     }
                 });
