@@ -172,13 +172,14 @@ public class QuizAppWidget extends AppWidgetProvider {
             if (intent.hasExtra(QuizAppWidget.CATEGORY_CLICKED)) {
                 String cat = intent.getStringExtra(QuizAppWidget.CATEGORY_CLICKED);
                 Log.d(TAG, "onReceive: " + cat);
-                if (cat.equals("Sport")) {
+
+
                     Intent intent1 = new Intent(context, QuestionActivity.class);
                     intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent1.putExtra("CategoryClicked", cat);
                     intent1.putExtra("Username", mUsername);
                     context.startActivity(intent1);
-                }
+
             }
             /*Intent i = new Intent(context, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
