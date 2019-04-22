@@ -25,6 +25,7 @@ import java.util.ArrayList;
  */
 public class QuizAppWidget extends AppWidgetProvider {
     public static final String ACTION_UPDATE_WIDGET = "QuizAppWidget_Update_Action";
+    public static final String ACTION_OPEN_ACTIVITY = "QuizAppWidget_Open_Action";
     FirebaseFirestore db;
     private DocumentReference myRef;
     private FirebaseAuth mFirebaseAuth;
@@ -53,15 +54,19 @@ public class QuizAppWidget extends AppWidgetProvider {
             serviceIntent.setData(Uri. parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
             Intent refreshIntent = new Intent(context, QuizAppWidget.class);
-            refreshIntent.setAction(ACTION_UPDATE_WIDGET);
-            refreshIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            refreshIntent.setAction(ACTION_OPEN_ACTIVITY);
+
             PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, 0);
 
+            Intent loadIntentTwo = new Intent(context, MainActivity.class);
+            PendingIntent loadPendingIntentTwo = PendingIntent.getActivity(context, 0, loadIntentTwo, 0);
 
             /*CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
             // Construct the RemoteViews object*/
             views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget);
-            views.setOnClickPendingIntent(R.id.refresh_widget, refreshPendingIntent);
+           views.setOnClickPendingIntent(R.id.refresh_widget, loadPendingIntentTwo);
+           views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
+            //views.setOnClickPendingIntent(R.id.refresh_widget, refreshPendingIntent);
            /* views.setTextViewText(R.id.appwidget_text, widgetText);
             views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);*/
             views.setRemoteAdapter(R.id.widget_stack_view, serviceIntent);
@@ -159,6 +164,11 @@ public class QuizAppWidget extends AppWidgetProvider {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
+        }
+        if (ACTION_OPEN_ACTIVITY.equals(intent.getAction())) {
+            Intent i = new Intent(context, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
         }
 
         super.onReceive(context, intent);

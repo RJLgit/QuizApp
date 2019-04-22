@@ -61,21 +61,21 @@ public class QuizAppWidgetService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
-            topScores.clear();
-            topScores.add("100");
-            topScores.add("100");
-            topScores.add("100");
-            topScores.add("100");
-            topScores.add("100");
-            topScores.add("100");
-            topScores.add("100");
-            topScores.add("100");
-            topScores.add("100");
-            topScores.add("100");
             /*topScores.clear();
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");
+            topScores.add("100");*/
+            topScores.clear();
             for (int i = 0; i < QuizAppWidget.topScores.size(); i++) {
                 topScores.add(QuizAppWidget.topScores.get(i));
-            }*/
+            }
         }
 
         @Override
@@ -92,11 +92,13 @@ public class QuizAppWidgetService extends RemoteViewsService {
         public RemoteViews getViewAt(int i) {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget_item);
             if (QuizAppWidget.topScores.size() != 0) {
-                views.setTextViewText(R.id.widget_textview_item, data.get(i) + QuizAppWidget.topScores.get(i));
+                views.setTextViewText(R.id.widget_textview_item, data.get(i) + topScores.get(i));
             } else {
                 views.setTextViewText(R.id.widget_textview_item, data.get(i));
             }
-
+            Intent fillIntent = new Intent();
+            fillIntent.putExtra("Cat Clicked", topScores.get(i));
+            views.setOnClickFillInIntent(R.id.widget_textview_item, fillIntent);
 
             return views;
         }

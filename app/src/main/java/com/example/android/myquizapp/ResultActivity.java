@@ -158,7 +158,14 @@ public class ResultActivity extends AppCompatActivity {
         }
         if (yourHighScore && !globalHighScore) {
             toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is your new top score!";
-
+            /*ComponentName componentName = new ComponentName(getApplicationContext(), QuizAppWidget.class);
+            RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.quiz_app_widget);
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+            Intent sIntent = new Intent(getApplicationContext(), QuizAppWidget.class);
+            sIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetManager.getAppWidgetIds(componentName));
+            sIntent.setAction(QuizAppWidget.ACTION_UPDATE_WIDGET);
+            PendingIntent sPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, sIntent, 0);
+            */
         } else if (globalHighScore) {
             toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is the highest score ever achieved!";
 
