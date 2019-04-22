@@ -3,8 +3,9 @@
     android:configure="com.example.android.myquizapp.QuizAppWidgetConfigureActivity"
     android:initialKeyguardLayout="@layout/quiz_app_widget"
     android:initialLayout="@layout/quiz_app_widget"
-    android:minWidth="40dp"
-    android:minHeight="40dp"
+    android:minWidth="110dp"
+    android:minHeight="110dp"
+    android:minResizeHeight="40dp"
     android:previewImage="@drawable/example_appwidget_preview"
     android:resizeMode="horizontal|vertical"
 

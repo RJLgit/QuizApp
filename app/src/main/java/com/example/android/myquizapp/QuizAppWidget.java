@@ -3,6 +3,8 @@ package com.example.android.myquizapp;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -32,11 +34,21 @@ public class QuizAppWidget extends AppWidgetProvider {
             views = new RemoteViews(context.getPackageName(), R.layout.simple_quiz_app_widget);
             views.setTextViewText(R.id.simple_widget_textview, "Quiz App");
         } else {
-            CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
-            // Construct the RemoteViews object
+
+            Intent serviceIntent = new Intent(context, QuizAppWidgetService.class);
+            serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            serviceIntent.setData(Uri. parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
+
+
+
+            /*CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
+            // Construct the RemoteViews object*/
             views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget);
-            views.setTextViewText(R.id.appwidget_text, widgetText);
-            views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);
+
+           /* views.setTextViewText(R.id.appwidget_text, widgetText);
+            views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);*/
+            views.setRemoteAdapter(R.id.widget_stack_view, serviceIntent);
+            views.setEmptyView(R.id.widget_stack_view, R.id.empty_widget_view);
         }
 
 
