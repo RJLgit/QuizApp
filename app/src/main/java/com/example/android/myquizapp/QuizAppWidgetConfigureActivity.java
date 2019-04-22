@@ -39,13 +39,39 @@ public class QuizAppWidgetConfigureActivity extends Activity {
             final String spinText = mSpinner.getSelectedItem().toString();
             // When the button is clicked, store the string locally
             //String widgetText = mAppWidgetText.getText().toString();
-            saveModePref(context, mAppWidgetId, spinText);
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            QuizAppWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId, spinText);
-            Intent resultValue = new Intent();
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-            setResult(RESULT_OK, resultValue);
-            finish();
+            mFirebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = mFirebaseAuth.getCurrentUser();
+            uniqueUserId = user.getUid();
+            db = FirebaseFirestore.getInstance();
+            myRef = db.collection("TopScores").document(uniqueUserId);
+            myRef.get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                TopScores myScores = documentSnapshot.toObject(TopScores.class);
+                                for (int i = 0; i < QuizQuestionClass.getCategories().size(); i++) {
+                                    int score = myScores.getScoreByCategory(QuizQuestionClass.getCategories().get(i));
+                                    if (QuizAppWidget.topScores != null) {
+                                        QuizAppWidget.topScores.set(i, "" + score);
+                                    } else {
+                                        QuizAppWidget.topScores.add("" + score);
+                                    }
+
+                                }
+
+                            }
+                            saveModePref(context, mAppWidgetId, spinText);
+                            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                            QuizAppWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId, spinText);
+                            Intent resultValue = new Intent();
+                            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                            setResult(RESULT_OK, resultValue);
+                            finish();
+                        }
+                    });
+
+
             /*mFirebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mFirebaseAuth.getCurrentUser();
             uniqueUserId = user.getUid();

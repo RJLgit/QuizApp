@@ -62,6 +62,10 @@ public class QuizAppWidget extends AppWidgetProvider {
         }
     }
 
+    public static void newTopScore() {
+
+    }
+
     @Override
     public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
