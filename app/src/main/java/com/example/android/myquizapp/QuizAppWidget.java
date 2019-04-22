@@ -26,10 +26,12 @@ import java.util.ArrayList;
 public class QuizAppWidget extends AppWidgetProvider {
     public static final String ACTION_UPDATE_WIDGET = "QuizAppWidget_Update_Action";
     public static final String ACTION_OPEN_ACTIVITY = "QuizAppWidget_Open_Action";
+    public static final String CATEGORY_CLICKED = "QuizAppWidget_Cat_Clicked";
     FirebaseFirestore db;
     private DocumentReference myRef;
     private FirebaseAuth mFirebaseAuth;
     private String uniqueUserId;
+    private String mUsername;
     int score;
     public static ArrayList<String> topScores = new ArrayList<>();
     private static final String TAG = "QuizAppWidget";
@@ -107,6 +109,7 @@ public class QuizAppWidget extends AppWidgetProvider {
             FirebaseUser user = mFirebaseAuth.getCurrentUser();
             uniqueUserId = user.getUid();
             db = FirebaseFirestore.getInstance();
+            mUsername = user.getDisplayName();
             myRef = db.collection("TopScores").document(uniqueUserId);
         myRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -166,9 +169,20 @@ public class QuizAppWidget extends AppWidgetProvider {
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
         }
         if (ACTION_OPEN_ACTIVITY.equals(intent.getAction())) {
-            Intent i = new Intent(context, MainActivity.class);
+            if (intent.hasExtra(QuizAppWidget.CATEGORY_CLICKED)) {
+                String cat = intent.getStringExtra(QuizAppWidget.CATEGORY_CLICKED);
+                Log.d(TAG, "onReceive: " + cat);
+                if (cat.equals("Sport")) {
+                    Intent intent1 = new Intent(context, QuestionActivity.class);
+                    intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent1.putExtra("CategoryClicked", cat);
+                    intent1.putExtra("Username", mUsername);
+                    context.startActivity(intent1);
+                }
+            }
+            /*Intent i = new Intent(context, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
+            context.startActivity(i);*/
         }
 
         super.onReceive(context, intent);

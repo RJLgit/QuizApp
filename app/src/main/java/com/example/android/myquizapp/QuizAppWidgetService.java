@@ -97,7 +97,7 @@ public class QuizAppWidgetService extends RemoteViewsService {
                 views.setTextViewText(R.id.widget_textview_item, data.get(i));
             }
             Intent fillIntent = new Intent();
-            fillIntent.putExtra("Cat Clicked", topScores.get(i));
+            fillIntent.putExtra(QuizAppWidget.CATEGORY_CLICKED, data.get(i));
             views.setOnClickFillInIntent(R.id.widget_textview_item, fillIntent);
 
             return views;
