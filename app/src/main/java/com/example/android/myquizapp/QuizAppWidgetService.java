@@ -76,7 +76,7 @@ public class QuizAppWidgetService extends RemoteViewsService {
         @Override
         public RemoteViews getViewAt(int i) {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget_item);
-            if (QuizAppWidget.topScores != null) {
+            if (QuizAppWidget.topScores.size() != 0) {
                 views.setTextViewText(R.id.widget_textview_item, data.get(i) + QuizAppWidget.topScores.get(i));
             } else {
                 views.setTextViewText(R.id.widget_textview_item, data.get(i));
