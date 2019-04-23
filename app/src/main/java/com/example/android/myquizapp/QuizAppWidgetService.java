@@ -23,7 +23,7 @@ public class QuizAppWidgetService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new QuizWidgetItemFactory(getApplicationContext(), intent);
+        return new QuizWidgetItemFactory(this.getApplicationContext(), intent);
     }
 
     class QuizWidgetItemFactory implements RemoteViewsFactory {

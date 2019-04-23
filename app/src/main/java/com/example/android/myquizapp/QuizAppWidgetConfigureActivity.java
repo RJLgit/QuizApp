@@ -3,6 +3,7 @@ package com.example.android.myquizapp;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +32,7 @@ public class QuizAppWidgetConfigureActivity extends Activity {
     private static final String PREF_PREFIX_KEY = "appwidget_";
     private static final String PREF_MODE_KEY = "appwidget_simple_detailed";
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    //int mAppWidgetId;
     EditText mAppWidgetText;
     Spinner mSpinner;
     FirebaseFirestore db;
@@ -266,9 +268,9 @@ public class QuizAppWidgetConfigureActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
-        // Set the result to CANCELED.  This will cause the widget host to cancel
+        /*// Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.
-        setResult(RESULT_CANCELED);
+        setResult(RESULT_CANCELED);*/
 
         setContentView(R.layout.quiz_app_widget_configure);
         mAppWidgetText = (EditText) findViewById(R.id.appwidget_text);
@@ -278,14 +280,17 @@ public class QuizAppWidgetConfigureActivity extends Activity {
         //findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
 
         // Find the widget id from the intent.
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        Intent configIntent = getIntent();
+        Bundle extras = configIntent.getExtras();
         if (extras != null) {
             mAppWidgetId = extras.getInt(
                     AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             Log.d(TAG, "onCreate: " + mAppWidgetId);
             Log.d(TAG, "onCreate: " + AppWidgetManager.INVALID_APPWIDGET_ID);
         }
+        Intent resultValue = new Intent();
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+        setResult(RESULT_CANCELED, resultValue);
 
         // If this activity was started with an intent without an app widget ID, finish with an error.
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
@@ -293,7 +298,7 @@ public class QuizAppWidgetConfigureActivity extends Activity {
 
         }
 
-        mButton.setOnClickListener(new View.OnClickListener() {
+       /* mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 context = QuizAppWidgetConfigureActivity.this;
@@ -339,6 +344,11 @@ public class QuizAppWidgetConfigureActivity extends Activity {
                                         Intent loadIntent = new Intent(context, MainActivity.class);
                                         PendingIntent loadPendingIntent = PendingIntent.getActivity(context, 1, loadIntent, 0);
                                         views.setOnClickPendingIntent(R.id.simple_widget_textview, loadPendingIntent);
+                                        appWidgetManager.updateAppWidget(mAppWidgetId, views);
+                                        Intent resultValue = new Intent();
+                                        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                                        setResult(RESULT_OK, resultValue);
+                                        finish();
                                     } else {
 
                                         Intent serviceIntent = new Intent(context, QuizAppWidgetService.class);
@@ -359,37 +369,139 @@ public class QuizAppWidgetConfigureActivity extends Activity {
 
                                         PendingIntent loadPendingIntentTwo = PendingIntent.getBroadcast(context, 3, loadIntentTwo, 0);
 
-            /*CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
-            // Construct the RemoteViews object*/
+            *//*CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
+            // Construct the RemoteViews object*//*
                                         views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget);
                                         views.setOnClickPendingIntent(R.id.refresh_widget, loadPendingIntentTwo);
                                         views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
                                         //views.setOnClickPendingIntent(R.id.refresh_widget, refreshPendingIntent);
-           /* views.setTextViewText(R.id.appwidget_text, widgetText);
-            views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);*/
+           *//* views.setTextViewText(R.id.appwidget_text, widgetText);
+            views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);*//*
                                         views.setRemoteAdapter(R.id.widget_stack_view, serviceIntent);
                                         views.setEmptyView(R.id.widget_stack_view, R.id.empty_widget_view);
                                         //views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
-                                        appWidgetManager.notifyAppWidgetViewDataChanged(mAppWidgetId, R.id.widget_stack_view);
-
-                                    }
-
-                                    if (views != null) {
                                         appWidgetManager.updateAppWidget(mAppWidgetId, views);
-
+                                        appWidgetManager.notifyAppWidgetViewDataChanged(mAppWidgetId, R.id.widget_stack_view);
                                         Intent resultValue = new Intent();
                                         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
                                         setResult(RESULT_OK, resultValue);
                                         finish();
+
                                     }
+
+                                    *//*if (views != null) {
+
+
+
+                                    }*//*
 
                                 }
                             }
                         });
             }
-        });
+        });*/
 
        // mAppWidgetText.setText(loadTitlePref(QuizAppWidgetConfigureActivity.this, mAppWidgetId));
+    }
+    public void configSetUp(View v) {
+        context = QuizAppWidgetConfigureActivity.this;
+        s = mSpinner.getSelectedItem().toString();
+        if (QuizAppWidget.topScores.size() == 0) {
+            topScoresExists = false;
+        } else {
+            topScoresExists = true;
+        }
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        uniqueUserId = user.getUid();
+        db = FirebaseFirestore.getInstance();
+        mUsername = user.getDisplayName();
+
+        myRef = db.collection("TopScores").document(uniqueUserId);
+        myRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            TopScores myScores = documentSnapshot.toObject(TopScores.class);
+                            for (int i = 0; i < QuizQuestionClass.getCategories().size(); i++) {
+                                int score = myScores.getScoreByCategory(QuizQuestionClass.getCategories().get(i));
+                                if (topScoresExists) {
+                                    QuizAppWidget.topScores.set(i, "" + score);
+                                } else {
+                                    QuizAppWidget.topScores.add("" + score);
+                                }
+
+                            }
+                            saveModePref(context, mAppWidgetId, s);
+                            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+
+
+                            //updateAppWidget(context, appWidgetManager, appWidgetId, widgetMode.toString());
+
+                            RemoteViews views;
+                            if (s.equals("Simple")) {
+                                views = new RemoteViews(context.getPackageName(), R.layout.simple_quiz_app_widget);
+                                views.setTextViewText(R.id.simple_widget_textview, "Quiz App");
+                                Intent loadIntent = new Intent(context, MainActivity.class);
+                                PendingIntent loadPendingIntent = PendingIntent.getActivity(context, 1, loadIntent, 0);
+                                views.setOnClickPendingIntent(R.id.simple_widget_textview, loadPendingIntent);
+                                appWidgetManager.updateAppWidget(mAppWidgetId, views);
+                                Intent resultValue = new Intent();
+                                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                                setResult(RESULT_OK, resultValue);
+                                finish();
+                            } else {
+
+                                Intent serviceIntent = new Intent(context, QuizAppWidgetService.class);
+                                serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                                Log.d(TAG, "onSuccess: " + mAppWidgetId);
+                                serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
+
+                                Intent refreshIntent = new Intent(context, QuizAppWidget.class);
+                                refreshIntent.setAction(QuizAppWidget.ACTION_OPEN_ACTIVITY);
+
+                                PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, 0);
+
+                                Intent loadIntentTwo = new Intent(context, QuizAppWidget.class);
+
+                                loadIntentTwo.setAction(QuizAppWidget.ACTION_UPDATE_WIDGET);
+                                loadIntentTwo.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                                Log.d(TAG, "onSuccess: " + mAppWidgetId);
+
+                                PendingIntent loadPendingIntentTwo = PendingIntent.getBroadcast(context, 3, loadIntentTwo, PendingIntent.FLAG_IMMUTABLE);
+
+            /*CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
+            // Construct the RemoteViews object*/
+                                views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget);
+                                views.setOnClickPendingIntent(R.id.refresh_widget, loadPendingIntentTwo);
+                                views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
+                                //views.setOnClickPendingIntent(R.id.refresh_widget, refreshPendingIntent);
+           /* views.setTextViewText(R.id.appwidget_text, widgetText);
+            views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);*/
+                                views.setRemoteAdapter(R.id.widget_stack_view, serviceIntent);
+                                views.setEmptyView(R.id.widget_stack_view, R.id.empty_widget_view);
+                                //views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
+                                appWidgetManager.updateAppWidget(mAppWidgetId, views);
+                                appWidgetManager.notifyAppWidgetViewDataChanged(mAppWidgetId, R.id.widget_stack_view);
+                                Intent resultValue = new Intent();
+                                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                                setResult(RESULT_OK, resultValue);
+                                finish();
+
+                            }
+
+                                    /*if (views != null) {
+
+
+
+                                    }*/
+
+                        }
+                    }
+                });
     }
 }
 

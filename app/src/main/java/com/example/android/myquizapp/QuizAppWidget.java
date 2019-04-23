@@ -27,6 +27,7 @@ public class QuizAppWidget extends AppWidgetProvider {
     public static final String ACTION_UPDATE_WIDGET = "QuizAppWidget_Update_Action";
     public static final String ACTION_OPEN_ACTIVITY = "QuizAppWidget_Open_Action";
     public static final String CATEGORY_CLICKED = "QuizAppWidget_Cat_Clicked";
+    public static int myRequestCode = 0;
     FirebaseFirestore db;
     private DocumentReference myRef;
     private FirebaseAuth mFirebaseAuth;
@@ -144,7 +145,7 @@ public class QuizAppWidget extends AppWidgetProvider {
                                     PendingIntent loadPendingIntent = PendingIntent.getActivity(context, 1, loadIntent, 0);
                                     views.setOnClickPendingIntent(R.id.simple_widget_textview, loadPendingIntent);
                                 } else {
-                                    Log.d(TAG, "onSuccess: ");
+                                    Log.d(TAG, "onSuccess: " + appWidgetId);
                                     Intent serviceIntent = new Intent(context, QuizAppWidgetService.class);
                                     serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 
@@ -159,7 +160,8 @@ public class QuizAppWidget extends AppWidgetProvider {
                                     Intent loadIntentTwo = new Intent(context, QuizAppWidget.class);
 
                                     loadIntentTwo.setAction(QuizAppWidget.ACTION_UPDATE_WIDGET);
-                                    loadIntentTwo.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                                    Log.d(TAG, "onSuccess: " + appWidgetId);
+                                   loadIntentTwo.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 
                                     PendingIntent loadPendingIntentTwo = PendingIntent.getBroadcast(context, 3, loadIntentTwo, 0);
 
@@ -175,13 +177,14 @@ public class QuizAppWidget extends AppWidgetProvider {
                                     views.setRemoteAdapter(R.id.widget_stack_view, serviceIntent);
                                     views.setEmptyView(R.id.widget_stack_view, R.id.empty_widget_view);
                                     //views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
+                                    appWidgetManager.updateAppWidget(appWidgetId, views);
                                     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
 
 
                                 }
-                                if (views != null) {
-                                    appWidgetManager.updateAppWidget(appWidgetId, views);
-                                }
+                                /*if (views != null) {
+
+                                }*/
                             }
                         }
                     }
@@ -216,9 +219,12 @@ public class QuizAppWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         if (ACTION_UPDATE_WIDGET.equals(intent.getAction())) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
             Log.d(TAG, "onReceive: " + appWidgetId);
+            //maybe do this line of code if can get correct appWidgetId to the onReceive method
+            //appWidgetManager.updateAppWidget(appWidgetId);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
         }
         if (ACTION_OPEN_ACTIVITY.equals(intent.getAction())) {
