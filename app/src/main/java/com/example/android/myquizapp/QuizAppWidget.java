@@ -40,7 +40,7 @@ public class QuizAppWidget extends AppWidgetProvider {
 
 
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+   /* static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId, String s) {
         RemoteViews views;
         if (s.equals("Simple")) {
@@ -68,26 +68,26 @@ public class QuizAppWidget extends AppWidgetProvider {
 
             PendingIntent loadPendingIntentTwo = PendingIntent.getBroadcast(context, 3, loadIntentTwo, 0);
 
-            /*CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
-            // Construct the RemoteViews object*/
+            *//*CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
+            // Construct the RemoteViews object*//*
             views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget);
            views.setOnClickPendingIntent(R.id.refresh_widget, loadPendingIntentTwo);
            views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
             //views.setOnClickPendingIntent(R.id.refresh_widget, refreshPendingIntent);
-           /* views.setTextViewText(R.id.appwidget_text, widgetText);
-            views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);*/
+           *//* views.setTextViewText(R.id.appwidget_text, widgetText);
+            views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);*//*
             views.setRemoteAdapter(R.id.widget_stack_view, serviceIntent);
             views.setEmptyView(R.id.widget_stack_view, R.id.empty_widget_view);
             //views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
-        }
+        }*/
 
 
         // Instruct the widget manager to update the widget
-        if (views != null) {
+    /*    if (views != null) {
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
-    }
+    }*/
 
     public static void newTopScore(String category, int newScore) {
         if (topScores.size() != 0) {
@@ -134,10 +134,52 @@ public class QuizAppWidget extends AppWidgetProvider {
                             }
                             for (final int appWidgetId : appWidgetIds) {
                                 CharSequence widgetMode = QuizAppWidgetConfigureActivity.loadModePref(context, appWidgetId);
+                                String s = widgetMode.toString();
+                                //updateAppWidget(context, appWidgetManager, appWidgetId, widgetMode.toString());
+                                RemoteViews views;
+                                if (s.equals("Simple")) {
+                                    views = new RemoteViews(context.getPackageName(), R.layout.simple_quiz_app_widget);
+                                    views.setTextViewText(R.id.simple_widget_textview, "Quiz App");
+                                    Intent loadIntent = new Intent(context, MainActivity.class);
+                                    PendingIntent loadPendingIntent = PendingIntent.getActivity(context, 1, loadIntent, 0);
+                                    views.setOnClickPendingIntent(R.id.simple_widget_textview, loadPendingIntent);
+                                } else {
 
-                                updateAppWidget(context, appWidgetManager, appWidgetId, widgetMode.toString());
+                                    Intent serviceIntent = new Intent(context, QuizAppWidgetService.class);
+                                    serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+
+                                    serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
+
+                                    Intent refreshIntent = new Intent(context, QuizAppWidget.class);
+                                    refreshIntent.setAction(ACTION_OPEN_ACTIVITY);
+
+                                    PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, 0);
+
+                                    Intent loadIntentTwo = new Intent(context, QuizAppWidget.class);
+
+                                    loadIntentTwo.setAction(QuizAppWidget.ACTION_UPDATE_WIDGET);
+                                    loadIntentTwo.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+
+                                    PendingIntent loadPendingIntentTwo = PendingIntent.getBroadcast(context, 3, loadIntentTwo, 0);
+
+            /*CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
+            // Construct the RemoteViews object*/
+                                    views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget);
+                                    views.setOnClickPendingIntent(R.id.refresh_widget, loadPendingIntentTwo);
+                                    views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
+                                    //views.setOnClickPendingIntent(R.id.refresh_widget, refreshPendingIntent);
+           /* views.setTextViewText(R.id.appwidget_text, widgetText);
+            views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);*/
+                                    views.setRemoteAdapter(R.id.widget_stack_view, serviceIntent);
+                                    views.setEmptyView(R.id.widget_stack_view, R.id.empty_widget_view);
+                                    //views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
+                                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
 
 
+                                }
+                                if (views != null) {
+                                    appWidgetManager.updateAppWidget(appWidgetId, views);
+                                }
                             }
                         }
                     }
@@ -145,6 +187,7 @@ public class QuizAppWidget extends AppWidgetProvider {
 
 
     }
+
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
