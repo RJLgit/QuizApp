@@ -36,6 +36,7 @@ public class QuizAppWidgetService extends RemoteViewsService {
         private FirebaseAuth mFirebaseAuth;
         private String uniqueUserId;
         private static final String TAG = "QuizWidgetItemFactory";
+        boolean topScoresExists;
 
 
         public QuizWidgetItemFactory(Context context, Intent intent) {
@@ -74,13 +75,40 @@ public class QuizAppWidgetService extends RemoteViewsService {
             topScores.add("100");
             topScores.add("100");
             topScores.add("100");*/
-            topScores.clear();
-
-            for (int i = 0; i < QuizAppWidget.topScores.size(); i++) {
-                topScores.add(QuizAppWidget.topScores.get(i));
-            }
             Log.d(TAG, "onDataSetChanged: " + topScores);
+
+
+            myRef.get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                topScores.clear();
+                                if (QuizAppWidget.topScores.size() == 0) {
+                                    topScoresExists = false;
+                                } else {
+                                    topScoresExists = true;
+                                }
+                                TopScores myScores = documentSnapshot.toObject(TopScores.class);
+                                for (int i = 0; i < QuizQuestionClass.getCategories().size(); i++) {
+                                    int score = myScores.getScoreByCategory(QuizQuestionClass.getCategories().get(i));
+                                    if (topScoresExists) {
+                                        QuizAppWidget.topScores.set(i, "" + score);
+                                    } else {
+                                        QuizAppWidget.topScores.add("" + score);
+                                    }
+                                }
+                                for (int i = 0; i < QuizAppWidget.topScores.size(); i++) {
+                                    topScores.add(QuizAppWidget.topScores.get(i));
+                                    Log.d(TAG, "onDataSetChanged: " + topScores);
+                                }
+                            }
+                        }
+                    });
         }
+
+
+
 
         @Override
         public void onDestroy() {
@@ -103,7 +131,9 @@ public class QuizAppWidgetService extends RemoteViewsService {
             Intent fillIntent = new Intent();
             fillIntent.putExtra(QuizAppWidget.CATEGORY_CLICKED, data.get(i));
             views.setOnClickFillInIntent(R.id.widget_textview_item, fillIntent);
-
+            /*Intent fillIntent = new Intent();
+            fillIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            views.setOnClickFillInIntent(R.id.widget_textview_item, fillIntent);*/
             return views;
         }
 

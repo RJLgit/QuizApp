@@ -132,7 +132,7 @@ public class QuizAppWidget extends AppWidgetProvider {
                                 }
 
                             }
-                            for (final int appWidgetId : appWidgetIds) {
+                            for (int appWidgetId : appWidgetIds) {
                                 CharSequence widgetMode = QuizAppWidgetConfigureActivity.loadModePref(context, appWidgetId);
                                 String s = widgetMode.toString();
                                 //updateAppWidget(context, appWidgetManager, appWidgetId, widgetMode.toString());
@@ -151,6 +151,7 @@ public class QuizAppWidget extends AppWidgetProvider {
                                     serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
                                     Intent refreshIntent = new Intent(context, QuizAppWidget.class);
+
                                     refreshIntent.setAction(ACTION_OPEN_ACTIVITY);
 
                                     PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, 0);
@@ -165,6 +166,7 @@ public class QuizAppWidget extends AppWidgetProvider {
             /*CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
             // Construct the RemoteViews object*/
                                     views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget);
+
                                     views.setOnClickPendingIntent(R.id.refresh_widget, loadPendingIntentTwo);
                                     views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
                                     //views.setOnClickPendingIntent(R.id.refresh_widget, refreshPendingIntent);
@@ -222,6 +224,8 @@ public class QuizAppWidget extends AppWidgetProvider {
         if (ACTION_OPEN_ACTIVITY.equals(intent.getAction())) {
             if (intent.hasExtra(QuizAppWidget.CATEGORY_CLICKED)) {
                 String cat = intent.getStringExtra(QuizAppWidget.CATEGORY_CLICKED);
+
+
                 Log.d(TAG, "onReceive: " + cat);
 
 
