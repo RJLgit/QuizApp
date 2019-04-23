@@ -35,6 +35,7 @@ public class QuizAppWidget extends AppWidgetProvider {
     int score;
     public static ArrayList<String> topScores = new ArrayList<>();
     private static final String TAG = "QuizAppWidget";
+    private AppWidgetManager myAppWidgetManager;
 
 
 
@@ -46,7 +47,7 @@ public class QuizAppWidget extends AppWidgetProvider {
             views = new RemoteViews(context.getPackageName(), R.layout.simple_quiz_app_widget);
             views.setTextViewText(R.id.simple_widget_textview, "Quiz App");
             Intent loadIntent = new Intent(context, MainActivity.class);
-            PendingIntent loadPendingIntent = PendingIntent.getActivity(context, 0, loadIntent, 0);
+            PendingIntent loadPendingIntent = PendingIntent.getActivity(context, 1, loadIntent, 0);
             views.setOnClickPendingIntent(R.id.simple_widget_textview, loadPendingIntent);
         } else {
 
@@ -60,8 +61,12 @@ public class QuizAppWidget extends AppWidgetProvider {
 
             PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, 0);
 
-            Intent loadIntentTwo = new Intent(context, MainActivity.class);
-            PendingIntent loadPendingIntentTwo = PendingIntent.getActivity(context, 0, loadIntentTwo, 0);
+            Intent loadIntentTwo = new Intent(context, QuizAppWidget.class);
+
+            loadIntentTwo.setAction(QuizAppWidget.ACTION_UPDATE_WIDGET);
+            loadIntentTwo.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+
+            PendingIntent loadPendingIntentTwo = PendingIntent.getBroadcast(context, 3, loadIntentTwo, 0);
 
             /*CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
             // Construct the RemoteViews object*/
@@ -73,7 +78,7 @@ public class QuizAppWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);*/
             views.setRemoteAdapter(R.id.widget_stack_view, serviceIntent);
             views.setEmptyView(R.id.widget_stack_view, R.id.empty_widget_view);
-            views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
+            //views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
         }
 
@@ -110,6 +115,7 @@ public class QuizAppWidget extends AppWidgetProvider {
             uniqueUserId = user.getUid();
             db = FirebaseFirestore.getInstance();
             mUsername = user.getDisplayName();
+            myAppWidgetManager = appWidgetManager;
             myRef = db.collection("TopScores").document(uniqueUserId);
         myRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -166,6 +172,8 @@ public class QuizAppWidget extends AppWidgetProvider {
         if (ACTION_UPDATE_WIDGET.equals(intent.getAction())) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+            Log.d(TAG, "onReceive: " + appWidgetId);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
         }
         if (ACTION_OPEN_ACTIVITY.equals(intent.getAction())) {

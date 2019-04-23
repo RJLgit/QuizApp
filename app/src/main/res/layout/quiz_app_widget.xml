@@ -18,16 +18,16 @@
         android:textColor="#ffffff"
         android:textSize="24sp"
         android:textStyle="bold|italic" />
-
+    <Button
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:text="@string/refresh_widget"
+        android:id="@+id/refresh_widget"/>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <Button
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:text="@string/refresh_widget"
-            android:id="@+id/refresh_widget"/>
+
         <StackView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

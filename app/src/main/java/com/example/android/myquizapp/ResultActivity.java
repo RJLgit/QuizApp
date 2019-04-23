@@ -158,6 +158,7 @@ public class ResultActivity extends AppCompatActivity {
         }
         if (yourHighScore && !globalHighScore) {
             toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is your new top score!";
+            //QuizAppWidget.newTopScore(category, intPercentScore);
             /*ComponentName componentName = new ComponentName(getApplicationContext(), QuizAppWidget.class);
             RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.quiz_app_widget);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
@@ -168,7 +169,7 @@ public class ResultActivity extends AppCompatActivity {
             */
         } else if (globalHighScore) {
             toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is the highest score ever achieved!";
-
+            /*QuizAppWidget.newTopScore(category, intPercentScore);*/
         } else {
             toDisplay = "Your Score was " + intPercentScore + " percent!" + "\n" + "This is not a high score.";
         }

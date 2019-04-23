@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -34,6 +35,7 @@ public class QuizAppWidgetService extends RemoteViewsService {
         private DocumentReference myRef;
         private FirebaseAuth mFirebaseAuth;
         private String uniqueUserId;
+        private static final String TAG = "QuizWidgetItemFactory";
 
 
         public QuizWidgetItemFactory(Context context, Intent intent) {
@@ -73,9 +75,11 @@ public class QuizAppWidgetService extends RemoteViewsService {
             topScores.add("100");
             topScores.add("100");*/
             topScores.clear();
+
             for (int i = 0; i < QuizAppWidget.topScores.size(); i++) {
                 topScores.add(QuizAppWidget.topScores.get(i));
             }
+            Log.d(TAG, "onDataSetChanged: " + topScores);
         }
 
         @Override
