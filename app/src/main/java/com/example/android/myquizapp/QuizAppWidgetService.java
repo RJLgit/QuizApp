@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -102,6 +103,7 @@ public class QuizAppWidgetService extends RemoteViewsService {
                                     topScores.add(QuizAppWidget.topScores.get(i));
                                     Log.d(TAG, "onDataSetChanged: " + topScores);
                                 }
+
                             }
                         }
                     });
@@ -122,6 +124,8 @@ public class QuizAppWidgetService extends RemoteViewsService {
 
         @Override
         public RemoteViews getViewAt(int i) {
+            SystemClock.sleep(500);
+            Log.d(TAG, "getViewAt: " + QuizQuestionClass.getCategories().get(i));
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget_item);
             if (QuizAppWidget.topScores.size() != 0) {
                 views.setTextViewText(R.id.widget_textview_item, data.get(i) + topScores.get(i));

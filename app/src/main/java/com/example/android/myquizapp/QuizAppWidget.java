@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.RemoteViews;
@@ -241,6 +242,7 @@ public class QuizAppWidget extends AppWidgetProvider {
             Log.d(TAG, "onReceive: " + appWidgetId);
             //maybe do this line of code if can get correct appWidgetId to the onReceive method
             //appWidgetManager.updateAppWidget(appWidgetId);
+
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
         }
         if (ACTION_OPEN_ACTIVITY.equals(intent.getAction())) {
