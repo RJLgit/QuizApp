@@ -460,6 +460,11 @@ public class QuizAppWidgetConfigureActivity extends Activity {
                                 Log.d(TAG, "onSuccess: " + mAppWidgetId);
                                 serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
+                                Intent loadIntent = new Intent(context, MainActivity.class);
+                                PendingIntent loadPendingIntent = PendingIntent.getActivity(context, 1, loadIntent, 0);
+
+
+
                                 Intent openQuestionActivityIntent = new Intent(context, QuizAppWidget.class);
                                 openQuestionActivityIntent.setAction(QuizAppWidget.ACTION_OPEN_ACTIVITY);
 
@@ -478,6 +483,7 @@ public class QuizAppWidgetConfigureActivity extends Activity {
                                 views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget);
                                 views.setOnClickPendingIntent(R.id.refresh_widget, refreshWidgetPendingIntent);
                                 views.setPendingIntentTemplate(R.id.widget_stack_view, openQuestionActivityPendingIntent);
+                                views.setOnClickPendingIntent(R.id.appwidget_text, loadPendingIntent);
                                 //views.setOnClickPendingIntent(R.id.refresh_widget, openQuestionActivityPendingIntent);
            /* views.setTextViewText(R.id.appwidget_text, widgetText);
             views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);*/
