@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -442,6 +443,10 @@ public class QuizAppWidgetConfigureActivity extends Activity {
                             String mod = loadModePref(context, mAppWidgetId);
                             RemoteViews views;
                             if (mod.equals("Simple")) {
+                                /*ComponentName componentName = new ComponentName(context.getPackageName(), QuizAppWidget.class.getName());
+                                if (Build.VERSION.SDK_INT >= 28) {
+                                    appWidgetManager.updateAppWidgetProviderInfo(componentName, "android.appwidget.provider2");
+                                }*/
                                 views = new RemoteViews(context.getPackageName(), R.layout.simple_quiz_app_widget);
                                 views.setTextViewText(R.id.simple_widget_textview, "Quiz App");
                                 Intent loadIntent = new Intent(context, MainActivity.class);
@@ -453,7 +458,10 @@ public class QuizAppWidgetConfigureActivity extends Activity {
                                 setResult(RESULT_OK, resultValue);
                                 finish();
                             } else {
-
+                                /*ComponentName componentName = new ComponentName(context.getPackageName(), QuizAppWidget.class.getName());
+                                if (Build.VERSION.SDK_INT >= 28) {
+                                    appWidgetManager.updateAppWidgetProviderInfo(componentName, "android.appwidget.provider");
+                                }*/
                                 Intent serviceIntent = new Intent(context, QuizAppWidgetService.class);
                                 serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
                                 Log.d(TAG, "onSuccess: " + mAppWidgetId);

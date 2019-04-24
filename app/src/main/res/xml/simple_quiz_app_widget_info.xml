@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="com.example.android.myquizapp.QuizAppWidgetConfigureActivity"
-    android:initialKeyguardLayout="@layout/quiz_app_widget"
-    android:initialLayout="@layout/quiz_app_widget"
+    android:initialKeyguardLayout="@layout/simple_quiz_app_widget"
+    android:initialLayout="@layout/simple_quiz_app_widget"
     android:minWidth="120dp"
-    android:minHeight="120dp"
+    android:minHeight="40dp"
     android:minResizeHeight="40dp"
-    android:previewImage="@drawable/quiz_app_detailed_preview"
+    android:previewImage="@drawable/example_appwidget_preview"
     android:resizeMode="horizontal|vertical"
 
     android:updatePeriodMillis="500"

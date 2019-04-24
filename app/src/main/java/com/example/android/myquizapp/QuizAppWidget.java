@@ -3,9 +3,11 @@ package com.example.android.myquizapp;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.RemoteViews;
@@ -139,13 +141,22 @@ public class QuizAppWidget extends AppWidgetProvider {
                                 //updateAppWidget(context, appWidgetManager, appWidgetId, widgetMode.toString());
                                 RemoteViews views;
                                 if (s.equals("Simple")) {
+                                    /*ComponentName componentName = new ComponentName(context.getPackageName(), QuizAppWidget.class.getName());
+                                    if (Build.VERSION.SDK_INT >= 28) {
+                                        appWidgetManager.updateAppWidgetProviderInfo(componentName, "android.appwidget.provider2");
+                                    }*/
                                     views = new RemoteViews(context.getPackageName(), R.layout.simple_quiz_app_widget);
                                     views.setTextViewText(R.id.simple_widget_textview, "Quiz App");
+
                                     Intent loadIntent = new Intent(context, MainActivity.class);
                                     PendingIntent loadPendingIntent = PendingIntent.getActivity(context, 1, loadIntent, 0);
                                     views.setOnClickPendingIntent(R.id.simple_widget_textview, loadPendingIntent);
                                     appWidgetManager.updateAppWidget(appWidgetId, views);
                                 } else {
+                                    /*ComponentName componentName = new ComponentName(context.getPackageName(), QuizAppWidget.class.getName());
+                                    if (Build.VERSION.SDK_INT >= 28) {
+                                        appWidgetManager.updateAppWidgetProviderInfo(componentName, "android.appwidget.provider");
+                                    }*/
                                     Log.d(TAG, "onSuccess: " + appWidgetId);
                                     Intent serviceIntent = new Intent(context, QuizAppWidgetService.class);
                                     serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
