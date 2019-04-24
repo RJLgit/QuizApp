@@ -78,35 +78,14 @@ public class QuizAppWidgetService extends RemoteViewsService {
             topScores.add("100");*/
             Log.d(TAG, "onDataSetChanged: " + topScores);
 
+    topScores.clear();
 
-            myRef.get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-                                topScores.clear();
-                                if (QuizAppWidget.topScores.size() == 0) {
-                                    topScoresExists = false;
-                                } else {
-                                    topScoresExists = true;
-                                }
-                                TopScores myScores = documentSnapshot.toObject(TopScores.class);
-                                for (int i = 0; i < QuizQuestionClass.getCategories().size(); i++) {
-                                    int score = myScores.getScoreByCategory(QuizQuestionClass.getCategories().get(i));
-                                    if (topScoresExists) {
-                                        QuizAppWidget.topScores.set(i, "" + score);
-                                    } else {
-                                        QuizAppWidget.topScores.add("" + score);
-                                    }
-                                }
                                 for (int i = 0; i < QuizAppWidget.topScores.size(); i++) {
                                     topScores.add(QuizAppWidget.topScores.get(i));
                                     Log.d(TAG, "onDataSetChanged: " + topScores);
                                 }
 
-                            }
-                        }
-                    });
+
         }
 
 
@@ -124,7 +103,7 @@ public class QuizAppWidgetService extends RemoteViewsService {
 
         @Override
         public RemoteViews getViewAt(int i) {
-            SystemClock.sleep(500);
+            //SystemClock.sleep(500);
             Log.d(TAG, "getViewAt: " + QuizQuestionClass.getCategories().get(i));
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget_item);
             if (QuizAppWidget.topScores.size() != 0) {
