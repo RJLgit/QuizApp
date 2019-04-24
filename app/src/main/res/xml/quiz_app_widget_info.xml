@@ -6,7 +6,7 @@
     android:minWidth="120dp"
     android:minHeight="120dp"
     android:minResizeHeight="40dp"
-    android:previewImage="@drawable/quiz_app_detailed_preview"
+    android:previewImage="@drawable/quiz_app_detailed_preview_resized"
     android:resizeMode="horizontal|vertical"
 
     android:updatePeriodMillis="500"
