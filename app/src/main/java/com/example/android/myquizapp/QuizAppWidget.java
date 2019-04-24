@@ -144,6 +144,7 @@ public class QuizAppWidget extends AppWidgetProvider {
                                     Intent loadIntent = new Intent(context, MainActivity.class);
                                     PendingIntent loadPendingIntent = PendingIntent.getActivity(context, 1, loadIntent, 0);
                                     views.setOnClickPendingIntent(R.id.simple_widget_textview, loadPendingIntent);
+                                    appWidgetManager.updateAppWidget(appWidgetId, views);
                                 } else {
                                     Log.d(TAG, "onSuccess: " + appWidgetId);
                                     Intent serviceIntent = new Intent(context, QuizAppWidgetService.class);

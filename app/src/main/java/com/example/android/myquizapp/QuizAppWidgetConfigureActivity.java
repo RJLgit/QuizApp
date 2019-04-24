@@ -439,9 +439,9 @@ public class QuizAppWidgetConfigureActivity extends Activity {
 
 
                             //updateAppWidget(context, appWidgetManager, appWidgetId, widgetMode.toString());
-
+                            String mod = loadModePref(context, mAppWidgetId);
                             RemoteViews views;
-                            if (s.equals("Simple")) {
+                            if (mod.equals("Simple")) {
                                 views = new RemoteViews(context.getPackageName(), R.layout.simple_quiz_app_widget);
                                 views.setTextViewText(R.id.simple_widget_textview, "Quiz App");
                                 Intent loadIntent = new Intent(context, MainActivity.class);
