@@ -32,8 +32,7 @@ public class QuizAppWidgetConfigureActivity extends Activity {
     private static final String PREF_PREFIX_KEY = "appwidget_";
     private static final String PREF_MODE_KEY = "appwidget_simple_detailed";
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    //int mAppWidgetId;
-    EditText mAppWidgetText;
+
     Spinner mSpinner;
     FirebaseFirestore db;
     private DocumentReference myRef;
@@ -273,7 +272,7 @@ public class QuizAppWidgetConfigureActivity extends Activity {
         setResult(RESULT_CANCELED);*/
 
         setContentView(R.layout.quiz_app_widget_configure);
-        mAppWidgetText = (EditText) findViewById(R.id.appwidget_text);
+
         mSpinner = findViewById(R.id.spinner1);
         mButton = findViewById(R.id.add_button);
 
