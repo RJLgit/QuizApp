@@ -460,30 +460,30 @@ public class QuizAppWidgetConfigureActivity extends Activity {
                                 Log.d(TAG, "onSuccess: " + mAppWidgetId);
                                 serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
-                                Intent refreshIntent = new Intent(context, QuizAppWidget.class);
-                                refreshIntent.setAction(QuizAppWidget.ACTION_OPEN_ACTIVITY);
+                                Intent openQuestionActivityIntent = new Intent(context, QuizAppWidget.class);
+                                openQuestionActivityIntent.setAction(QuizAppWidget.ACTION_OPEN_ACTIVITY);
 
-                                PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, 0);
+                                PendingIntent openQuestionActivityPendingIntent = PendingIntent.getBroadcast(context, 0, openQuestionActivityIntent, 0);
 
-                                Intent loadIntentTwo = new Intent(context, QuizAppWidget.class);
+                                Intent refreshWidgetIntent = new Intent(context, QuizAppWidget.class);
 
-                                loadIntentTwo.setAction(QuizAppWidget.ACTION_UPDATE_WIDGET);
-                                loadIntentTwo.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                                refreshWidgetIntent.setAction(QuizAppWidget.ACTION_UPDATE_WIDGET);
+                                refreshWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
                                 Log.d(TAG, "onSuccess: " + mAppWidgetId);
 
-                                PendingIntent loadPendingIntentTwo = PendingIntent.getBroadcast(context, mAppWidgetId, loadIntentTwo, 0);
+                                PendingIntent refreshWidgetPendingIntent = PendingIntent.getBroadcast(context, mAppWidgetId, refreshWidgetIntent, 0);
 
             /*CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
             // Construct the RemoteViews object*/
                                 views = new RemoteViews(context.getPackageName(), R.layout.quiz_app_widget);
-                                views.setOnClickPendingIntent(R.id.refresh_widget, loadPendingIntentTwo);
-                                views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
-                                //views.setOnClickPendingIntent(R.id.refresh_widget, refreshPendingIntent);
+                                views.setOnClickPendingIntent(R.id.refresh_widget, refreshWidgetPendingIntent);
+                                views.setPendingIntentTemplate(R.id.widget_stack_view, openQuestionActivityPendingIntent);
+                                //views.setOnClickPendingIntent(R.id.refresh_widget, openQuestionActivityPendingIntent);
            /* views.setTextViewText(R.id.appwidget_text, widgetText);
             views.setTextViewText(R.id.score_text_widget, "Your high score is " + s);*/
                                 views.setRemoteAdapter(R.id.widget_stack_view, serviceIntent);
                                 views.setEmptyView(R.id.widget_stack_view, R.id.empty_widget_view);
-                                //views.setPendingIntentTemplate(R.id.widget_stack_view, refreshPendingIntent);
+                                //views.setPendingIntentTemplate(R.id.widget_stack_view, openQuestionActivityPendingIntent);
                                 appWidgetManager.updateAppWidget(mAppWidgetId, views);
                                 appWidgetManager.notifyAppWidgetViewDataChanged(mAppWidgetId, R.id.widget_stack_view);
                                 Intent resultValue = new Intent();
