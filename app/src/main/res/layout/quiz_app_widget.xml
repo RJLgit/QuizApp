@@ -18,11 +18,22 @@
         android:textColor="#ffffff"
         android:textSize="24sp"
         android:textStyle="bold|italic" />
-    <Button
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:text="@string/refresh_widget"
-        android:id="@+id/refresh_widget"/>
+  <!-- <Button
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+
+       android:drawableStart="@drawable/baseline_refresh_black_18dp"
+
+
+
+        />-->
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/baseline_refresh_black_18dp"
+        android:id="@+id/refresh_widget"
+        />
+
 
     <FrameLayout
         android:layout_width="match_parent"
