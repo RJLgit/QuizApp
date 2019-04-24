@@ -163,7 +163,7 @@ public class QuizAppWidget extends AppWidgetProvider {
                                     Log.d(TAG, "onSuccess: " + appWidgetId);
                                    loadIntentTwo.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 
-                                    PendingIntent loadPendingIntentTwo = PendingIntent.getBroadcast(context, 3, loadIntentTwo, 0);
+                                    PendingIntent loadPendingIntentTwo = PendingIntent.getBroadcast(context, appWidgetId, loadIntentTwo, 0);
 
             /*CharSequence widgetText = QuizAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
             // Construct the RemoteViews object*/
