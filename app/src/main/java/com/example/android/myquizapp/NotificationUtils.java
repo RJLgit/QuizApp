@@ -21,7 +21,7 @@ public class NotificationUtils {
     }
     private static Bitmap getNotIcon(Context context) {
         Resources res = context.getResources();
-        Bitmap icon = BitmapFactory.decodeResource(res, R.drawable.quiz_app_widget_preview);
+        Bitmap icon = BitmapFactory.decodeResource(res, R.drawable.tiny_notifcation_image);
         return icon;
     }
     public static void updateUserAboutTopScores(Context context) {
@@ -34,7 +34,7 @@ public class NotificationUtils {
         }
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID_QUIZ_APP)
-                .setSmallIcon(R.drawable.quiz_app_widget_preview)
+                .setSmallIcon(R.drawable.tiny_notifcation_image)
                 .setLargeIcon(getNotIcon(context))
                 .setContentTitle("Ultimate Quiz App")
                 .setContentText("Try to beat the quiz scores")
