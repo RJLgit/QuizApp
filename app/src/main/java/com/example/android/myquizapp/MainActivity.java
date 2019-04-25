@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
             }
         });
         mUsername = "ANON";
+
+
         progressBar = findViewById(R.id.mainProgressBar);
         mRecyclerView = (RecyclerView) findViewById(R.id.category_recycler_view);
         LinearLayoutManager layoutManager
@@ -104,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle("The Ultimate Quiz App");
         setSupportActionBar(myToolbar);
+
+        NotificationUtils.scheduleNotificationUpdate(this);
        //batchWriteToAddQuestions();
         //addPicsToStorage();
     }
