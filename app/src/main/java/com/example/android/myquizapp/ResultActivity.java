@@ -82,7 +82,13 @@ public class ResultActivity extends AppCompatActivity {
         myScore = intent.getIntExtra("CurrentScore", 0);
 
         Log.d(TAG, "onCreate: " + myScore);
-        percentScore =  ((float) myScore/ (float) QuestionActivity.totalQuestions) * 100;
+        if (category.equals("Ultimate")) {
+            percentScore =  ((float) myScore/ (float) QuestionActivity.totalUltimateQuestions) * 100;
+        } else {
+            percentScore =  ((float) myScore/ (float) QuestionActivity.totalQuestions) * 100;
+        }
+
+
         Log.d(TAG, "onCreate: " + percentScore);
         intPercentScore = Math.round(percentScore);
         Log.d(TAG, "onCreate: " + intPercentScore);
