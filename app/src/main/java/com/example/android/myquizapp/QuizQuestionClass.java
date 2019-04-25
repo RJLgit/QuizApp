@@ -265,6 +265,8 @@ public class QuizQuestionClass {
                 return 7;
             case "People":
                 return 7;
+            case "TV":
+                return 5;
 
             default:
                 return 0;
@@ -332,7 +334,22 @@ public class QuizQuestionClass {
 
         return res;
     }
+    public static ArrayList<QuizQuestion> getTVQuestions() {
+        ArrayList<QuizQuestion> res = new ArrayList<>();
+        QuizQuestion q1 = new QuizQuestion("Who was the president in the west wing?", "President Bartlet", "President Hampton", "President Breakit", "President Jones");
+        QuizQuestion q2 = new QuizQuestion("Who played Ned Stark in game of thrones?", "Sean Bean", "Kit Harrington", "Ian Glenn", "Peter Dinklage");
+        QuizQuestion q3 = new QuizQuestion("What was the name of the android in Star Trek: The next generation?", "Data", "REM", "C924P", "Crunch");
+        QuizQuestion q4 = new QuizQuestion("Who played the title role in the BBC series Merlin?", "Colin Morgan", "Bradley James", "Richard Wilson", "Anthony Head");
+        QuizQuestion q5 = new QuizQuestion("Who is Larry's manager in Curb Your Enthusiasm?", "Jeff", "Richie", "Joe", "George");
 
+        res.add(q1);
+        res.add(q2);
+        res.add(q3);
+        res.add(q4);
+        res.add(q5);
+
+        return res;
+    }
     public static ArrayList<QuizQuestion> getGeographyQuestions() {
         ArrayList<QuizQuestion> res = new ArrayList<>();
         QuizQuestion q1 = new QuizQuestion("What does the suez canal link with the Meditarrean Sea?", "Red sea", "Dead sea", "Black sea", "Caspian sea");
