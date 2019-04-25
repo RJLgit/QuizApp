@@ -75,7 +75,7 @@ public class ScoresAdapter extends RecyclerView.Adapter<ScoresAdapter.ScoresView
                                 scoresViewHolder.bind(categories.get(i), myScore, "Not set");
                             }
                         } else {
-                            TopScores newScores = new TopScores(0, 0, 0, 0, 0, 0 , 0, 0 , 0, 0);
+                            TopScores newScores = new TopScores(0, 0, 0, 0, 0, 0, 0 , 0, 0 , 0, 0);
                             myRef.set(newScores);
                             scoresViewHolder.bind(categories.get(i), "0", "Not set");
                         }

@@ -87,7 +87,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
                             });
 
                         } else {
-                            TopScores newScores = new TopScores(0, 0, 0, 0, 0, 0 , 0, 0 , 0, 0);
+                            TopScores newScores = new TopScores(0, 0, 0, 0, 0, 0, 0 , 0, 0 , 0, 0);
                             myRef.set(newScores);
                             DocumentReference globalDocRef = globalRef.document(categories.get(i).toLowerCase());
                             globalDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

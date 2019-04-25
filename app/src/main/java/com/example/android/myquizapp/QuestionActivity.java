@@ -96,7 +96,7 @@ private String category;
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
     private FirebaseAuth mFirebaseAuth;
-
+    private Boolean isUltimate;
 
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {
@@ -363,6 +363,11 @@ private String category;
                     getResources(), R.drawable.question_mark
             ));
             pictureQuestionTextView.setText("Who wrote this music?");
+        }
+        if (category.equals("Ultimate")) {
+            isUltimate = true;
+        } else {
+            isUltimate = false;
         }
 
         if (isNewGame) {

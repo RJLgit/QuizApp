@@ -24,6 +24,7 @@ public class QuizQuestionClass {
 
     public static ArrayList<String> getCategories() {
         ArrayList<String> res = new ArrayList<>();
+        res.add("Ultimate");
         res.add("Sport");
         res.add("Music");
         res.add("Nature");
@@ -38,6 +39,7 @@ public class QuizQuestionClass {
     }
     public static ArrayList<String> getUserHighScores() {
         ArrayList<String> res = new ArrayList<>();
+        res.add("33");
         res.add("65");
         res.add("54");
         res.add("76");
@@ -52,6 +54,7 @@ public class QuizQuestionClass {
     }
     public static ArrayList<String> getGlobalHighScores() {
         ArrayList<String> res = new ArrayList<>();
+        res.add("35");
         res.add("12");
         res.add("34");
         res.add("56");

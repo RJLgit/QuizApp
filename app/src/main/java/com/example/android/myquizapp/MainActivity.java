@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle("The Ultimate Quiz App");
         setSupportActionBar(myToolbar);
-       batchWriteToAddQuestions();
+       //batchWriteToAddQuestions();
         //addPicsToStorage();
     }
 

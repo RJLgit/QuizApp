@@ -3,6 +3,7 @@ package com.example.android.myquizapp;
 import android.util.Log;
 
 public class TopScores {
+    private int Ultimate;
     private int Sport;
     private int Music;
     private int Nature;
@@ -17,7 +18,8 @@ public class TopScores {
     public TopScores() {
     }
 
-    public TopScores(int sport, int music, int nature, int history, int geography, int technology, int people, int pictures, int films, int TV) {
+    public TopScores(int ultimate, int sport, int music, int nature, int history, int geography, int technology, int people, int pictures, int films, int TV) {
+        Ultimate = ultimate;
         Sport = sport;
         Music = music;
         Nature = nature;
@@ -51,9 +53,19 @@ public class TopScores {
                 return getFilms();
             case "TV":
                 return getTV();
+            case "Ultimate":
+                return getUltimate();
                 default:
                     return 0;
         }
+    }
+
+    public int getUltimate() {
+        return Ultimate;
+    }
+
+    public void setUltimate(int ultimate) {
+        Ultimate = ultimate;
     }
 
     public int getSport() {

@@ -102,7 +102,7 @@ public class ResultActivity extends AppCompatActivity {
                 if (documentSnapshot.exists()) {
                     s = updateDataHelperMethod(documentSnapshot, myGlobalSnapshot, transaction);
                 } else {
-                    TopScores nTopScores = new TopScores(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                    TopScores nTopScores = new TopScores(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
                     db.collection("TopScores").document(uniqueUserId).set(nTopScores);
                     documentSnapshot = transaction.get(documentReference);
                     s = updateDataHelperMethod(documentSnapshot, myGlobalSnapshot, transaction);
@@ -267,7 +267,7 @@ public class ResultActivity extends AppCompatActivity {
                     });
 
                 } else {
-                    TopScores nTopScores = new TopScores(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                    TopScores nTopScores = new TopScores(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
                     db.collection("TopScores").document(uniqueUserId).set(nTopScores);
                     documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
