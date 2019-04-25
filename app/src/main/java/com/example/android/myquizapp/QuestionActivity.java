@@ -714,7 +714,8 @@ private String category;
             Random rn = new Random();
             int answer = rn.nextInt(QuizQuestionClass.getNumberQuestions(QuizQuestionClass.getCategories().get(catIndex))) + 1;
             Integer myInt = new Integer(answer);
-            if (results.size() == 0 || results.get(results.size() - 1) != myInt) {
+
+            if (results.size() == 0 || results.get(results.size() - 1).compareTo(myInt) == 1 || results.get(results.size() - 1).compareTo(myInt) == -1) {
                 results.add(myInt);
                 questionsIndex++;
                 if (questionsIndex >= 2) {
@@ -723,6 +724,7 @@ private String category;
                 }
             }
         }
+        Log.d(TAG, "generateUltimateQuestionsToAsk: " + results);
         return results;
     }
 
