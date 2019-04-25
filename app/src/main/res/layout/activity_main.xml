@@ -18,6 +18,16 @@ tools:context=".MainActivity"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+    <Button
+        android:layout_width="82dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
+        android:text="Test Not"
+        android:id="@+id/test_not_but"/>
+
     <android.support.design.widget.CoordinatorLayout
 
         android:id="@+id/main_coordinator"

@@ -17,6 +17,7 @@
     <string name="quiz_app">Quiz App</string>
     <string name="refresh_widget">Refresh</string>
     <string name="widget_config_prompt">Please select either a detailed or simple widget</string>
+    <string name="main_notification_channel_name">Primary</string>
 
     <string-array name="category_arrays">
         <item>TV</item>

@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
    private DatabaseReference mDatabaseReference;
    private StorageReference mStorageRef;
     private static final String TAG = "MainActivity";
+    private Button testButt;
 
     //Sign in Request code
     private static final int RC_SIGN_IN = 1;
@@ -57,6 +58,13 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        testButt = findViewById(R.id.test_not_but);
+        testButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotificationUtils.updateUserAboutTopScores(MainActivity.this);
+            }
+        });
         mUsername = "ANON";
         progressBar = findViewById(R.id.mainProgressBar);
         mRecyclerView = (RecyclerView) findViewById(R.id.category_recycler_view);
