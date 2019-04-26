@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
@@ -54,6 +55,7 @@ public class ResultActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DocumentReference documentReference;
     private DocumentReference globalDocumentReference;
+    private DocumentReference updateGlobalReference;
     private static final int RC_SIGN_IN = 1;
     private int myScore;
     private String category;
@@ -94,6 +96,7 @@ public class ResultActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: " + intPercentScore);
         globalDocumentReference = db.collection("TopScores").document(category.toLowerCase());
         documentReference = db.collection("TopScores").document(uniqueUserId);
+        updateGlobalReference = db.collection("TopScores").document("globalscoreupdated");
         /*if (documentReference.get() == null) {
             TopScores nTopScores = new TopScores(0, 0,0 , 0, 0, 0, 0, 0, 0, 0);
             db.collection("TopScores").document(uniqueUserId).set(nTopScores);
@@ -175,6 +178,9 @@ public class ResultActivity extends AppCompatActivity {
             */
         } else if (globalHighScore) {
             toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is the highest score ever achieved!";
+            Map<String, Object> updates = new HashMap<>();
+            updates.put(category.toLowerCase(), FieldValue.serverTimestamp());
+            updateGlobalReference.update(updates);
             /*QuizAppWidget.newTopScore(category, intPercentScore);*/
         } else {
             toDisplay = "Your Score was " + intPercentScore + " percent!" + "\n" + "This is not a high score.";
