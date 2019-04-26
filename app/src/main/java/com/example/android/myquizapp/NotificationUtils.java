@@ -103,8 +103,8 @@ public class NotificationUtils {
                 LocalDate twoDaysAgo = current.minusDays(2);
                 Date twoDaysAgoDate = Date.from(twoDaysAgo.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 Log.d(TAG, "onSuccess: twodays" + twoDaysAgo);
-                LocalDate histDate = LocalDate.of(hist.toDate().getYear(), hist.toDate().getMonth(), hist.toDate().getDay());
-                Log.d(TAG, "onSuccess: " + histDate);
+                /*LocalDate histDate = LocalDate.of(hist.toDate().getYear(), hist.toDate().getMonth(), hist.toDate().getDay());*/
+                /*Log.d(TAG, "onSuccess: " + histDate);*/
                 if (hist.toDate().after(twoDaysAgoDate)) {
                     ress = ress + "History";
                 }
