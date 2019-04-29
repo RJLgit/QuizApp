@@ -90,24 +90,25 @@ public class NotificationUtils {
 
 
     public static void updateUserAboutTopScores(final Context context) {
-
+        Log.d(TAG, "updateUserAboutTopScores: ");
         globalDocumentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 GlobalScoreUpdated globalScoreUpdated = documentSnapshot.toObject(GlobalScoreUpdated.class);
-                String ress = "The following had top scores: ";
-                Log.d(TAG, "onSuccess: " + globalScoreUpdated.getHistory());
+                Log.d(TAG, "onSuccess: ");
+               /* Log.d(TAG, "onSuccess: " + globalScoreUpdated.getHistory());
                 Timestamp hist = globalScoreUpdated.getHistory();
                 Log.d(TAG, "onSuccess: histdate" + hist.toDate());
                 LocalDate current = LocalDate.now();
                 LocalDate twoDaysAgo = current.minusDays(2);
                 Date twoDaysAgoDate = Date.from(twoDaysAgo.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                Log.d(TAG, "onSuccess: twodays" + twoDaysAgo);
+                Log.d(TAG, "onSuccess: twodays" + twoDaysAgo);*/
                 /*LocalDate histDate = LocalDate.of(hist.toDate().getYear(), hist.toDate().getMonth(), hist.toDate().getDay());*/
                 /*Log.d(TAG, "onSuccess: " + histDate);*/
-                if (hist.toDate().after(twoDaysAgoDate)) {
+                /*if (hist.toDate().after(twoDaysAgoDate)) {
                     ress = ress + "History";
-                }
+                }*/
+                String catsLastTwoDays = globalScoreUpdated.getUpdatedSince();
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     NotificationChannel mChannel = new NotificationChannel(
@@ -119,9 +120,13 @@ public class NotificationUtils {
                 NotificationCompat.Builder notificationBuilder =
                         new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID_QUIZ_APP)
                                 .setSmallIcon(R.drawable.tiny_notifcation_image)
+                                .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(catsLastTwoDays)
+                                .setBigContentTitle("Ultimate Quiz App")
+                                .setSummaryText("See which top scores have been set recently"))
+
                                 .setLargeIcon(getNotIcon(context))
-                                .setContentTitle("Ultimate Quiz App")
-                                .setContentText(ress)
+           
                                 .setContentIntent(contentIntent(context))
                                 .setAutoCancel(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
