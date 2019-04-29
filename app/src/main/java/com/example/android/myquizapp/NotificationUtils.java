@@ -126,7 +126,7 @@ public class NotificationUtils {
                                 .setSummaryText("See which top scores have been set recently"))
 
                                 .setLargeIcon(getNotIcon(context))
-           
+
                                 .setContentIntent(contentIntent(context))
                                 .setAutoCancel(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {

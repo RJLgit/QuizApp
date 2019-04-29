@@ -66,19 +66,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
             }
         });
         mUsername = "ANON";
-
-
-        progressBar = findViewById(R.id.mainProgressBar);
-        mRecyclerView = (RecyclerView) findViewById(R.id.category_recycler_view);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setHasFixedSize(true);
-        mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(), QuizQuestionClass.getUserHighScores(), QuizQuestionClass.getGlobalHighScores(), this);
-        mRecyclerView.setAdapter(mCategoryAdapter);
-
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-       mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         mListener = new FirebaseAuth.AuthStateListener() {
@@ -90,6 +78,16 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
                     uniqueUserId = user.getUid();
                     onSignedInInit(user.getDisplayName());
                     updateActionBar();
+                    progressBar = findViewById(R.id.mainProgressBar);
+                    mRecyclerView = (RecyclerView) findViewById(R.id.category_recycler_view);
+                    LinearLayoutManager layoutManager
+                            = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
+                    mRecyclerView.setLayoutManager(layoutManager);
+                    mRecyclerView.setHasFixedSize(true);
+                    mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(), QuizQuestionClass.getUserHighScores(), QuizQuestionClass.getGlobalHighScores(), MainActivity.this);
+                    mRecyclerView.setAdapter(mCategoryAdapter);
+
+                    mStorageRef = FirebaseStorage.getInstance().getReference();
                 } else {
                     startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
                             .setAvailableProviders(Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build(), new AuthUI.IdpConfig.EmailBuilder().build()))
@@ -98,10 +96,32 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
                         uniqueUserId = user.getUid();
                         onSignedInInit(user.getDisplayName());
                         updateActionBar();
+                        progressBar = findViewById(R.id.mainProgressBar);
+                        mRecyclerView = (RecyclerView) findViewById(R.id.category_recycler_view);
+                        LinearLayoutManager layoutManager
+                                = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
+                        mRecyclerView.setLayoutManager(layoutManager);
+                        mRecyclerView.setHasFixedSize(true);
+                        mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(), QuizQuestionClass.getUserHighScores(), QuizQuestionClass.getGlobalHighScores(), MainActivity.this);
+                        mRecyclerView.setAdapter(mCategoryAdapter);
+
+                        mStorageRef = FirebaseStorage.getInstance().getReference();
                     }
                 }
             }
         };
+
+       /* progressBar = findViewById(R.id.mainProgressBar);
+        mRecyclerView = (RecyclerView) findViewById(R.id.category_recycler_view);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(), QuizQuestionClass.getUserHighScores(), QuizQuestionClass.getGlobalHighScores(), this);
+        mRecyclerView.setAdapter(mCategoryAdapter);
+
+        mStorageRef = FirebaseStorage.getInstance().getReference();*/
+
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle("The Ultimate Quiz App");

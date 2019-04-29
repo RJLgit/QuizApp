@@ -55,8 +55,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
-        uniqueUserId = user.getUid();
-        myRef = db.collection("TopScores").document(uniqueUserId);
+        if (user != null) {
+            uniqueUserId = user.getUid();
+            myRef = db.collection("TopScores").document(uniqueUserId);
+        }
         globalRef = db.collection("TopScores");
         View view = inflater.inflate(layoutForListItem, viewGroup, false);
 
