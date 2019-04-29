@@ -98,7 +98,7 @@ public class ResultActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: " + percentScore);
         intPercentScore = Math.round(percentScore);
         myShareIntent = new Intent(Intent.ACTION_SEND);
-        myShareIntent.setType("text/html");
+        myShareIntent.setType("text/plain");
         myShareIntent.putExtra(Intent.EXTRA_TEXT, "I got " + intPercentScore + " in " + category);
 
         Log.d(TAG, "onCreate: " + intPercentScore);
