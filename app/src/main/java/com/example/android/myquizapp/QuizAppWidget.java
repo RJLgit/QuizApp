@@ -244,40 +244,42 @@ public class QuizAppWidget extends AppWidgetProvider {
             final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             mFirebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mFirebaseAuth.getCurrentUser();
-            uniqueUserId = user.getUid();
-            db = FirebaseFirestore.getInstance();
-            mUsername = user.getDisplayName();
+            if (user != null) {
+                uniqueUserId = user.getUid();
+                db = FirebaseFirestore.getInstance();
+                mUsername = user.getDisplayName();
 
-            myRef = db.collection("TopScores").document(uniqueUserId);
-            myRef.get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-                                boolean topScoresExists;
+                myRef = db.collection("TopScores").document(uniqueUserId);
+                myRef.get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    boolean topScoresExists;
 
-                                if (QuizAppWidget.topScores.size() == 0) {
-                                    topScoresExists = false;
-                                } else {
-                                    topScoresExists = true;
-                                }
-                                TopScores myScores = documentSnapshot.toObject(TopScores.class);
-                                for (int i = 0; i < QuizQuestionClass.getCategories().size(); i++) {
-                                    int score = myScores.getScoreByCategory(QuizQuestionClass.getCategories().get(i));
-                                    if (topScoresExists) {
-                                        QuizAppWidget.topScores.set(i, "" + score);
+                                    if (QuizAppWidget.topScores.size() == 0) {
+                                        topScoresExists = false;
                                     } else {
-                                        QuizAppWidget.topScores.add("" + score);
+                                        topScoresExists = true;
                                     }
+                                    TopScores myScores = documentSnapshot.toObject(TopScores.class);
+                                    for (int i = 0; i < QuizQuestionClass.getCategories().size(); i++) {
+                                        int score = myScores.getScoreByCategory(QuizQuestionClass.getCategories().get(i));
+                                        if (topScoresExists) {
+                                            QuizAppWidget.topScores.set(i, "" + score);
+                                        } else {
+                                            QuizAppWidget.topScores.add("" + score);
+                                        }
+                                    }
+
+
                                 }
-
-
+                                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
                             }
-                            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_stack_view);
-                        }
-                    });
+                        });
 
-            Log.d(TAG, "onReceive: " + appWidgetId);
+                Log.d(TAG, "onReceive: " + appWidgetId);
+            }
             //maybe do this line of code if can get correct appWidgetId to the onReceive method
             //appWidgetManager.updateAppWidget(appWidgetId);
             /*MyThread ex = new MyThread(appWidgetManager, appWidgetId);

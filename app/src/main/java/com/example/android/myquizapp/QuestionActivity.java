@@ -345,7 +345,12 @@ private String category;
             ab.setSubtitle("Logged in as " + getIntent().getStringExtra("Username").toString());
         } else {
             mFirebaseAuth = FirebaseAuth.getInstance();
-            mUsername = mFirebaseAuth.getCurrentUser().getDisplayName();
+            if (mFirebaseAuth.getCurrentUser() != null) {
+                mUsername = mFirebaseAuth.getCurrentUser().getDisplayName();
+            } else {
+                Intent startMainActIntent = new Intent(this, MainActivity.class);
+                startActivity(startMainActIntent);
+            }
         }
 
         category = getIntent().getStringExtra("CategoryClicked");
