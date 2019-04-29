@@ -47,15 +47,15 @@ public class NotificationUtils {
     private static final String TAG = "NotificationUtils";
     private static long DAY_IN_MS = 1000 * 60 * 60 * 24;
 
-    private static final int PENDING_INTENT_ID = 96543;
+    public static final int PENDING_INTENT_ID = 96543;
     public static final int UNIQUE_QUIZ_APP_NOTIFICATION_ID = 96543423;
     public static final String ACTION_DISMISS_NOTIFICATION = "quizappdismiss";
-    private static final String NOTIFICATION_CHANNEL_ID_QUIZ_APP = "quiz_app_notification_channel";
-    private static PendingIntent contentIntent(Context context) {
+    public static final String NOTIFICATION_CHANNEL_ID_QUIZ_APP = "quiz_app_notification_channel";
+    public static PendingIntent contentIntent(Context context) {
         Intent startActivityIntent = new Intent(context, MainActivity.class);
         return PendingIntent.getActivity(context, PENDING_INTENT_ID, startActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
-    private static Bitmap getNotIcon(Context context) {
+    public static Bitmap getNotIcon(Context context) {
         Resources res = context.getResources();
         Bitmap icon = BitmapFactory.decodeResource(res, R.drawable.tiny_notifcation_image);
         return icon;

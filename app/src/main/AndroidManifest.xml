@@ -13,6 +13,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_icon"
+                android:resource="@drawable/tiny_notifcation_image" />
+        </service>
+
         <receiver android:name=".QuizAppWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -21,9 +33,11 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/quiz_app_widget_info" />
-            <!--<meta-data
+            <!--
+                <meta-data
                 android:name="android.appwidget.provider2"
-                android:resource="@xml/simple_quiz_app_widget_info" />-->
+                android:resource="@xml/simple_quiz_app_widget_info" />
+            -->
         </receiver>
 
         <activity android:name=".QuizAppWidgetConfigureActivity">
@@ -42,15 +56,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".QuizAppWidgetService"
+
+        <service
+            android:name=".QuizAppWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-        <service android:name=".MyJobService"
-            android:exported="false" >
+        <service
+            android:name=".MyJobService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>
