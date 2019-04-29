@@ -116,11 +116,12 @@ public class QuizAppWidget extends AppWidgetProvider {
             Log.d(TAG, "onUpdate: ");
             mFirebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mFirebaseAuth.getCurrentUser();
-            uniqueUserId = user.getUid();
-            db = FirebaseFirestore.getInstance();
-            mUsername = user.getDisplayName();
-            myAppWidgetManager = appWidgetManager;
-            myRef = db.collection("TopScores").document(uniqueUserId);
+    if (user != null) {
+        uniqueUserId = user.getUid();
+        db = FirebaseFirestore.getInstance();
+        mUsername = user.getDisplayName();
+        myAppWidgetManager = appWidgetManager;
+        myRef = db.collection("TopScores").document(uniqueUserId);
         myRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -177,7 +178,7 @@ public class QuizAppWidget extends AppWidgetProvider {
 
                                     refreshWidgetIntent.setAction(QuizAppWidget.ACTION_UPDATE_WIDGET);
                                     Log.d(TAG, "onSuccess: " + appWidgetId);
-                                   refreshWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                                    refreshWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 
                                     PendingIntent refreshWidgetPendingIntent = PendingIntent.getBroadcast(context, appWidgetId, refreshWidgetIntent, 0);
 
@@ -207,7 +208,7 @@ public class QuizAppWidget extends AppWidgetProvider {
                     }
                 });
 
-
+    }
     }
 
 

@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     private Button testButt;
 
     //Sign in Request code
-    private static final int RC_SIGN_IN = 1;
+    protected static final int RC_SIGN_IN = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
 
                     mStorageRef = FirebaseStorage.getInstance().getReference();
                 } else {
+                    Log.d(TAG, "onAuthStateChanged: ");
                     startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
                             .setAvailableProviders(Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build(), new AuthUI.IdpConfig.EmailBuilder().build()))
                             .setIsSmartLockEnabled(false).build(), RC_SIGN_IN);

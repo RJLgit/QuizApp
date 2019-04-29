@@ -51,14 +51,15 @@ public class QuizAppWidgetService extends RemoteViewsService {
         public void onCreate() {
             mFirebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mFirebaseAuth.getCurrentUser();
-            uniqueUserId = user.getUid();
-            db = FirebaseFirestore.getInstance();
-            myRef = db.collection("TopScores").document(uniqueUserId);
-            for (int i = 0; i < QuizAppWidget.topScores.size(); i++) {
-                topScores.add(QuizAppWidget.topScores.get(i));
+            if (user != null) {
+                uniqueUserId = user.getUid();
+                db = FirebaseFirestore.getInstance();
+                myRef = db.collection("TopScores").document(uniqueUserId);
+                for (int i = 0; i < QuizAppWidget.topScores.size(); i++) {
+                    topScores.add(QuizAppWidget.topScores.get(i));
+                }
+
             }
-
-
 
 
         }
