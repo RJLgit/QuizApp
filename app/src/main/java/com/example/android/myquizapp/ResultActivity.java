@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -62,6 +64,8 @@ public class ResultActivity extends AppCompatActivity {
     private int intPercentScore;
     boolean yourHighScore = false;
     boolean globalHighScore = false;
+    private ShareActionProvider shareActionProvider;
+    private Intent myShareIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +97,10 @@ public class ResultActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate: " + percentScore);
         intPercentScore = Math.round(percentScore);
+        myShareIntent = new Intent(Intent.ACTION_SEND);
+        myShareIntent.setType("text/html");
+        myShareIntent.putExtra(Intent.EXTRA_TEXT, "I got " + intPercentScore + " in " + category);
+
         Log.d(TAG, "onCreate: " + intPercentScore);
         globalDocumentReference = db.collection("TopScores").document(category.toLowerCase());
         documentReference = db.collection("TopScores").document(uniqueUserId);
@@ -370,7 +378,13 @@ public class ResultActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+
+        inflater.inflate(R.menu.results_menu, menu);
+        MenuItem item = menu.findItem(R.id.share_menu);
+
+        // Fetch and store ShareActionProvider
+        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        shareActionProvider.setShareIntent(myShareIntent);
         return true;
     }
 
@@ -387,6 +401,8 @@ public class ResultActivity extends AppCompatActivity {
                 intent.putExtra("Username", mUsername);
                 startActivity(intent);
                 return true;
+
+
             default:
                 return super.onOptionsItemSelected(item);
         }
