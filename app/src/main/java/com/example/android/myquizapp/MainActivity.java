@@ -58,13 +58,13 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        testButt = findViewById(R.id.test_not_but);
+       /* testButt = findViewById(R.id.test_not_but);
         testButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NotificationUtils.updateUserAboutTopScores(MainActivity.this);
             }
-        });
+        });*/
         mUsername = "ANON";
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
