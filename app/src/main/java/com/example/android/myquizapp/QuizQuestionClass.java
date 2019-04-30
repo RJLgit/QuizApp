@@ -70,6 +70,7 @@ public class QuizQuestionClass {
     public static ArrayList<String> getDates() {
         ArrayList<String> res = new ArrayList<>();
         res.add("12th Feb");
+        res.add("19th Feb");
         res.add("16th Mar");
         res.add("23rd Sep");
         res.add("1st Apr");

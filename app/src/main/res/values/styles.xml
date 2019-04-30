@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">#1a4582</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="buttonStyle">@style/Widget.AppCompat.Button.Colored</item>
+
     </style>
   <!--<style name="MyTheme" parent="Theme.AppCompat.NoActionBar">
         &lt;!&ndash; Customize your theme here. &ndash;&gt;
