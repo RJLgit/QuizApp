@@ -18,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RemoteViews;
 import android.widget.TextView;
@@ -66,6 +68,10 @@ public class ResultActivity extends AppCompatActivity {
     boolean globalHighScore = false;
     private ShareActionProvider shareActionProvider;
     private Intent myShareIntent;
+    private Button myReturnButton;
+    private ImageView resultsImageView;
+    private ImageView yourScoreImageView;
+    private TextView descriptionOfScoreTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +81,18 @@ public class ResultActivity extends AppCompatActivity {
 
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         uniqueUserId = user.getUid();
+        myReturnButton = findViewById(R.id.returnToMainActButton);
+        myReturnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myReturnIntent = new Intent(ResultActivity.this, MainActivity.class);
+                startActivity(myReturnIntent);
+            }
+        });
+        resultsImageView = findViewById(R.id.resultsImageView);
+        yourScoreImageView = findViewById(R.id.yourScoreImageView);
+        descriptionOfScoreTextView = findViewById(R.id.isTopScoreResultsTextView);
+
 
         res = findViewById(R.id.resultsTextView);
         mProgressBar = findViewById(R.id.progressBar3);
@@ -133,8 +151,11 @@ public class ResultActivity extends AppCompatActivity {
             public void onSuccess(String toDisplay) {
                 Log.d(TAG, "onSuccess: " + toDisplay);
 
-                res.setText(toDisplay);
+                res.setText(intPercentScore + "%");
+                descriptionOfScoreTextView.setText(toDisplay);
                 res.setVisibility(View.VISIBLE);
+                descriptionOfScoreTextView.setVisibility(View.VISIBLE);
+                yourScoreImageView.setVisibility(View.VISIBLE);
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -174,7 +195,7 @@ public class ResultActivity extends AppCompatActivity {
             yourHighScore = true;
         }
         if (yourHighScore && !globalHighScore) {
-            toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is your new top score!";
+            toDisplay = "Congratulations! This is your new top score!";
             //QuizAppWidget.newTopScore(category, intPercentScore);
             /*ComponentName componentName = new ComponentName(getApplicationContext(), QuizAppWidget.class);
             RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.quiz_app_widget);
@@ -185,13 +206,13 @@ public class ResultActivity extends AppCompatActivity {
             PendingIntent sPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, sIntent, 0);
             */
         } else if (globalHighScore) {
-            toDisplay = "Congratulations! Your score was " + intPercentScore + " percent!" + "\n" + "This is the highest score ever achieved!";
+            toDisplay = "Congratulations! This is the highest score ever achieved!";
             Map<String, Object> updates = new HashMap<>();
             updates.put(category.toLowerCase(), FieldValue.serverTimestamp());
             updateGlobalReference.update(updates);
             /*QuizAppWidget.newTopScore(category, intPercentScore);*/
         } else {
-            toDisplay = "Your Score was " + intPercentScore + " percent!" + "\n" + "This is not a high score.";
+            toDisplay = "Unlucky! This is not a high score.";
         }
         //So all data references are written to during the transaction
         String lastChecked = new Date().toString();
