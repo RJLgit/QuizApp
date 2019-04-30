@@ -178,7 +178,9 @@ private String category;
         super.onDestroy();
         releasePlayer();
         if (category.equals("Music")) {
-            mMediaSession.setActive(false);
+            if (mMediaSession != null) {
+                mMediaSession.setActive(false);
+            }
         }
 
 
@@ -400,6 +402,10 @@ private String category;
                 startActivity(intent);
             } else {
                 if (ultimateCategory.equals("Music")) {
+                    answerOne.setEnabled(false);
+                    answerTwo.setEnabled(false);
+                    answerThree.setEnabled(false);
+                    answerFour.setEnabled(false);
                     questionTextView.setVisibility(View.INVISIBLE);
                     pictureQuestionTextView.setVisibility(View.VISIBLE);
                     mPlayerView.setVisibility(View.VISIBLE);
@@ -407,6 +413,7 @@ private String category;
                             getResources(), R.drawable.question_mark
                     ));
                     pictureQuestionTextView.setText("Who wrote this music?");
+
                     try {
                         final File localFile = File.createTempFile("Music", "mp3");
                         StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + questionsToAsk.get(currentQuestionIndex) + ".mp3");
@@ -520,6 +527,11 @@ private String category;
                 startActivity(intent);
             } else {
                 if (category.equals("Music")) {
+                    answerOne.setEnabled(false);
+                    answerTwo.setEnabled(false);
+                    answerThree.setEnabled(false);
+                    answerFour.setEnabled(false);
+                    
                     try {
                         final File localFile = File.createTempFile("Music", "mp3");
                         StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + questionsToAsk.get(currentQuestionIndex) + ".mp3");
@@ -661,6 +673,10 @@ private String category;
         mMediaSession.setPlaybackState(mStateBuilder.build());
         mMediaSession.setCallback(new MySessionCallback());
         mMediaSession.setActive(true);
+        answerOne.setEnabled(true);
+        answerTwo.setEnabled(true);
+        answerThree.setEnabled(true);
+        answerFour.setEnabled(true);
     }
     private void initializePlayer(Uri mediaUri) {
         if (mExoPlayer == null) {
