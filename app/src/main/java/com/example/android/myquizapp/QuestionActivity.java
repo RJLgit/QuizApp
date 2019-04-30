@@ -347,6 +347,7 @@ private String category;
             mFirebaseAuth = FirebaseAuth.getInstance();
             if (mFirebaseAuth.getCurrentUser() != null) {
                 mUsername = mFirebaseAuth.getCurrentUser().getDisplayName();
+                ab.setSubtitle("Logged in as " + mUsername);
             } else {
                 Intent startMainActIntent = new Intent(this, MainActivity.class);
                 startActivity(startMainActIntent);
