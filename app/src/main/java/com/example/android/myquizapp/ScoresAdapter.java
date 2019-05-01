@@ -26,6 +26,7 @@ public class ScoresAdapter extends RecyclerView.Adapter<ScoresAdapter.ScoresView
     private ArrayList<String> categories;
     private ArrayList<String> topUserScores;
     private ArrayList<String> dates;
+    private ArrayList<String> quizNames;
     final private ScoresAdapter.ListItemClickListener mListItemClickListener;
     FirebaseFirestore db;
     private DocumentReference myRef;
@@ -38,6 +39,7 @@ public class ScoresAdapter extends RecyclerView.Adapter<ScoresAdapter.ScoresView
         this.topUserScores = topUser;
         this.dates = d;
         mListItemClickListener = listener;
+        this.quizNames = QuizQuestionClass.getQuizNames();
     }
     public interface ListItemClickListener {
         void onListItemCLick (String cat);
@@ -70,18 +72,18 @@ public class ScoresAdapter extends RecyclerView.Adapter<ScoresAdapter.ScoresView
                             String dte = documentSnapshot.getString(categories.get(i).toLowerCase() + "dateUpdated");
                             if (dte != null) {
 
-                                scoresViewHolder.bind(categories.get(i), myScore, dte);
+                                scoresViewHolder.bind(quizNames.get(i), myScore, dte);
                             } else {
-                                scoresViewHolder.bind(categories.get(i), myScore, "Not set");
+                                scoresViewHolder.bind(quizNames.get(i), myScore, "Not set");
                             }
                         } else {
                             TopScores newScores = new TopScores(0, 0, 0, 0, 0, 0, 0 , 0, 0 , 0, 0);
                             myRef.set(newScores);
-                            scoresViewHolder.bind(categories.get(i), "0", "Not set");
+                            scoresViewHolder.bind(quizNames.get(i), "0", "Not set");
                         }
                     }
                 });
-        scoresViewHolder.bind(categories.get(i), topUserScores.get(i), dates.get(i));
+        scoresViewHolder.bind(quizNames.get(i), topUserScores.get(i), dates.get(i));
     }
 
     @Override
