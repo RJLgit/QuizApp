@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
                             = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
                     mRecyclerView.setLayoutManager(layoutManager);
                     mRecyclerView.setHasFixedSize(true);
-                    mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(), QuizQuestionClass.getUserHighScores(), QuizQuestionClass.getGlobalHighScores(), MainActivity.this);
+                    mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(),MainActivity.this);
                     mRecyclerView.setAdapter(mCategoryAdapter);
 
                     mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
                                 = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
                         mRecyclerView.setLayoutManager(layoutManager);
                         mRecyclerView.setHasFixedSize(true);
-                        mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(), QuizQuestionClass.getUserHighScores(), QuizQuestionClass.getGlobalHighScores(), MainActivity.this);
+                        mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(),MainActivity.this);
                         mRecyclerView.setAdapter(mCategoryAdapter);
 
                         mStorageRef = FirebaseStorage.getInstance().getReference();
