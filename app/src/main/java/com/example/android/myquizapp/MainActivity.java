@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         setSupportActionBar(myToolbar);
 
         NotificationUtils.scheduleNotificationUpdate(this);
-       //batchWriteToAddQuestions();
+       batchWriteToAddQuestions();
         //addPicsToStorage();
     }
 
@@ -161,9 +161,9 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
 
     private void batchWriteToAddQuestions() {
         WriteBatch batch = db.batch();
-        String batchCategory = "TV";
-        ArrayList<QuizQuestion> lst = QuizQuestionClass.getTVQuestions();
-        for (int i = 1; i < 6; i++) {
+        String batchCategory = "Geography";
+        ArrayList<QuizQuestion> lst = QuizQuestionClass.getGeographyQuestions();
+        for (int i = 1; i < 21; i++) {
             DocumentReference myRef = db.collection("QuizQuestions")
                     .document(batchCategory).collection(batchCategory + "Questions")
                     .document(batchCategory + "Question" + i);

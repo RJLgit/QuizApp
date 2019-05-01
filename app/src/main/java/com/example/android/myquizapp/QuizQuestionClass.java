@@ -274,7 +274,7 @@ public class QuizQuestionClass {
             case "Nature":
                 return 10;
             case "Geography":
-                return 10;
+                return 20;
             case "Films":
                 return 8;
             case "Pictures":
@@ -308,6 +308,8 @@ public class QuizQuestionClass {
         QuizQuestion q8 = new QuizQuestion("What of these is the biggest by area?", "Lincolnshire", "Cumbria", "Devon", "Norfolk");
         QuizQuestion q9 = new QuizQuestion("Who was the third man to walk on the moon?", "Charles Conrad", "Alan Shepard", "Alan Bean", "Edgar Mitchell");
         QuizQuestion q10 = new QuizQuestion("What is the largest fish in the world?", "Whale Shark", "Basking Shark", "Great White Shark", "Tiger shark");
+
+
         res.add(q1);
         res.add(q2);
         res.add(q3);
@@ -382,6 +384,18 @@ public class QuizQuestionClass {
         QuizQuestion q8 = new QuizQuestion("What of these is the biggest by area?", "Illinois", "Iowa", "New york", "North Carolina");
         QuizQuestion q9 = new QuizQuestion("Which of these has the most people?", "Milton Keynes", "Northampton", "Luton", "York");
         QuizQuestion q10 = new QuizQuestion("Which of these has the most people?", "Stuttgart", "Dusseldorf", "Dortmound", "Essen");
+        QuizQuestion q11 = new QuizQuestion("Which city was formerly known as Stalingrad?", "Volgograd", "Saint Petersburg", "Krasnodar", "Rostov-on-Don");
+        QuizQuestion q12 = new QuizQuestion("In which state did the Battle of Little Bighorn take place?", "Montana", "Dakota", "Texas", "Washington");
+        QuizQuestion q13 = new QuizQuestion("Which EU country has the most borders with other countries?", "Germany", "France", "Austria", "Poland");
+        QuizQuestion q14 = new QuizQuestion("On what sea does Croatia sit?", "Adriatic Sea", "Ionian Sea", "Tyrrhenian Sea", "Red Sea");
+        QuizQuestion q15 = new QuizQuestion("Which country is Sabena Airlines from?", "Belgium", "France", "Denmark", "Netherlands");
+        QuizQuestion q16 = new QuizQuestion("Where is the european court of justice?", "Luxembourg", "Strasbourg", "Brussels", "Versailles");
+        QuizQuestion q17 = new QuizQuestion("What is the largest island in the Mediterranean Sea?", "Sicily", "Sardinia", "Cyprus", "Crete");
+        QuizQuestion q18 = new QuizQuestion("Whic capital city sits on The Tagus?", "Lisbon", "Madrid", "Warsaw", "Copenhagan");
+        QuizQuestion q19 = new QuizQuestion("Where is Australia did Capt. Cook land?", "Botany Bay", "Shark Bay", "Port Jackson", "Aldinga Bay");
+        QuizQuestion q20 = new QuizQuestion("What nationality were the members of the first successful expedition to the South Pole?", "Norwegian", "British", "Finnish", "Russian");
+
+
         res.add(q1);
         res.add(q2);
         res.add(q3);
@@ -392,6 +406,16 @@ public class QuizQuestionClass {
         res.add(q8);
         res.add(q9);
         res.add(q10);
+        res.add(q11);
+        res.add(q12);
+        res.add(q13);
+        res.add(q14);
+        res.add(q15);
+        res.add(q16);
+        res.add(q17);
+        res.add(q18);
+        res.add(q19);
+        res.add(q20);
         return res;
     }
 
