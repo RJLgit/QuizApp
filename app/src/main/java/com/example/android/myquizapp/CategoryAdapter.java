@@ -25,6 +25,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
 
     private Context mContext;
     private ArrayList<String> categories;
+    private ArrayList<String> categoriesToDisplayInRecyclerView;
     /*private ArrayList<String> topUserScores;
     private ArrayList<String> topGlobalScores;*/
     final private ListItemClickListener mListItemClickListener;
@@ -40,6 +41,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
         /*this.topUserScores = topUser;
         this.topGlobalScores = topGlobal;*/
         mListItemClickListener = listener;
+        categoriesToDisplayInRecyclerView = QuizQuestionClass.getQuizNames();
     }
     public interface ListItemClickListener {
         void onListItemCLick (String cat);
@@ -85,7 +87,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
                                         GlobalScores gblScores = documentSnapshot.toObject(GlobalScores.class);
                                         int gblScore = gblScores.getScore();
                                         String globalScore = gblScore + "";*/
-                                        catViewHolder.bind(categories.get(i));
+                                        catViewHolder.bind(categoriesToDisplayInRecyclerView.get(i));
                                     /*}
                                 }
                             });
@@ -140,7 +142,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
 
         void bind(String cat) {
             mCategoryTextView.setText(cat);
-            mDescriptionTextView.setText("5 " + cat + "questions");
+            if (cat.equals("The Ultimate Quiz Experience")) {
+                mDescriptionTextView.setText("20 questions from many quiz categories");
+            } else {
+                mDescriptionTextView.setText("5 random " + cat.toLowerCase() + " questions");
+            }
             /*mUserHighScoreTextView.setText(userHigh);
             mGlobalHighScoreTextView.setText(globalHigh);*/
             mDescriptionTextView.setVisibility(View.VISIBLE);

@@ -37,6 +37,22 @@ public class QuizQuestionClass {
         res.add("TV");
         return res;
     }
+    public static ArrayList<String> getQuizNames() {
+        ArrayList<String> res = new ArrayList<>();
+        res.add("The Ultimate Quiz Experience");
+        res.add("Sport Quiz");
+        res.add("Music Quiz");
+        res.add("Nature Quiz");
+        res.add("History Quiz");
+        res.add("Geography Quiz");
+        res.add("Technology Quiz");
+        res.add("People Quiz");
+        res.add("Pictures Quiz");
+        res.add("Films Quiz");
+        res.add("TV Quiz");
+        return res;
+    }
+
     public static ArrayList<String> getUserHighScores() {
         ArrayList<String> res = new ArrayList<>();
         res.add("33");
