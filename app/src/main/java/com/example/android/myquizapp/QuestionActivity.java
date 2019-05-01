@@ -336,7 +336,8 @@ private String category;
         boolean isNewGame = !getIntent().hasExtra(REMAINING_QUESTIONS_KEY);
 
         questionTextView.setBackgroundResource(R.drawable.question_mark);
-        questionTextView.getBackground().setAlpha(30);
+
+        questionTextView.getBackground().setAlpha(10);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_question);
         myToolbar.setTitle("Answer this question");
