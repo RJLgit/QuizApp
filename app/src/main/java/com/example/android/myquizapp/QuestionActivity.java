@@ -98,6 +98,7 @@ private String category;
     private PlaybackStateCompat.Builder mStateBuilder;
     private FirebaseAuth mFirebaseAuth;
     private Boolean isUltimate;
+    public boolean isInBackground;
 
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {
@@ -163,6 +164,11 @@ private String category;
 
             mExoPlayer = null;
         }
+
+            if (mMediaSession != null) {
+                mMediaSession.setActive(false);
+            }
+
     }
 
 /*    @Override
@@ -176,12 +182,9 @@ private String category;
     protected void onDestroy() {
 
         super.onDestroy();
+        isInBackground = true;
         releasePlayer();
-        if (category.equals("Music")) {
-            if (mMediaSession != null) {
-                mMediaSession.setActive(false);
-            }
-        }
+
 
 
     }
@@ -323,6 +326,7 @@ private String category;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isInBackground = false;
         setContentView(R.layout.activity_question);
         questionTextView = findViewById(R.id.questionView);
         questionImageView = findViewById(R.id.imageView);
@@ -427,6 +431,10 @@ private String category;
                                         Uri uri = Uri.parse(toURI);
                                         initializeMediaSession();
                                         initializePlayer(uri);
+                                        if (isInBackground) {
+                                            releasePlayer();
+
+                                        }
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -546,6 +554,9 @@ private String category;
                                         Uri uri = Uri.parse(toURI);
                                         initializeMediaSession();
                                         initializePlayer(uri);
+                                        if (isInBackground) {
+                                            releasePlayer();
+                                        }
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                             @Override
