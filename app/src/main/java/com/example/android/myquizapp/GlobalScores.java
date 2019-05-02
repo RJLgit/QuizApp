@@ -22,6 +22,13 @@ public class GlobalScores {
         return date;
     }
 
+    public String getShortDate() {
+        String[] words = date.split(" ");
+        String res = "";
+        res = res + words[2] + " " + words[1] + " " + words[5];
+        return res;
+    }
+
     public void setDate(String date) {
         this.date = date;
     }

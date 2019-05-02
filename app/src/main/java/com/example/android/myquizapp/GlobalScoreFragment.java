@@ -56,7 +56,7 @@ public class GlobalScoreFragment extends Fragment {
                     GlobalScores glbScores = documentSnapshot.toObject(GlobalScores.class);
                     value.setText(glbScores.getScore() + "");
                     person.setText("by " + glbScores.getUser());
-                    date.setText("Set on " + glbScores.getDate());
+                    date.setText("Set on " + glbScores.getShortDate());
                 } else {
                     GlobalScores glbScoress = new GlobalScores("Not set", 0, "Not set");
                     documentReference.set(glbScoress);
