@@ -280,7 +280,7 @@ public class QuizQuestionClass {
             case "Pictures":
                 return 5;
             case "Music":
-                return 5;
+                return 11;
             case "Technology":
                 return 7;
             case "People":
@@ -347,12 +347,23 @@ public class QuizQuestionClass {
         QuizQuestion q3 = new QuizQuestion("Who wrote this music?", "Tchaikovsky", "Handel", "Beethoven", "Mozart");
         QuizQuestion q4 = new QuizQuestion("Who wrote this music?", "Vivaldi", "Debussy", "Schumann", "Mahler");
         QuizQuestion q5 = new QuizQuestion("Who wrote this music?", "Beethoven", "Verdi", "Schoenberg", "Gershwin");
-
+        QuizQuestion q6 = new QuizQuestion("Who wrote this music?", "Pachelbel", "Bach", "Handel", "Albinoni");
+        QuizQuestion q7 = new QuizQuestion("Who wrote this music?", "Debussy", "Revel", "Chopin", "Brahms");
+        QuizQuestion q8 = new QuizQuestion("Who wrote this music?", "Brahms", "Schumann", "Beethoven", "Mozart");
+        QuizQuestion q9 = new QuizQuestion("Who wrote this music?", "Chopin", "Wagner", "Schumann", "Mozart");
+        QuizQuestion q10 = new QuizQuestion("Who wrote this music?", "Mozart", "Verdi", "Schoenberg", "Bach");
+        QuizQuestion q11 = new QuizQuestion("Who wrote this music?", "Bach", "Schubert", "Brahms", "Handel");
         res.add(q1);
         res.add(q2);
         res.add(q3);
         res.add(q4);
         res.add(q5);
+        res.add(q6);
+        res.add(q7);
+        res.add(q8);
+        res.add(q9);
+        res.add(q10);
+        res.add(q11);
 
         return res;
     }
