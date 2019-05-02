@@ -284,7 +284,7 @@ public class QuizQuestionClass {
             case "Technology":
                 return 7;
             case "People":
-                return 7;
+                return 20;
             case "TV":
                 return 5;
 
@@ -472,6 +472,19 @@ public class QuizQuestionClass {
         QuizQuestion q5 = new QuizQuestion("Which woman fameously campaigned for prison reform?", "Elizabeth Fry", "Jane Austen", "Emily Pankhurst", "Marie Stopes");
         QuizQuestion q6 = new QuizQuestion("Where was Mother Teresa born (modern day country)?", "Macedonia", "Greece", "Turkey", "Serbia");
         QuizQuestion q7 = new QuizQuestion("Where was Stalin born (modern day country)?", "Georgia", "Ukraine", "Russia", "Latvia");
+        QuizQuestion q8 = new QuizQuestion("How many Labour party prime ministers did the UK have in the 20th century?", "5", "4", "6", "7");
+        QuizQuestion q9 = new QuizQuestion("Who said: 'Never change horses in mid-stream'?", "Abraham Lincoln", "George Washington", "General Lee", "General Patton");
+        QuizQuestion q10 = new QuizQuestion("Who was Buonaparte Ignace Gallia better known as in the James Bond world?", "Mr. Big", "Oddjob", "Jaws", "Necros");
+        QuizQuestion q11 = new QuizQuestion("Who married Mary Weedon?", "Jeffrey Archer", "John Grisham", "John Major", "Freddie Mercury");
+        QuizQuestion q12 = new QuizQuestion("Whom did Mehmet Ali Aga attempt to assassinate on 13th May 1981?", "Pope John Paul II", "Jimmy Carter", "William Webster", "Queen Elizabeth II");
+        QuizQuestion q13 = new QuizQuestion("Which landscape gardener designed the grounds of Blenheim Palace?", "Lancelot Capability Brown", "Humphry Repton", "John Nash", "John Claudis Loudon");
+        QuizQuestion q14 = new QuizQuestion("What was the profession of Alexander Graham Bell?", "Teacher", "Train driver", "Accountant", "Lawyer");
+        QuizQuestion q15 = new QuizQuestion("Who first developed vaccines for rabies and cholera?", "Louis Pasteur", "Alexander Fleming", "Robert Koch", "Marie Curie");
+        QuizQuestion q16 = new QuizQuestion("Who falls in love with Heathcliff in Wuthering Heights?", "Catherine Earnshaw", "Isabella Linton", "Nelly Dean", "Frances Earnshaw");
+        QuizQuestion q17 = new QuizQuestion("Who did Castro overthrow in 1959?", "Fulgencio Batista", "Raymond Grau San Martin", "Miguel Mariano Gómez", "Camilo Cienfuegos Gorriarán");
+        QuizQuestion q18 = new QuizQuestion("Who became Australian Prime Minister in 1992?", "Paul Keating", "Bob Hawke", "John Howard", "Malcolm Fraser");
+        QuizQuestion q19 = new QuizQuestion("The worlds first woman Prime Minister was appointed by which nation in 1960?", "Sri Lanka", "Luxembourg", "New Zealand", "France");
+        QuizQuestion q20 = new QuizQuestion("Which actress was the mother of actress Mia Farrow?", "Maureen O'Sullivan", "Maureen O'Hara", "Myrna Loy", "Loretta Young");
 
 
         res.add(q1);
@@ -481,6 +494,19 @@ public class QuizQuestionClass {
         res.add(q5);
         res.add(q6);
         res.add(q7);
+        res.add(q8);
+        res.add(q9);
+        res.add(q10);
+        res.add(q11);
+        res.add(q12);
+        res.add(q13);
+        res.add(q14);
+        res.add(q15);
+        res.add(q16);
+        res.add(q17);
+        res.add(q18);
+        res.add(q19);
+        res.add(q20);
 
 
         return res;
