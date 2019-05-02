@@ -383,12 +383,13 @@ private String category;
                 questionsLeft = QuestionActivity.totalUltimateQuestions;
 
                 questionsToAsk = generateUltimateQuestionsToAsk();
+                myToolbar.setTitle("Question " + (currentQuestionIndex + 1) + " of " + (questionsLeft + currentQuestionIndex));
 
             } else {
                 currentQuestionIndex = getIntent().getIntExtra(CURRENT_QUESTION_KEY, 1);
                 questionsLeft = getIntent().getIntExtra(REMAINING_QUESTIONS_KEY, 0);
                 questionsToAsk = getIntent().getIntegerArrayListExtra(QUESTIONS_TO_ASK_KEY);
-
+                myToolbar.setTitle("Question " + (currentQuestionIndex + 1) + " of " + (questionsLeft + currentQuestionIndex));
             }
 
             String ultimateCategory = getUltimateCategory(questionsLeft);
@@ -505,12 +506,13 @@ private String category;
                 questionsLeft = QuestionActivity.totalQuestions;
 
                 questionsToAsk = generateQuestionsToAsk();
+                myToolbar.setTitle("Question " + (currentQuestionIndex + 1) + " of " + (questionsLeft + currentQuestionIndex));
 
             } else {
                 currentQuestionIndex = getIntent().getIntExtra(CURRENT_QUESTION_KEY, 1);
                 questionsLeft = getIntent().getIntExtra(REMAINING_QUESTIONS_KEY, 0);
                 questionsToAsk = getIntent().getIntegerArrayListExtra(QUESTIONS_TO_ASK_KEY);
-
+                myToolbar.setTitle("Question " + (currentQuestionIndex + 1) + " of " + (questionsLeft + currentQuestionIndex));
             }
 
 
