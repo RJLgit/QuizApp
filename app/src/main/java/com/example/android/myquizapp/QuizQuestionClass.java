@@ -276,7 +276,7 @@ public class QuizQuestionClass {
             case "Geography":
                 return 20;
             case "Films":
-                return 8;
+                return 20;
             case "Pictures":
                 return 5;
             case "Music":
@@ -471,6 +471,18 @@ public class QuizQuestionClass {
         QuizQuestion q6 = new QuizQuestion("Francis Gumm is the real name of who?", "Judy Garland", "Meryl Streep", "Katherine Hepburn", "Ingrid Bergman");
         QuizQuestion q7 = new QuizQuestion("Which of these was not a Corleone in the Godfather?", "Luca", "Sonny", "Michael", "Fredo");
         QuizQuestion q8 = new QuizQuestion("Which disney film came first?", "Snow White", "Pinnocchio", "Fantasia", "Bambi");
+        QuizQuestion q9 = new QuizQuestion("The Andrea Gail is an ill-fated ship in which Hollywood film?", "The Perfect Storm", "Jaws", "All is Lost", "Life of Pi");
+        QuizQuestion q10 = new QuizQuestion("Marion Crane is the tragic figure in which film?", "Psycho", "Vertigo", "Silence of the Lambs", "Halloween");
+        QuizQuestion q11 = new QuizQuestion("Who was the first man to win the Academy Award for best actor two years in a row?", "Spencer Tracy", "Charles Laughton", "James Stewart", "Clark Gable");
+        QuizQuestion q12 = new QuizQuestion("In which animated Disney films would one find Edna E. Mode?", "The Incredibles", "101 Dalmations", "The Lady and the Tramp", "Cinderella");
+        QuizQuestion q13 = new QuizQuestion("In which animated Disney films would one find Pongo?", "101 Dalmations", "The lady and the Tramp", "Cinderella", "The Lion King");
+        QuizQuestion q14 = new QuizQuestion("In the Tarzan films, what was Jane's last name?", "Parker", "Hambly", "Jones", "Straw");
+        QuizQuestion q15 = new QuizQuestion("Ursula was the evil antagonists in which Disney film?", "The Little Mermaid", "Beauty and the Beast", "The Hunchback of Notre Dame", "Sleeping Beauty");
+        QuizQuestion q16 = new QuizQuestion("Maleficent was the evil antagonists in which Disney film?", "Sleeping Beauty", "Pinnocchio", "The Hunchback of Notre Dame", "Beauty and the Beast");
+        QuizQuestion q17 = new QuizQuestion("Who played the president in Love Actually?", "Billy Bob Thornton", "Ben Kingsley", "Gene Hackman", "Nigel Hawthorne");
+        QuizQuestion q18 = new QuizQuestion("Which big screen cartoon character was voiced by Charles Fleischer?", "Roger Rabbit", "Bugs Bunny", "Daffy Duck", "Goofy");
+        QuizQuestion q19 = new QuizQuestion("Who sang the theme song for Rocky III?", "Survivor", "Doris Day", "Journey", "Foreigner");
+        QuizQuestion q20 = new QuizQuestion("Who said - Of all the gin joints in all the world, she walks into mine?", "Humphrey Bogart", "Clark Gable", "James Cagney", "Cary Grant");
 
         res.add(q1);
         res.add(q2);
@@ -480,6 +492,19 @@ public class QuizQuestionClass {
         res.add(q6);
         res.add(q7);
         res.add(q8);
+        res.add(q9);
+        res.add(q10);
+        res.add(q11);
+        res.add(q12);
+        res.add(q13);
+        res.add(q14);
+        res.add(q15);
+        res.add(q16);
+        res.add(q17);
+        res.add(q18);
+        res.add(q19);
+        res.add(q20);
+
 
         return res;
     }
