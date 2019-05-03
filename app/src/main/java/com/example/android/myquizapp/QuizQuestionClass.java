@@ -270,7 +270,7 @@ public class QuizQuestionClass {
                 return 7;
 
             case "Sport":
-                return 10;
+                return 20;
             case "Nature":
                 return 10;
             case "Geography":
