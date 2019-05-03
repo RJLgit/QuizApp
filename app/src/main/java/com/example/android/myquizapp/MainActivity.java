@@ -38,99 +38,69 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements CategoryAdapter.ListItemClickListener {
+    //UI variables
     private RecyclerView mRecyclerView;
     private CategoryAdapter mCategoryAdapter;
+    private ProgressBar progressBar;
+    //Firebase related variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mListener;
     private String mUsername;
-    private String uniqueUserId;
     private FirebaseFirestore db;
-    private ProgressBar progressBar;
-   private FirebaseDatabase mFirebaseDatabase;
-   private DatabaseReference mDatabaseReference;
-   private StorageReference mStorageRef;
-    private static final String TAG = "MainActivity";
-    private Button testButt;
-
-    //Sign in Request code
+    private StorageReference mStorageRef;
     protected static final int RC_SIGN_IN = 1;
+
+    //Tag
+    private static final String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       /* testButt = findViewById(R.id.test_not_but);
-        testButt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NotificationUtils.updateUserAboutTopScores(MainActivity.this);
-            }
-        });*/
+
         mUsername = "ANON";
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setTitle("The Ultimate Quiz App");
+        setSupportActionBar(myToolbar);
         mListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
                 if (user != null) {
-                    uniqueUserId = user.getUid();
                     onSignedInInit(user.getDisplayName());
                     updateActionBar();
-                    progressBar = findViewById(R.id.mainProgressBar);
-                    mRecyclerView = (RecyclerView) findViewById(R.id.category_recycler_view);
-                    LinearLayoutManager layoutManager
-                            = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
-                    mRecyclerView.setLayoutManager(layoutManager);
-                    mRecyclerView.setHasFixedSize(true);
-                    mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(),MainActivity.this);
-                    mRecyclerView.setAdapter(mCategoryAdapter);
-
-                    mStorageRef = FirebaseStorage.getInstance().getReference();
+                    mainUiSetUp();
                 } else {
                     Log.d(TAG, "onAuthStateChanged: ");
                     startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
                             .setAvailableProviders(Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build(), new AuthUI.IdpConfig.EmailBuilder().build()))
                             .setIsSmartLockEnabled(false).build(), RC_SIGN_IN);
                     if (user != null) {
-                        uniqueUserId = user.getUid();
                         onSignedInInit(user.getDisplayName());
                         updateActionBar();
-                        progressBar = findViewById(R.id.mainProgressBar);
-                        mRecyclerView = (RecyclerView) findViewById(R.id.category_recycler_view);
-                        LinearLayoutManager layoutManager
-                                = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
-                        mRecyclerView.setLayoutManager(layoutManager);
-                        mRecyclerView.setHasFixedSize(true);
-                        mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(),MainActivity.this);
-                        mRecyclerView.setAdapter(mCategoryAdapter);
-
-                        mStorageRef = FirebaseStorage.getInstance().getReference();
+                        mainUiSetUp();
                     }
                 }
             }
         };
+        NotificationUtils.scheduleNotificationUpdate(this);
+        batchWriteToAddQuestions();
+        //addPicsToStorage();
+    }
 
-       /* progressBar = findViewById(R.id.mainProgressBar);
+    private void mainUiSetUp() {
+        progressBar = findViewById(R.id.mainProgressBar);
         mRecyclerView = (RecyclerView) findViewById(R.id.category_recycler_view);
         LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(), QuizQuestionClass.getUserHighScores(), QuizQuestionClass.getGlobalHighScores(), this);
+        mCategoryAdapter = new CategoryAdapter(MainActivity.this, QuizQuestionClass.getCategories(),MainActivity.this);
         mRecyclerView.setAdapter(mCategoryAdapter);
-
-        mStorageRef = FirebaseStorage.getInstance().getReference();*/
-
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setTitle("The Ultimate Quiz App");
-        setSupportActionBar(myToolbar);
-
-        NotificationUtils.scheduleNotificationUpdate(this);
-       batchWriteToAddQuestions();
-        //addPicsToStorage();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
     private void addPicsToStorage() {
@@ -201,10 +171,6 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         }
     }
 
-    //helper method to initialize top scores
-    protected void initTopScores() {
-
-    }
 
     //Helper methods to help sign in
     protected void onSignedInInit(String username) {
@@ -227,6 +193,15 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     protected void onResume() {
         super.onResume();
         mFirebaseAuth.addAuthStateListener(mListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mListener != null){
+            mFirebaseAuth.removeAuthStateListener(mListener);
+        }
+
     }
 
     @Override

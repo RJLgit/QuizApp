@@ -26,8 +26,6 @@ import org.w3c.dom.Text;
 public class GlobalScoreFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DocumentReference documentReference;
-    private FirebaseAuth mFirebaseAuth;
-    private String uniqueUserId;
 
     public GlobalScoreFragment() {
     }
@@ -46,8 +44,6 @@ public class GlobalScoreFragment extends Fragment {
         final String category = i.getStringExtra("Category");
         final String mUsername = i.getStringExtra("Username");
 
-       /* mFirebaseAuth = FirebaseAuth.getInstance();
-        uniqueUserId = mFirebaseAuth.getCurrentUser().getUid();*/
         documentReference = db.collection("TopScores").document(i.getStringExtra("Category").toLowerCase());
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override

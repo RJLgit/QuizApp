@@ -26,20 +26,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
     private Context mContext;
     private ArrayList<String> categories;
     private ArrayList<String> categoriesToDisplayInRecyclerView;
-    /*private ArrayList<String> topUserScores;
-    private ArrayList<String> topGlobalScores;*/
     final private ListItemClickListener mListItemClickListener;
-    FirebaseFirestore db;
-    private DocumentReference myRef;
-    private CollectionReference globalRef;
-    private FirebaseAuth mFirebaseAuth;
-    private String uniqueUserId;
+
 
     public CategoryAdapter(Context c, ArrayList<String> cat, ListItemClickListener listener) {
         this.mContext = c;
         this.categories = cat;
-        /*this.topUserScores = topUser;
-        this.topGlobalScores = topGlobal;*/
         mListItemClickListener = listener;
         categoriesToDisplayInRecyclerView = QuizQuestionClass.getQuizNames();
     }
@@ -54,65 +46,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
     public CatViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         int layoutForListItem = R.layout.main_recycler_view_item;
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        /*db = FirebaseFirestore.getInstance();
-        mFirebaseAuth = FirebaseAuth.getInstance();*/
-
-        /*FirebaseUser user = mFirebaseAuth.getCurrentUser();
-        if (user != null) {
-            uniqueUserId = user.getUid();
-            myRef = db.collection("TopScores").document(uniqueUserId);
-        }
-        globalRef = db.collection("TopScores");*/
         View view = inflater.inflate(layoutForListItem, viewGroup, false);
-
         return new CatViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final CatViewHolder catViewHolder, final int i) {
 
-       /* myRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            TopScores myScores = documentSnapshot.toObject(TopScores.class);
-                            int scor = myScores.getScoreByCategory(categories.get(i));
-                            final String myScore = scor + "";
-                            DocumentReference globalDocRef = globalRef.document(categories.get(i).toLowerCase());
-                            globalDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    if (documentSnapshot.exists()) {
-                                        GlobalScores gblScores = documentSnapshot.toObject(GlobalScores.class);
-                                        int gblScore = gblScores.getScore();
-                                        String globalScore = gblScore + "";*/
-                                        catViewHolder.bind(categoriesToDisplayInRecyclerView.get(i));
-                                    /*}
-                                }
-                            });
-
-                        } else {
-                            TopScores newScores = new TopScores(0, 0, 0, 0, 0, 0, 0 , 0, 0 , 0, 0);
-                            myRef.set(newScores);
-                            DocumentReference globalDocRef = globalRef.document(categories.get(i).toLowerCase());
-                            globalDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    if (documentSnapshot.exists()) {
-                                        GlobalScores gblScores = documentSnapshot.toObject(GlobalScores.class);
-                                        int gblScore = gblScores.getScore();
-                                        String globalScore = gblScore + "";
-                                        catViewHolder.bind(categories.get(i), "0", globalScore);
-                                    }
-                                }
-                            });
-
-                        }
-
-                    }
-                });*/
-
+        catViewHolder.bind(categoriesToDisplayInRecyclerView.get(i));
     }
 
     @Override
@@ -126,15 +67,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
     public class CatViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mCategoryTextView;
         private TextView mDescriptionTextView;
-       /* private TextView mUserHighScoreTextView;
-        private TextView mGlobalHighScoreTextView;*/
         private ProgressBar mProgressBar;
 
         public CatViewHolder(@NonNull View itemView) {
             super(itemView);
             mCategoryTextView = itemView.findViewById(R.id.quizNameTextView);
-            /*mUserHighScoreTextView = itemView.findViewById(R.id.userHighScoreValueTextView);
-            mGlobalHighScoreTextView = itemView.findViewById(R.id.globalHighScoreValueTextView);*/
             mDescriptionTextView = itemView.findViewById(R.id.quizDescriptionTextView);
             mProgressBar = itemView.findViewById(R.id.progressBar);
             itemView.setOnClickListener(this);
@@ -147,12 +84,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
             } else {
                 mDescriptionTextView.setText("5 random " + cat.toLowerCase() + " questions");
             }
-            /*mUserHighScoreTextView.setText(userHigh);
-            mGlobalHighScoreTextView.setText(globalHigh);*/
             mDescriptionTextView.setVisibility(View.VISIBLE);
             mCategoryTextView.setVisibility(View.VISIBLE);
-            /*mUserHighScoreTextView.setVisibility(View.VISIBLE);
-            mGlobalHighScoreTextView.setVisibility(View.VISIBLE);*/
             mProgressBar.setVisibility(View.INVISIBLE);
             mListItemClickListener.showRecyclerView();
         }
@@ -161,7 +94,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CatVie
         public void onClick(View view) {
             int clickedPosition = getAdapterPosition();
             String categoryClicked = categories.get(clickedPosition);
-
             mListItemClickListener.onListItemCLick(categoryClicked);
         }
     }
