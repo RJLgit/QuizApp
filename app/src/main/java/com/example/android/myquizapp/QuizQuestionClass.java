@@ -267,7 +267,7 @@ public class QuizQuestionClass {
     public static int getNumberQuestions(String category) {
         switch (category) {
             case "History":
-                return 7;
+                return 20;
 
             case "Sport":
                 return 20;
@@ -552,6 +552,54 @@ public class QuizQuestionClass {
         QuizQuestion q18 = new QuizQuestion("Who became Australian Prime Minister in 1992?", "Paul Keating", "Bob Hawke", "John Howard", "Malcolm Fraser");
         QuizQuestion q19 = new QuizQuestion("The worlds first woman Prime Minister was appointed by which nation in 1960?", "Sri Lanka", "Luxembourg", "New Zealand", "France");
         QuizQuestion q20 = new QuizQuestion("Which actress was the mother of actress Mia Farrow?", "Maureen O'Sullivan", "Maureen O'Hara", "Myrna Loy", "Loretta Young");
+
+
+        res.add(q1);
+        res.add(q2);
+        res.add(q3);
+        res.add(q4);
+        res.add(q5);
+        res.add(q6);
+        res.add(q7);
+        res.add(q8);
+        res.add(q9);
+        res.add(q10);
+        res.add(q11);
+        res.add(q12);
+        res.add(q13);
+        res.add(q14);
+        res.add(q15);
+        res.add(q16);
+        res.add(q17);
+        res.add(q18);
+        res.add(q19);
+        res.add(q20);
+
+
+        return res;
+    }
+    public static ArrayList<QuizQuestion> getHistoryQuestions() {
+        ArrayList<QuizQuestion> res = new ArrayList<>();
+        QuizQuestion q1 = new QuizQuestion("What year did William 1 invade?", "1066", "1056", "1076", "1086");
+        QuizQuestion q2 = new QuizQuestion("What year was the Munich Agreement?", "1938", "1937", "1936", "1933");
+        QuizQuestion q3 = new QuizQuestion("Who commanded the British at the battle of Blenheim?", "Malborough", "Nelson", "Montgomery", "Wellington");
+        QuizQuestion q4 = new QuizQuestion("Who made christainity the religion of the roman empire?", "Constantine", "Caesar", "Nero", "Hadrian");
+        QuizQuestion q5 = new QuizQuestion("Whre was Andrew Carnegie Born?", "Dunfermline", "New York", "Philadelphia", "Dundee");
+        QuizQuestion q6 = new QuizQuestion("Who won the nobel peace prize in 1919?", "Wilson", "La Fontaine", "Llyod-George", "Foch");
+        QuizQuestion q7 = new QuizQuestion("Who was the first chancellor of the re-united Germany in the 20th century?", "Kohl", "Schmidt", "Schroder", "Brandt");
+        QuizQuestion q8 = new QuizQuestion("Who commanded the British Expeditionary Force in 1914?", "John French", "Douglas Haig", "Herbert Kitchener", "Fredrick Roberts");
+        QuizQuestion q9 = new QuizQuestion("Who was the french commander in chief at the start of world war 1?", "Joseph Joffre", "Ferdinand Foch", "Philippe Petain", "Joseph Gallieni");
+        QuizQuestion q10 = new QuizQuestion("Who was the first chancellor of the German Empire?", "Otto von Bismarck", "Leo von Caprivi", "Kurt von Schleicher", "Paul von Hindenburg");
+        QuizQuestion q11 = new QuizQuestion("Who sacked Rome in 410?", "Alaric", "Hannibal", "Athaulf", "Spartacus");
+        QuizQuestion q12 = new QuizQuestion("Who Russian won the nobel prize for literature in 1970?", "Aleksandr Solzhenitsyn", "Boris Pasternak", "Mikhail Sholokhov", "Joseph Brodsky");
+        QuizQuestion q13 = new QuizQuestion("Who wrote Resurrection in the 19th Century?", "Leo Tolstoy", "Oscar Wilde", "Fyodor Dostoyevsky", "Anton Chekhov");
+        QuizQuestion q14 = new QuizQuestion("Who became secretary general of the UN in 1961?", "U Thant", "Kurt Waldheim", "Javier Perez de Cuellar", "Dag Hammarskjold");
+        QuizQuestion q15 = new QuizQuestion("When was the Sharpsville massacre?", "1960", "1970", "1980", "1950");
+        QuizQuestion q16 = new QuizQuestion("Which English town did the Romans call Eboracum?", "York", "Bath", "Chester", "London");
+        QuizQuestion q17 = new QuizQuestion("Who in 800 AD was crowned by Pope Leo III in Rome as the first Holy Roman emperor?", "Charlemagne", "Charles Martel", "Clovis", "King Alfred");
+        QuizQuestion q18 = new QuizQuestion("What was the first major battle in the english civil war?", "Edgehill", "Marston Moor", "Naseby", "Newbury");
+        QuizQuestion q19 = new QuizQuestion("Who was monarch when The Crystal Palace was opened?", "Victoria", "Elizabeth I", "Elizabeth II", "George I");
+        QuizQuestion q20 = new QuizQuestion("Who did William of Orange defeat at The Battle Of Boyne?", "James II", "Bonnie Prince Charlie", "Charles II", "Charles I");
 
 
         res.add(q1);
