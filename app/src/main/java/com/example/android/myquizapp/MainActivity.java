@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     private RecyclerView mRecyclerView;
     private CategoryAdapter mCategoryAdapter;
     private ProgressBar progressBar;
+    private ImageView mImageView;
     //Firebase related variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mListener;
@@ -57,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mImageView = (ImageView) findViewById(R.id.imageView2);
+        Picasso.get().load(R.drawable.select_quiz_image).into(mImageView);
 
         mUsername = "ANON";
         mFirebaseAuth = FirebaseAuth.getInstance();

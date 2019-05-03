@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.android.myquizapp"
-        minSdkVersion 26
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -35,6 +35,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:18.2.0'
     implementation 'com.google.android.exoplayer:exoplayer:2.6.0'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.6'
+    implementation ('com.squareup.picasso:picasso:2.71828') {
+        exclude group: 'com.android.support'
+        exclude module: ['exifinterface', 'support-annotations']
+    }
     //add support for push notifcations
     implementation 'com.google.firebase:firebase-messaging:17.6.0'
 }
