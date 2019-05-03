@@ -286,7 +286,7 @@ public class QuizQuestionClass {
             case "People":
                 return 20;
             case "TV":
-                return 5;
+                return 20;
 
             default:
                 return 0;
@@ -374,12 +374,43 @@ public class QuizQuestionClass {
         QuizQuestion q3 = new QuizQuestion("What was the name of the android in Star Trek: The next generation?", "Data", "REM", "C924P", "Crunch");
         QuizQuestion q4 = new QuizQuestion("Who played the title role in the BBC series Merlin?", "Colin Morgan", "Bradley James", "Richard Wilson", "Anthony Head");
         QuizQuestion q5 = new QuizQuestion("Who is Larry's manager in Curb Your Enthusiasm?", "Jeff", "Richie", "Joe", "George");
+        QuizQuestion q6 = new QuizQuestion("Where did Buffy the vampire slayer take place?", "Sunnydale", "Yorktown", "Camden", "Huntsville");
+        QuizQuestion q7 = new QuizQuestion("Who played the first Dr Who?", "William Hartnell", "Patrick Troughton", "Jon Pertwee", "Tom Baker");
+        QuizQuestion q8 = new QuizQuestion("Where is Fawlty Towers set?", "Torquay", "Brighton", "Bournemouth", "Grimsby");
+        QuizQuestion q9 = new QuizQuestion("Who Played Emily Bishop In Coronation Street?", "Eileen Derbyshire", "Barbara Knox", "Betty Driver", "Thelma Barlow");
+        QuizQuestion q10 = new QuizQuestion("Where is Cheers set?", "Boston", "New York", "LA", "Baltimore");
+        QuizQuestion q11 = new QuizQuestion("What was the name of the pub in Only Fools and Horses?", "The Nag's Head", "The Black Swan", "The Two Black Cats", "The Elephant and the Castle");
+        QuizQuestion q12 = new QuizQuestion("In Dad's Army, what was Private Fraser's occupation?", "Undertaker", "Butcher", "Bank Manager", "Green Grocer");
+        QuizQuestion q13 = new QuizQuestion("Which TV series title music was Wheels on Fire?", "Absolutely Fabulous", "Men Behaving Badly", "Bottom", "As time goes by");
+        QuizQuestion q14 = new QuizQuestion("Who hosted the cerebral & action quiz The Krypton Factor??", "Gordon Burns", "Roger Johnson", "Bob Greaves", "Tom Little");
+        QuizQuestion q15 = new QuizQuestion("Which of these was NOT one of the FOUR original hosts of Game for A Laugh?", "Leslie Crowther", "Jeremy Beadle", "Henry Kelly", "Sarah Kennedy");
+        QuizQuestion q16 = new QuizQuestion("Tony Green assisted Jim Bowen on which TV quiz show?", "Bullseye", "The price is right", "Blankety Blank", "Going for gold");
+        QuizQuestion q17 = new QuizQuestion("Suicide is painless - was the theme song of which TV show?", "MASH", "Roll Out", "House Calls", "All in the Family");
+        QuizQuestion q18 = new QuizQuestion("Who went to school at Greyfriars?", "Billy Bunter", "William Brown", "Desperate Dan", "Oliver Twist");
+        QuizQuestion q19 = new QuizQuestion("what type of dog was lassie?", "Collie", "Labrador", "Sheepdog", "Lurcher");
+        QuizQuestion q20 = new QuizQuestion("What ship did Captain Pugwash have?", "Black Pig", "Black Beetle", "Flying Horse", "Green Turtle");
+
 
         res.add(q1);
         res.add(q2);
         res.add(q3);
         res.add(q4);
         res.add(q5);
+        res.add(q6);
+        res.add(q7);
+        res.add(q8);
+        res.add(q9);
+        res.add(q10);
+        res.add(q11);
+        res.add(q12);
+        res.add(q13);
+        res.add(q14);
+        res.add(q15);
+        res.add(q16);
+        res.add(q17);
+        res.add(q18);
+        res.add(q19);
+        res.add(q20);
 
         return res;
     }
