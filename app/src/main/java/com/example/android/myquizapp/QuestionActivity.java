@@ -457,8 +457,8 @@ private String category;
                     pictureQuestionTextView.setVisibility(View.VISIBLE);
 
                     try {
-                        final File localFile = File.createTempFile("pictures", "jpg");
-                        StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".jpg");
+                        final File localFile = File.createTempFile("pictures", "JPG");
+                        StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".JPG");
                         myRef.getFile(localFile)
                                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                                     @Override
@@ -582,8 +582,8 @@ private String category;
                 }
                 if (category.equals("Pictures")) {
                     try {
-                        final File localFile = File.createTempFile("pictures", "jpg");
-                        StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".jpg");
+                        final File localFile = File.createTempFile("pictures", "JPG");
+                        StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".JPG");
                         myRef.getFile(localFile)
                                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                                     @Override

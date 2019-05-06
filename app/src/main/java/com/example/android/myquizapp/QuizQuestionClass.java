@@ -278,7 +278,7 @@ public class QuizQuestionClass {
             case "Films":
                 return 20;
             case "Pictures":
-                return 5;
+                return 20;
             case "Music":
                 return 11;
             case "Technology":
@@ -329,13 +329,43 @@ public class QuizQuestionClass {
         QuizQuestion q2 = new QuizQuestion("Where is this?", "Bavaria", "Just outside paris", "Bilboa", "Japan");
         QuizQuestion q3 = new QuizQuestion("Where is this?", "Edinburugh", "Warwick", "Dover", "Durham");
         QuizQuestion q4 = new QuizQuestion("Where is this?", "Florence", "Rome", "Milan", "Marseille");
-        QuizQuestion q5 = new QuizQuestion("where is this??", "London", "Paris", "Berlin", "St.Petersburg");
+        QuizQuestion q5 = new QuizQuestion("Where is this?", "London", "Paris", "Berlin", "St.Petersburg");
+        QuizQuestion q6 = new QuizQuestion("Where is this?", "Abu Dhabi", "Tehran", "Beirut", "Mecca");
+        QuizQuestion q7 = new QuizQuestion("Where is this?", "Milan", "Barcelona", "Munich", "Rome");
+        QuizQuestion q8 = new QuizQuestion("Where is this?", "Seville", "Barcelona", "Madrid", "Granada");
+        QuizQuestion q9 = new QuizQuestion("Where is this?", "Budapest", "Prague", "Berlin", "Moscow");
+        QuizQuestion q10 = new QuizQuestion("Where is this?", "Cambodia", "Vietnam", "Colombia", "Mexico");
+        QuizQuestion q11 = new QuizQuestion("Where is this?", "Brussels", "Amsterdam", "Paris", "Oslo");
+        QuizQuestion q12 = new QuizQuestion("Where is this?", "Venice", "Paris", "Bejing", "St. Petersburg");
+        QuizQuestion q13 = new QuizQuestion("Where is this?", "Cologne", "Munich", "Frankfurt", "Berlin");
+        QuizQuestion q14 = new QuizQuestion("Where is this?", "Jordan", "Syria", "Iran", "Iraq");
+        QuizQuestion q15 = new QuizQuestion("Who is this?", "Anne Frank", "Marie Curie", "Amelia Earhart", "Katherine Hepburn");
+        QuizQuestion q16 = new QuizQuestion("Who is this?", "Louis Pasteur", "Alexander Fleming", "Joseph Lister", "Thomas Edison");
+        QuizQuestion q17 = new QuizQuestion("Where is this?", "Japan", "Thailand", "China", "India");
+        QuizQuestion q18 = new QuizQuestion("Where is this?", "Denmark", "Germany", "Poland", "Czech Republic");
+        QuizQuestion q19 = new QuizQuestion("Where is this?", "Helsinki", "Rome", "Turin", "Berlin");
+        QuizQuestion q20 = new QuizQuestion("where is this?", "Prague", "Berlin", "Nuremburg", "St.Petersburg");
 
         res.add(q1);
         res.add(q2);
         res.add(q3);
         res.add(q4);
         res.add(q5);
+        res.add(q6);
+        res.add(q7);
+        res.add(q8);
+        res.add(q9);
+        res.add(q10);
+        res.add(q11);
+        res.add(q12);
+        res.add(q13);
+        res.add(q14);
+        res.add(q15);
+        res.add(q16);
+        res.add(q17);
+        res.add(q18);
+        res.add(q19);
+        res.add(q20);
 
         return res;
     }
