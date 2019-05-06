@@ -29,7 +29,7 @@
     <string name="image_global_content_desc">Image label for top score on global page</string>
     <string name="challenge_text_global_scores">Think you could beat this score?</string>
     <string name="question_activity_button_text_global">Try to beat it now!</string>
-    <string name="button_text_global_return_main">Return to main main screen</string>
+    <string name="button_text_global_return_main">Return to main screen</string>
     <string name="dummy_date_text_global">on the 12th March</string>
     <string name="dummy_user_text_global">was set by Bob Smith</string>
     <string name="dummy_score_text_global">84</string>

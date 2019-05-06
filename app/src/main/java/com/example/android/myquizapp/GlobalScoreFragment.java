@@ -1,6 +1,7 @@
 package com.example.android.myquizapp;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,13 +22,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
 public class GlobalScoreFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DocumentReference documentReference;
-
+    private ImageView mImageView;
     public GlobalScoreFragment() {
     }
 
@@ -37,6 +40,8 @@ public class GlobalScoreFragment extends Fragment {
         final TextView value = fView.findViewById(R.id.globalScoreValue);
         final TextView person = fView.findViewById(R.id.globalScorePerson);
         final TextView date = fView.findViewById(R.id.globalScoreDate);
+        mImageView = (ImageView) fView.findViewById(R.id.imageView3);
+        Picasso.get().load(R.drawable.top_score_image).into(mImageView);
 
         Button backToMain = fView.findViewById(R.id.backToMainActButt);
         Button startQuizRound = fView.findViewById(R.id.startQuizButton);

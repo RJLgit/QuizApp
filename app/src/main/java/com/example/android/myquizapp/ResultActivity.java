@@ -39,6 +39,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Transaction;
+import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -91,6 +92,9 @@ public class ResultActivity extends AppCompatActivity {
         });
         resultsImageView = findViewById(R.id.resultsImageView);
         yourScoreImageView = findViewById(R.id.yourScoreImageView);
+        Picasso.get().load(R.drawable.quiz_results_image).into(resultsImageView);
+        Picasso.get().load(R.drawable.your_score_image).into(yourScoreImageView);
+
         descriptionOfScoreTextView = findViewById(R.id.isTopScoreResultsTextView);
 
 
