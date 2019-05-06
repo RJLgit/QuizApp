@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -61,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mImageView = (ImageView) findViewById(R.id.imageView2);
-        Picasso.get().load(R.drawable.select_quiz_image).into(mImageView);
+        Glide.with(this).load(R.drawable.select_quiz_image).into(mImageView);
+        //Picasso.get().load(R.drawable.select_quiz_image).into(mImageView);
 
         mUsername = "ANON";
         mFirebaseAuth = FirebaseAuth.getInstance();

@@ -26,9 +26,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -58,9 +60,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -450,6 +455,7 @@ private String category;
                     questionTextView.setVisibility(View.INVISIBLE);
                     questionImageView.setVisibility(View.VISIBLE);
                     pictureQuestionTextView.setVisibility(View.VISIBLE);
+
                     try {
                         final File localFile = File.createTempFile("pictures", "jpg");
                         StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".jpg");
@@ -457,9 +463,11 @@ private String category;
                                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                                     @Override
                                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                        String toURI = localFile.toURI().toString();
-                                        Uri uri = Uri.parse(toURI);
-                                        questionImageView.setImageURI(uri);
+                                       /* String toURI = localFile.toURI().toString();
+                                        Uri uri = Uri.parse(toURI);*/
+                                        Glide.with(QuestionActivity.this).load(localFile).into(questionImageView);
+                                        //Picasso.get().load(localFile).into(questionImageView);
+                                        //questionImageView.setImageURI(uri);
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -576,9 +584,13 @@ private String category;
                                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                                     @Override
                                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                        String toURI = localFile.toURI().toString();
-                                        Uri uri = Uri.parse(toURI);
-                                        questionImageView.setImageURI(uri);
+                                       /* String toURI = localFile.toURI().toString();
+                                       Uri uri = Uri.parse(toURI);
+
+                                        Log.d(TAG, "onSuccess: " + uri);*/
+                                      //questionImageView.setImageURI(uri);
+                                        Glide.with(QuestionActivity.this).load(localFile).into(questionImageView);
+                                       //Picasso.get().load(uri).placeholder(R.drawable.question_mark).into(questionImageView);
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                             @Override

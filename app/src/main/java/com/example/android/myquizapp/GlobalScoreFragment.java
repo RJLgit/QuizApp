@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,7 +42,8 @@ public class GlobalScoreFragment extends Fragment {
         final TextView person = fView.findViewById(R.id.globalScorePerson);
         final TextView date = fView.findViewById(R.id.globalScoreDate);
         mImageView = (ImageView) fView.findViewById(R.id.imageView3);
-        Picasso.get().load(R.drawable.top_score_image).into(mImageView);
+        Glide.with(this).load(R.drawable.top_score_image).into(mImageView);
+       /* Picasso.get().load(R.drawable.top_score_image).into(mImageView);*/
 
         Button backToMain = fView.findViewById(R.id.backToMainActButt);
         Button startQuizRound = fView.findViewById(R.id.startQuizButton);

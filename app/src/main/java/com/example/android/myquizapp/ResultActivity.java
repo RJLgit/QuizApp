@@ -25,6 +25,7 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -92,8 +93,11 @@ public class ResultActivity extends AppCompatActivity {
         });
         resultsImageView = findViewById(R.id.resultsImageView);
         yourScoreImageView = findViewById(R.id.yourScoreImageView);
-        Picasso.get().load(R.drawable.quiz_results_image).into(resultsImageView);
-        Picasso.get().load(R.drawable.your_score_image).into(yourScoreImageView);
+        Glide.with(this).load(R.drawable.quiz_results_image).into(resultsImageView);
+        Glide.with(this).load(R.drawable.your_score_image).into(yourScoreImageView);
+
+        /*Picasso.get().load(R.drawable.quiz_results_image).into(resultsImageView);
+        Picasso.get().load(R.drawable.your_score_image).into(yourScoreImageView);*/
 
         descriptionOfScoreTextView = findViewById(R.id.isTopScoreResultsTextView);
 
