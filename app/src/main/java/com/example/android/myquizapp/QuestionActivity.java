@@ -485,7 +485,11 @@ private String category;
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 if (documentSnapshot.exists()) {
                                     currentQuestion = documentSnapshot.toObject(QuizQuestion.class);
-                                    questionTextView.setText(currentQuestion.getQuestion());
+                                    if (category.equals("Pictures")) {
+                                        pictureQuestionTextView.setText(currentQuestion.getQuestion());
+                                    } else {
+                                        questionTextView.setText(currentQuestion.getQuestion());
+                                    }
                                     ArrayList<String> mAnswers = initAnswers(currentQuestion);
                                     answerOne.setText(mAnswers.get(0));
                                     answerTwo.setText(mAnswers.get(1));
@@ -608,7 +612,11 @@ private String category;
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 if (documentSnapshot.exists()) {
                                     currentQuestion = documentSnapshot.toObject(QuizQuestion.class);
-                                    questionTextView.setText(currentQuestion.getQuestion());
+                                    if (category.equals("Pictures")) {
+                                        pictureQuestionTextView.setText(currentQuestion.getQuestion());
+                                    } else {
+                                        questionTextView.setText(currentQuestion.getQuestion());
+                                    }
                                     ArrayList<String> mAnswers = initAnswers(currentQuestion);
                                     answerOne.setText(mAnswers.get(0));
                                     answerTwo.setText(mAnswers.get(1));
