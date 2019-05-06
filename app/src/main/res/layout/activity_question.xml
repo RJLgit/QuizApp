@@ -117,7 +117,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Where is this?"
+        android:text="@string/picture_text_view_dummy_text"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="30sp"

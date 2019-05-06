@@ -53,7 +53,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:text="TextView"
+
             android:textSize="20sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/categoryLabelTextView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +89,7 @@
             android:layout_width="100dp"
             android:layout_height="20dp"
             android:layout_marginStart="44dp"
-            android:text="Score"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userHighScoreLabelTextView"
             android:visibility="invisible"/>
@@ -100,7 +100,7 @@
             android:layout_height="20dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Score"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/userHighScoreValueTextView"
             app:layout_constraintTop_toBottomOf="@+id/globalHighScoreLabelTextView"

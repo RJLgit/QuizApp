@@ -18,6 +18,26 @@
     <string name="refresh_widget">Refresh</string>
     <string name="widget_config_prompt">Please select either a detailed or simple widget</string>
     <string name="main_notification_channel_name">Primary</string>
+    <string name="select_quiz_image_content">Image view telling user to select a quiz</string>
+    <string name="picture_text_view_dummy_text">Where is this?</string>
+    <string name="results_text_view_dummy_text">Your score appears here</string>
+    <string name="return_button_text_results">Return to main page</string>
+    <string name="if_top_score_dummy_text">Describes if achieved top score</string>
+    <string name="your_score_image_label_content">Image label for your score on results page</string>
+    <string name="results_image_view_content">Results image view label</string>
+    <string name="top_scores_instructions">Click any of these quiz rounds to see the top score EVER obtained for this quiz</string>
+    <string name="image_global_content_desc">Image label for top score on global page</string>
+    <string name="challenge_text_global_scores">Think you could beat this score?</string>
+    <string name="question_activity_button_text_global">Try to beat it now!</string>
+    <string name="button_text_global_return_main">Return to main main screen</string>
+    <string name="dummy_date_text_global">on the 12th March</string>
+    <string name="dummy_user_text_global">was set by Bob Smith</string>
+    <string name="dummy_score_text_global">84</string>
+    <string name="dummy_text_quiz_name_main_recycler">Quiz title here</string>
+    <string name="cannot_get_data_widget_text">No data</string>
+    <string name="refresh_widget_icon">Refresh widget icon</string>
+    <string name="dummy_text_widget_item">Category and score</string>
+    <string name="dummy_text_high_score_date">Date</string>
 
     <string-array name="category_arrays">
         <item>TV</item>

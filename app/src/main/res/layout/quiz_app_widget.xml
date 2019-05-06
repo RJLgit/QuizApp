@@ -30,6 +30,7 @@
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:contentDescription="@string/refresh_widget_icon"
         android:src="@drawable/baseline_refresh_black_18dp"
         android:id="@+id/refresh_widget"
         />
@@ -49,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/empty_widget_view"
-            android:text="Empty"
+            android:text="@string/cannot_get_data_widget_text"
             android:gravity="center"
             />
         

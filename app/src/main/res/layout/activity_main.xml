@@ -68,7 +68,7 @@ tools:context=".MainActivity"
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-
+        android:contentDescription="@string/select_quiz_image_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"

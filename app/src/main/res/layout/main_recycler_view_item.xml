@@ -41,7 +41,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:text="TextView"
+            android:text="@string/dummy_text_quiz_name_main_recycler"
             android:textSize="30sp"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
