@@ -33,11 +33,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -166,7 +168,7 @@ private String category;
         if (mExoPlayer != null) {
             mExoPlayer.stop();
             mExoPlayer.release();
-
+            Log.d(TAG, "releasePlayer: ");
             mExoPlayer = null;
         }
 
@@ -717,8 +719,10 @@ private String category;
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, loadControl);
+            RenderersFactory renderersFactory = new DefaultRenderersFactory(this);
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, loadControl);  //.newSimpleInstance(, loadControl);
             mPlayerView.setPlayer(mExoPlayer);
+            Log.d(TAG, "initializePlayer: " + "created");
 
             // Set the ExoPlayer.EventListener to this activity.
             mExoPlayer.addListener(this);
@@ -735,6 +739,7 @@ private String category;
     private class MySessionCallback extends MediaSessionCompat.Callback {
         @Override
         public void onPlay() {
+
             mExoPlayer.setPlayWhenReady(true);
         }
 
