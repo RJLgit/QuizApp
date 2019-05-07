@@ -3,6 +3,8 @@ package com.example.android.myquizapp;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -57,15 +59,16 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     private FirebaseFirestore db;
     private StorageReference mStorageRef;
     protected static final int RC_SIGN_IN = 1;
+    private ConnectivityReceiver mConnectivityReceiver;
 
     //Tag
     private static final String TAG = "MainActivity";
 
-    private void showDialog()
+   /* private void showDialog()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Connect to wifi or quit")
-                .setCancelable(false)
+                .setCancelable(true)
                 .setPositiveButton("Connect to WIFI", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
@@ -78,14 +81,17 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
                 });
         AlertDialog alert = builder.create();
         alert.show();
-    }
+    }*/
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mConnectivityReceiver = new ConnectivityReceiver(this, this);
         if (!ConnectionUtils.haveNetworkConnection(this)) {
-            showDialog();
+            ConnectionUtils.showDialog(this);
         }
 
         mImageView = (ImageView) findViewById(R.id.imageView2);
@@ -221,12 +227,16 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         if (mListener != null) {
             mFirebaseAuth.removeAuthStateListener(mListener);
         }
+        unregisterReceiver(mConnectivityReceiver);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mFirebaseAuth.addAuthStateListener(mListener);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(mConnectivityReceiver, intentFilter);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.android.myquizapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,22 +27,23 @@ public class ConnectionUtils {
         return haveConnectedWifi || haveConnectedMobile;
     }
 
-   /* public static void showDialog(final Context context)
+    public static void showDialog(final Activity activity)
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setMessage("Connect to wifi or quit")
-                .setCancelable(false)
+                .setCancelable(true)
                 .setPositiveButton("Connect to WIFI", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        context.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                        activity.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                     }
                 })
                 .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        (
+                        activity.finish();
+
                     }
                 });
         AlertDialog alert = builder.create();
         alert.show();
-    }*/
+    }
 }
