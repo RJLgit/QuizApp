@@ -2,12 +2,9 @@ package com.example.android.myquizapp;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -31,6 +28,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -56,7 +57,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FileDownloadTask;
@@ -66,8 +66,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -106,7 +104,7 @@ private String category;
     private FirebaseAuth mFirebaseAuth;
     private Boolean isUltimate;
     public boolean isInBackground;
-
+    private ProgressBar progressBar;
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {
 
@@ -344,6 +342,7 @@ private String category;
         answerTwo = findViewById(R.id.buttonD);
         answerThree = findViewById(R.id.buttonB);
         answerFour = findViewById(R.id.buttonC);
+        progressBar = findViewById(R.id.imageProgressBar);
         boolean isNewGame = !getIntent().hasExtra(REMAINING_QUESTIONS_KEY);
 
         questionTextView.setBackgroundResource(R.drawable.question_mark);
@@ -371,9 +370,9 @@ private String category;
         category = getIntent().getStringExtra("CategoryClicked");
         if (category.equals("Pictures")) {
             questionTextView.setVisibility(View.INVISIBLE);
-            questionImageView.setVisibility(View.VISIBLE);
+            //questionImageView.setVisibility(View.VISIBLE);
             pictureQuestionTextView.setVisibility(View.VISIBLE);
-
+            progressBar.setVisibility(View.VISIBLE);
 
         }
         if (category.equals("Music")) {
@@ -455,9 +454,9 @@ private String category;
                 }
                 if (ultimateCategory.equals("Pictures")) {
                     questionTextView.setVisibility(View.INVISIBLE);
-                    questionImageView.setVisibility(View.VISIBLE);
+                    //questionImageView.setVisibility(View.VISIBLE);
                     pictureQuestionTextView.setVisibility(View.VISIBLE);
-
+                    progressBar.setVisibility(View.VISIBLE);
                     try {
                         final File localFile = File.createTempFile("pictures", "JPG");
                         StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".JPG");
@@ -467,7 +466,23 @@ private String category;
                                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                        /* String toURI = localFile.toURI().toString();
                                         Uri uri = Uri.parse(toURI);*/
-                                        Glide.with(QuestionActivity.this).load(localFile).into(questionImageView);
+                                        Glide.with(QuestionActivity.this).load(localFile).addListener(new RequestListener<Drawable>() {
+                                            @Override
+                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                progressBar.setVisibility(View.INVISIBLE);
+                                                questionImageView.setImageResource(R.drawable.error_load);
+                                                questionImageView.setVisibility(View.VISIBLE);
+                                                return false;
+                                            }
+
+                                            @Override
+                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                progressBar.setVisibility(View.INVISIBLE);
+                                                questionImageView.setImageDrawable(resource);
+                                                questionImageView.setVisibility(View.VISIBLE);
+                                                return true;
+                                            }
+                                        }).into(questionImageView);
                                         //Picasso.get().load(localFile).into(questionImageView);
                                         //questionImageView.setImageURI(uri);
                                     }
@@ -595,7 +610,24 @@ private String category;
 
                                         Log.d(TAG, "onSuccess: " + uri);*/
                                       //questionImageView.setImageURI(uri);
-                                        Glide.with(QuestionActivity.this).load(localFile).into(questionImageView);
+
+                                        Glide.with(QuestionActivity.this).load(localFile).addListener(new RequestListener<Drawable>() {
+                                            @Override
+                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                progressBar.setVisibility(View.INVISIBLE);
+                                                questionImageView.setImageResource(R.drawable.error_load);
+                                                questionImageView.setVisibility(View.VISIBLE);
+                                                return false;
+                                            }
+
+                                            @Override
+                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                progressBar.setVisibility(View.INVISIBLE);
+                                                questionImageView.setImageDrawable(resource);
+                                                questionImageView.setVisibility(View.VISIBLE);
+                                                return true;
+                                            }
+                                        }).into(questionImageView);
                                        //Picasso.get().load(uri).placeholder(R.drawable.question_mark).into(questionImageView);
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
