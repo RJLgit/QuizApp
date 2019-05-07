@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     private FirebaseFirestore db;
     private StorageReference mStorageRef;
     protected static final int RC_SIGN_IN = 1;
-    private ConnectivityReceiver mConnectivityReceiver;
+
 
     //Tag
     private static final String TAG = "MainActivity";
@@ -89,10 +89,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mConnectivityReceiver = new ConnectivityReceiver(this, this);
-        if (!ConnectionUtils.haveNetworkConnection(this)) {
-            ConnectionUtils.showDialog(this);
-        }
+
 
         mImageView = (ImageView) findViewById(R.id.imageView2);
         Glide.with(this).load(R.drawable.select_quiz_image).into(mImageView);
@@ -227,16 +224,14 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         if (mListener != null) {
             mFirebaseAuth.removeAuthStateListener(mListener);
         }
-        unregisterReceiver(mConnectivityReceiver);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mFirebaseAuth.addAuthStateListener(mListener);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(mConnectivityReceiver, intentFilter);
+
     }
 
     @Override

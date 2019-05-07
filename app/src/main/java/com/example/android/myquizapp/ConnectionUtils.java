@@ -30,17 +30,11 @@ public class ConnectionUtils {
     public static void showDialog(final Activity activity)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage("Connect to wifi or quit")
-                .setCancelable(true)
-                .setPositiveButton("Connect to WIFI", new DialogInterface.OnClickListener() {
+        builder.setMessage("You have no internet connection")
+                .setCancelable(false)
+                .setPositiveButton("Return to main menu", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        activity.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-                    }
-                })
-                .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        activity.finish();
-
+                        activity.startActivity(new Intent(activity, MainActivity.class));
                     }
                 });
         AlertDialog alert = builder.create();

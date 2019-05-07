@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class ScoresActivity extends AppCompatActivity implements ScoresAdapter.ListItemClickListener {
+public class ScoresActivity extends BaseActivity implements ScoresAdapter.ListItemClickListener {
 
     private boolean mSplitScreen;
 

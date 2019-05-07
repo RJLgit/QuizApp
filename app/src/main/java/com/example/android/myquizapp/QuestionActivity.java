@@ -1,10 +1,12 @@
 package com.example.android.myquizapp;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -70,7 +72,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class QuestionActivity extends AppCompatActivity implements View.OnClickListener, ExoPlayer.EventListener {
+public class QuestionActivity extends BaseActivity implements View.OnClickListener, ExoPlayer.EventListener {
 
 private static final String REMAINING_QUESTIONS_KEY = "remaining_questions";
     private static final String CURRENT_QUESTION_KEY = "current_question";
@@ -105,6 +107,7 @@ private String category;
     private Boolean isUltimate;
     public boolean isInBackground;
     private ProgressBar progressBar;
+    //private ConnectivityReceiver mConnectivityReceiver;
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {
 
@@ -189,6 +192,10 @@ private String category;
         super.onDestroy();
         isInBackground = true;
         releasePlayer();
+        /*if (mConnectivityReceiver != null) {
+            unregisterReceiver(mConnectivityReceiver);
+            mConnectivityReceiver = null;
+        }*/
 
 
 
@@ -344,6 +351,16 @@ private String category;
         answerFour = findViewById(R.id.buttonC);
         progressBar = findViewById(R.id.imageProgressBar);
         boolean isNewGame = !getIntent().hasExtra(REMAINING_QUESTIONS_KEY);
+
+
+            /*mConnectivityReceiver = new ConnectivityReceiver(this, this);
+            if (!ConnectionUtils.haveNetworkConnection(this)) {
+                ConnectionUtils.showDialog(this);
+            }
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            registerReceiver(mConnectivityReceiver, intentFilter);*/
+
 
         questionTextView.setBackgroundResource(R.drawable.question_mark);
 
