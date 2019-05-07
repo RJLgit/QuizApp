@@ -282,7 +282,7 @@ public class QuizQuestionClass {
             case "Music":
                 return 11;
             case "Technology":
-                return 7;
+                return 20;
             case "People":
                 return 20;
             case "TV":
@@ -547,7 +547,19 @@ public class QuizQuestionClass {
         QuizQuestion q5 = new QuizQuestion("Who invented the logarithm table?", "John Napier", "George Friend", "Henry Simpson", "Joe Fraser");
         QuizQuestion q6 = new QuizQuestion("What is the biggest tech company in the world by market cap (as of March 2019)?", "Microsoft", "Apple", "Amazon", "Alphabet Inc (google)");
         QuizQuestion q7 = new QuizQuestion("Who published their thesis on jet engines in 1929?", "Frank Whittle", "Wilhelm Pape", "Hans Van Ohain", "Maxime Guillaume");
-
+        QuizQuestion q8 = new QuizQuestion("Which country is the home of the Nokia mobile phone company? ", "Finland", "Sweden", "Norway", "Denmark");
+        QuizQuestion q9 = new QuizQuestion("Which of the following is an actual name for a quark?", "Charm", "Left", "French", "Fork");
+        QuizQuestion q10 = new QuizQuestion("Tux the penguin is the mascot of which computer operating system?", "Unix", "Microsoft Windows", "Google's Android OS", "Apple iOS");
+        QuizQuestion q11 = new QuizQuestion("Which company comercially released the world's first compact disc player in 1982?", "Sony", "Panasonic", "Samsung", "LG");
+        QuizQuestion q12 = new QuizQuestion("How many characters were originally allowed in a Tweet when Twitter first launched in 2006?", "140", "280", "180", "200");
+        QuizQuestion q13 = new QuizQuestion("Firefox is a web browser owned by which company?", "Mozilla", "Microsoft", "Apple", "Yahoo");
+        QuizQuestion q14 = new QuizQuestion("What colour are aircraft black boxes?", "Orange", "Black", "Green", "Silver");
+        QuizQuestion q15 = new QuizQuestion("Along with whom did Bill Gates found Microsoft?", "Paul Allen", "Steve Ballmer", "Larry Ellison", "Steve Wozniak");
+        QuizQuestion q16 = new QuizQuestion("What science fiction writer wrote the three laws of robotics?", "Isaac Asmiov", "Arthur Clarke", "Ray Bradbury", "H. G. Wells");
+        QuizQuestion q17 = new QuizQuestion("Which of these has the longest wavelength?", "Microwaves", "Infrared", "Ultraviolet", "X-Rays");
+        QuizQuestion q18 = new QuizQuestion("Which of these planets is biggest by radius?", "Uranus", "Neptune", "Earth", "Mars");
+        QuizQuestion q19 = new QuizQuestion("Which of these is not an element in sucrose (sugar)?", "Nitrogen", "Carbon", "Oxygen", "hydrogen");
+        QuizQuestion q20 = new QuizQuestion("Which of these diseases is caused by a bateria?", "E. Coli", "Smallpox", "Rabies", "Measles");
 
         res.add(q1);
         res.add(q2);
@@ -556,6 +568,19 @@ public class QuizQuestionClass {
         res.add(q5);
         res.add(q6);
         res.add(q7);
+        res.add(q8);
+        res.add(q9);
+        res.add(q10);
+        res.add(q11);
+        res.add(q12);
+        res.add(q13);
+        res.add(q14);
+        res.add(q15);
+        res.add(q16);
+        res.add(q17);
+        res.add(q18);
+        res.add(q19);
+        res.add(q20);
 
 
         return res;
