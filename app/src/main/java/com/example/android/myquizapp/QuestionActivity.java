@@ -107,6 +107,7 @@ private String category;
     private Boolean isUltimate;
     public boolean isInBackground;
     private ProgressBar progressBar;
+    private UserResults userResults = UserResults.getInstance();
     //private ConnectivityReceiver mConnectivityReceiver;
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {
@@ -404,6 +405,7 @@ private String category;
         if (category.equals("Ultimate")) {
             isUltimate = true;
             if (isNewGame) {
+                userResults.clear();
                 QuizUtils.setCurrentScore(getApplicationContext(), 0);
 
                 currentQuestionIndex = 0;
@@ -554,6 +556,8 @@ private String category;
 
 
             if (isNewGame) {
+                userResults.clear();
+
                 QuizUtils.setCurrentScore(getApplicationContext(), 0);
 
                 currentQuestionIndex = 0;

@@ -20,5 +20,16 @@ public class UserResults {
         }
         return single_user_results;
     }
+    public void clear() {
+        if (questions != null) {
+            questions.clear();
+        }
+        if (userAnswers != null) {
+            userAnswers.clear();
+        }
+        if (correctAnswers != null) {
+            correctAnswers.clear();
+        }
+    }
 
 }
