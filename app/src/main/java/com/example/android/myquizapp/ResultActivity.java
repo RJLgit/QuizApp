@@ -170,6 +170,12 @@ public class ResultActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG, "onFailure: ", e);
+                res.setText(intPercentScore + "%");
+                descriptionOfScoreTextView.setText("Cannot see if this was a top score");
+                res.setVisibility(View.VISIBLE);
+                descriptionOfScoreTextView.setVisibility(View.VISIBLE);
+                yourScoreImageView.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
       //updateDatabaseScores();
