@@ -6,4 +6,5 @@
     <color name="actionColor">#9cefee</color>
     <color name="transparent">#80000000</color>
     <color name="descriptionTextColor">#000000</color>
+    <color name="whiteColor">#ffffff</color>
 </resources>
