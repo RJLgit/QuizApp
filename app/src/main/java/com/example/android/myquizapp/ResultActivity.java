@@ -11,6 +11,8 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -74,6 +76,9 @@ public class ResultActivity extends AppCompatActivity {
     private ImageView resultsImageView;
     private ImageView yourScoreImageView;
     private TextView descriptionOfScoreTextView;
+    private RecyclerView mRecyclerView;
+    private ResultsAdapter mResultsAdapter;
+    private UserResults userResults = UserResults.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +106,14 @@ public class ResultActivity extends AppCompatActivity {
 
         descriptionOfScoreTextView = findViewById(R.id.isTopScoreResultsTextView);
 
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.user_results_recycler_view);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(ResultActivity.this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        mResultsAdapter = new ResultsAdapter(ResultActivity.this, userResults.questions, userResults.userAnswers, userResults.correctAnswers);
+        mRecyclerView.setAdapter(mResultsAdapter);
 
         res = findViewById(R.id.resultsTextView);
         mProgressBar = findViewById(R.id.progressBar3);
