@@ -240,6 +240,10 @@ private String category;
             mCurrentScore++;
 
         }
+        userResults.questions.add(currentQuestion.getQuestion());
+        userResults.correctAnswers.add(currentQuestion.getCorrectAnswer());
+        userResults.userAnswers.add(buttonPressed.getText().toString());
+
         QuizUtils.setCurrentScore(getApplicationContext(), mCurrentScore);
         Toast.makeText(this, "Current score is " + QuizUtils.getCurrentScore(getApplicationContext()), Toast.LENGTH_SHORT).show();
         questionsLeft--;
