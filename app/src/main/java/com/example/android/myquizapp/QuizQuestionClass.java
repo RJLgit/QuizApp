@@ -272,7 +272,7 @@ public class QuizQuestionClass {
             case "Sport":
                 return 20;
             case "Nature":
-                return 10;
+                return 20;
             case "Geography":
                 return 20;
             case "Films":
@@ -308,7 +308,16 @@ public class QuizQuestionClass {
         QuizQuestion q8 = new QuizQuestion("What of these is the biggest by area?", "Lincolnshire", "Cumbria", "Devon", "Norfolk");
         QuizQuestion q9 = new QuizQuestion("Who was the third man to walk on the moon?", "Charles Conrad", "Alan Shepard", "Alan Bean", "Edgar Mitchell");
         QuizQuestion q10 = new QuizQuestion("What is the largest fish in the world?", "Whale Shark", "Basking Shark", "Great White Shark", "Tiger shark");
-
+        QuizQuestion q11 = new QuizQuestion("What colour tounge does a chow chow have?", "Blue", "Red", "Pink", "Yellow");
+        QuizQuestion q12 = new QuizQuestion("A jenny is a female what?", "Donkey", "Horse", "Camel", "Rhino");
+        QuizQuestion q13 = new QuizQuestion("What is the collective name for a group of frogs?", "Army", "Herd", "Flood", "Tribe");
+        QuizQuestion q14 = new QuizQuestion("What is a young penguin called?", "Chick", "Pup", "Cub", "whelp");
+        QuizQuestion q15 = new QuizQuestion("Which country has the most Asian elephants in their natural habitat?", "India", "China", "Nepal", "Pakistan");
+        QuizQuestion q16 = new QuizQuestion("What colour is copper sulphate?", "Blue", "Yellow", "Green", "Orange");
+        QuizQuestion q17 = new QuizQuestion("What is the chemical symbol of Tungsten?", "W", "TG", "V", "In");
+        QuizQuestion q18 = new QuizQuestion("A bone is joined to a muscle by what structure?", "Tendon", "Ligament", "Meniscus", "Joints");
+        QuizQuestion q19 = new QuizQuestion("Which part of the brain regulates physiological stability in the body?", "Hypothalamus", "Cerebellum", "Putamen", "Motor cortex");
+        QuizQuestion q20 = new QuizQuestion("What type of farm animal is an English Romney?", "Sheep", "Cow", "Goat", "Pig");
 
         res.add(q1);
         res.add(q2);
@@ -320,6 +329,16 @@ public class QuizQuestionClass {
         res.add(q8);
         res.add(q9);
         res.add(q10);
+        res.add(q11);
+        res.add(q12);
+        res.add(q13);
+        res.add(q14);
+        res.add(q15);
+        res.add(q16);
+        res.add(q17);
+        res.add(q18);
+        res.add(q19);
+        res.add(q20);
                 return res;
     }
 
