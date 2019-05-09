@@ -57,28 +57,47 @@
         <TextView
             android:id="@+id/userAnswerText"
             android:layout_width="144dp"
-            android:layout_height="41dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_height="26dp"
+            android:layout_marginEnd="60dp"
             android:textAlignment="center"
             android:textColor="@color/whiteColor"
             android:textSize="15sp"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/correctAnswerText"
             app:layout_constraintTop_toBottomOf="@+id/questionAsked" />
+
         <TextView
             android:id="@+id/correctAnswerText"
             android:layout_width="144dp"
-            android:layout_height="41dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="60dp"
             android:textAlignment="center"
             android:textColor="@color/whiteColor"
             android:textSize="15sp"
             android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/questionAsked" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userAnswerText" />
+
+        <TextView
+            android:id="@+id/your_answer_results_label"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/whiteColor"
+            android:textSize="15sp"
+            android:text="@string/your_answer_results_label"
+            app:layout_constraintBaseline_toBaselineOf="@+id/userAnswerText"
+            app:layout_constraintEnd_toStartOf="@+id/userAnswerText" />
+
+        <TextView
+            android:id="@+id/correct_answer_results_label"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/whiteColor"
+            android:textSize="15sp"
+            android:text="@string/correct_answer_results_label"
+            app:layout_constraintBaseline_toBaselineOf="@+id/correctAnswerText"
+            app:layout_constraintEnd_toStartOf="@+id/correctAnswerText" />
     </android.support.constraint.ConstraintLayout>
 </LinearLayout>

@@ -38,6 +38,9 @@
     <string name="refresh_widget_icon">Refresh widget icon</string>
     <string name="dummy_text_widget_item">Category and score</string>
     <string name="dummy_text_high_score_date">Date</string>
+    <string name="results_summary_title">Summary of your answers</string>
+    <string name="correct_answer_results_label">Correct Answer:</string>
+    <string name="your_answer_results_label">Your Answer:</string>
 
     <string-array name="category_arrays">
         <item>TV</item>
