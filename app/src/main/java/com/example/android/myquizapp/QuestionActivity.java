@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Handler;
@@ -68,6 +69,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -77,7 +79,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
 private static final String REMAINING_QUESTIONS_KEY = "remaining_questions";
     private static final String CURRENT_QUESTION_KEY = "current_question";
     private static final String QUESTIONS_TO_ASK_KEY = "all_questions";
-private static final int CORRECT_ANSWER_DELAY_MILLIS = 1000;
+private static final int CORRECT_ANSWER_DELAY_MILLIS = 1500;
 private static final String TAG = QuestionActivity.class.getSimpleName();
 private String category;
 
@@ -108,6 +110,9 @@ private String category;
     public boolean isInBackground;
     private ProgressBar progressBar;
     private UserResults userResults = UserResults.getInstance();
+    private static MediaPlayer correctSound;
+    private static MediaPlayer incorrectSound;
+
     //private ConnectivityReceiver mConnectivityReceiver;
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {
@@ -238,7 +243,9 @@ private String category;
         Button buttonPressed = (Button) view;
         if (buttonPressed.getText().equals(currentQuestion.getCorrectAnswer())) {
             mCurrentScore++;
-
+            correctSound.start();
+        } else {
+            incorrectSound.start();
         }
         userResults.questions.add(currentQuestion.getQuestion());
         userResults.correctAnswers.add(currentQuestion.getCorrectAnswer());
@@ -345,6 +352,19 @@ private String category;
         super.onCreate(savedInstanceState);
         isInBackground = false;
         setContentView(R.layout.activity_question);
+       if (correctSound != null && correctSound.isPlaying()) {
+           correctSound.stop();
+       }
+       if (incorrectSound != null && incorrectSound.isPlaying()) {
+           incorrectSound.stop();
+       }
+
+       incorrectSound = MediaPlayer.create(this, R.raw.incorrect_sound);
+
+
+
+        correctSound = MediaPlayer.create(this, R.raw.correct_sound);
+
         questionTextView = findViewById(R.id.questionView);
         questionImageView = findViewById(R.id.imageView);
         pictureQuestionTextView = findViewById(R.id.pictureQuestionTextView);
