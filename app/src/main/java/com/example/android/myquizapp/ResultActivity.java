@@ -74,7 +74,7 @@ public class ResultActivity extends AppCompatActivity {
     private Intent myShareIntent;
     private Button myReturnButton;
     private ImageView resultsImageView;
-    private ImageView yourScoreImageView;
+    //private ImageView yourScoreImageView;
     private TextView descriptionOfScoreTextView;
     private RecyclerView mRecyclerView;
     private ResultsAdapter mResultsAdapter;
@@ -97,9 +97,9 @@ public class ResultActivity extends AppCompatActivity {
             }
         });
         resultsImageView = findViewById(R.id.resultsImageView);
-        yourScoreImageView = findViewById(R.id.yourScoreImageView);
+        //yourScoreImageView = findViewById(R.id.yourScoreImageView);
         Glide.with(this).load(R.drawable.quiz_results_image).into(resultsImageView);
-        Glide.with(this).load(R.drawable.your_score_image).into(yourScoreImageView);
+        //Glide.with(this).load(R.drawable.your_score_image).into(yourScoreImageView);
 
         /*Picasso.get().load(R.drawable.quiz_results_image).into(resultsImageView);
         Picasso.get().load(R.drawable.your_score_image).into(yourScoreImageView);*/
@@ -176,7 +176,7 @@ public class ResultActivity extends AppCompatActivity {
                 descriptionOfScoreTextView.setText(toDisplay);
                 res.setVisibility(View.VISIBLE);
                 descriptionOfScoreTextView.setVisibility(View.VISIBLE);
-                yourScoreImageView.setVisibility(View.VISIBLE);
+                //yourScoreImageView.setVisibility(View.VISIBLE);
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -187,7 +187,7 @@ public class ResultActivity extends AppCompatActivity {
                 descriptionOfScoreTextView.setText("Cannot see if this was a top score");
                 res.setVisibility(View.VISIBLE);
                 descriptionOfScoreTextView.setVisibility(View.VISIBLE);
-                yourScoreImageView.setVisibility(View.VISIBLE);
+                //yourScoreImageView.setVisibility(View.VISIBLE);
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
