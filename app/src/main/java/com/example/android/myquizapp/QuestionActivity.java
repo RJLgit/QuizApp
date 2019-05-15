@@ -222,6 +222,11 @@ private String category;
                 Intent i = new Intent(QuestionActivity.this, MainActivity.class);
                 startActivity(i);
                 return true;
+            case R.id.settings_menu:
+                Intent intentTwo = new Intent(QuestionActivity.this, SettingsActivity.class);
+                intentTwo.putExtra("Username", mUsername);
+                startActivity(intentTwo);
+                return true;
             case R.id.top_scores_menu:
                 Intent intent = new Intent(QuestionActivity.this, ScoresActivity.class);
                 intent.putExtra("Username", mUsername);

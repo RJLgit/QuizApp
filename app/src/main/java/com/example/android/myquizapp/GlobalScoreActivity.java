@@ -52,6 +52,11 @@ public class GlobalScoreActivity extends AppCompatActivity {
                 Intent i = new Intent(GlobalScoreActivity.this, MainActivity.class);
                 startActivity(i);
                 return true;
+            case R.id.settings_menu:
+                Intent intentTwo = new Intent(GlobalScoreActivity.this, SettingsActivity.class);
+                intentTwo.putExtra("Username", getIntent().getStringExtra("Username"));
+                startActivity(intentTwo);
+                return true;
             case R.id.top_scores_menu:
                 Intent intent = new Intent(GlobalScoreActivity.this, ScoresActivity.class);
                 intent.putExtra("Username", getIntent().getStringExtra("Username"));

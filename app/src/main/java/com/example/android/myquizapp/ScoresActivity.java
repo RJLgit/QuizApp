@@ -73,6 +73,11 @@ public class ScoresActivity extends BaseActivity implements ScoresAdapter.ListIt
                 Intent i = new Intent(ScoresActivity.this, MainActivity.class);
                 startActivity(i);
                 return true;
+            case R.id.settings_menu:
+                Intent intentTwo = new Intent(ScoresActivity.this, SettingsActivity.class);
+                intentTwo.putExtra("Username", getIntent().getStringExtra("Username"));
+                startActivity(intentTwo);
+                return true;
             case R.id.top_scores_menu:
                 Intent intent = new Intent(this, ScoresActivity.class);
                 intent.putExtra("Username", getIntent().getStringExtra("Username"));

@@ -444,6 +444,11 @@ public class ResultActivity extends AppCompatActivity {
                 Intent i = new Intent(ResultActivity.this, MainActivity.class);
                 startActivity(i);
                 return true;
+            case R.id.settings_menu:
+                Intent intentTwo = new Intent(ResultActivity.this, SettingsActivity.class);
+                intentTwo.putExtra("Username", mUsername);
+                startActivity(intentTwo);
+                return true;
             case R.id.top_scores_menu:
                 Intent intent = new Intent(ResultActivity.this, ScoresActivity.class);
                 intent.putExtra("Username", mUsername);

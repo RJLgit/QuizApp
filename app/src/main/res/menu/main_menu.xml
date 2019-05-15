@@ -6,9 +6,15 @@
         android:title="@string/your_top_scores"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/settings_menu"
+        android:title="@string/settings"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/sign_out_menu"
         android:title="@string/sign_out"
         app:showAsAction="never"/>
+
+
 </menu>

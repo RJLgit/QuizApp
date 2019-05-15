@@ -198,6 +198,11 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
             case R.id.sign_out_menu:
                 AuthUI.getInstance().signOut(this);
                 return true;
+            case R.id.settings_menu:
+                Intent intentTwo = new Intent(MainActivity.this, SettingsActivity.class);
+                intentTwo.putExtra("Username", mUsername);
+                startActivity(intentTwo);
+                return true;
             case R.id.top_scores_menu:
                 Intent intent = new Intent(MainActivity.this, ScoresActivity.class);
                 intent.putExtra("Username", mUsername);
