@@ -5,6 +5,6 @@
         android:title="Sounds"
         android:entries="@array/sounds_array"
         android:entryValues="@array/sounds_array"
-
+        android:summary="%s"
         />
 </PreferenceScreen>
