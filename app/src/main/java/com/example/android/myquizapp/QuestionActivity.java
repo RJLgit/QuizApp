@@ -76,7 +76,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class QuestionActivity extends BaseActivity implements View.OnClickListener, ExoPlayer.EventListener {
+public class QuestionActivity extends BaseActivity implements View.OnClickListener, ExoPlayer.EventListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
 private static final String REMAINING_QUESTIONS_KEY = "remaining_questions";
     private static final String CURRENT_QUESTION_KEY = "current_question";
@@ -114,6 +114,7 @@ private String category;
     private UserResults userResults = UserResults.getInstance();
     private static MediaPlayer correctSound;
     private static MediaPlayer incorrectSound;
+    private String soundSetting;
 
     //private ConnectivityReceiver mConnectivityReceiver;
     @Override
@@ -200,6 +201,7 @@ private String category;
         super.onDestroy();
         isInBackground = true;
         releasePlayer();
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
         /*if (mConnectivityReceiver != null) {
             unregisterReceiver(mConnectivityReceiver);
             mConnectivityReceiver = null;
@@ -246,8 +248,8 @@ private String category;
         answerThree.setEnabled(false);
         answerFour.setEnabled(false);
         showCorrectAnswer();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String soundSetting = sharedPreferences.getString("sounds_preference", "On");
+        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String soundSetting = sharedPreferences.getString("sounds_preference", "On");*/
 
         Button buttonPressed = (Button) view;
         if (buttonPressed.getText().equals(currentQuestion.getCorrectAnswer())) {
@@ -363,9 +365,9 @@ private String category;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String soundSetting = sharedPreferences.getString("sounds_preference", "Off");*/
-
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        soundSetting = sharedPreferences.getString("sounds_preference", "On");
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         isInBackground = false;
         setContentView(R.layout.activity_question);
        if (correctSound != null && correctSound.isPlaying()) {
@@ -911,5 +913,11 @@ private String category;
 
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        if (s.equals("sounds_preference")) {
+            soundSetting = sharedPreferences.getString("sounds_preference", "On");
+        }
+    }
 }
 
