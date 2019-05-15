@@ -247,7 +247,7 @@ private String category;
         answerFour.setEnabled(false);
         showCorrectAnswer();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String soundSetting = sharedPreferences.getString("sounds_preference", "Off");
+        String soundSetting = sharedPreferences.getString("sounds_preference", "On");
 
         Button buttonPressed = (Button) view;
         if (buttonPressed.getText().equals(currentQuestion.getCorrectAnswer())) {
