@@ -2,6 +2,7 @@ package com.example.android.myquizapp;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -18,6 +19,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -244,13 +246,19 @@ private String category;
         answerThree.setEnabled(false);
         answerFour.setEnabled(false);
         showCorrectAnswer();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String soundSetting = sharedPreferences.getString("sounds_preference", "Off");
 
         Button buttonPressed = (Button) view;
         if (buttonPressed.getText().equals(currentQuestion.getCorrectAnswer())) {
             mCurrentScore++;
-            correctSound.start();
+           if (soundSetting.equals("On")) {
+                correctSound.start();
+            }
         } else {
-            incorrectSound.start();
+            if (soundSetting.equals("On")) {
+                incorrectSound.start();
+           }
         }
         userResults.questions.add(currentQuestion.getQuestion());
         userResults.correctAnswers.add(currentQuestion.getCorrectAnswer());
@@ -355,6 +363,9 @@ private String category;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String soundSetting = sharedPreferences.getString("sounds_preference", "Off");*/
+
         isInBackground = false;
         setContentView(R.layout.activity_question);
        if (correctSound != null && correctSound.isPlaying()) {
@@ -365,10 +376,28 @@ private String category;
        }
 
        incorrectSound = MediaPlayer.create(this, R.raw.incorrect_sound);
-
-
-
         correctSound = MediaPlayer.create(this, R.raw.correct_sound);
+       /*switch (soundSetting) {
+           case ("Off") :
+               incorrectSound.setVolume(0, 0);
+               correctSound.setVolume(0, 0);
+           case ("Low") :
+               incorrectSound.setVolume(0.25f, 0.25f);
+               correctSound.setVolume(0.25f, 0.25f);
+           case ("Medium") :
+               incorrectSound.setVolume(0.5f, 0.5f);
+               correctSound.setVolume(0.5f, 0.5f);
+           case ("High") :
+               incorrectSound.setVolume(0.75f, 0.75f);
+               correctSound.setVolume(0.75f, 0.75f);
+               default:
+                   incorrectSound.setVolume(0.5f, 0.5f);
+                   correctSound.setVolume(0.5f, 0.5f);
+       }*/
+
+
+
+
 
         questionTextView = findViewById(R.id.questionView);
         questionImageView = findViewById(R.id.imageView);

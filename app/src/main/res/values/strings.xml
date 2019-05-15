@@ -65,9 +65,9 @@
 
     <string-array name="sounds_array">
         <item>Off</item>
-        <item>Low</item>
-        <item>Medium</item>
-        <item>High</item>
+        <item>On</item>
+     
+
 
     </string-array>
 </resources>

@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
         android:key="sounds_preference"
-        android:title="Sounds"
+        android:title="Sounds effects"
         android:entries="@array/sounds_array"
         android:entryValues="@array/sounds_array"
         android:summary="%s"
