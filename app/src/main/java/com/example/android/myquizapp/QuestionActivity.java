@@ -175,12 +175,7 @@ private String category;
         }
 
         category = getIntent().getStringExtra("CategoryClicked");
-        if (category.equals("Pictures")) {
-            questionTextView.setVisibility(View.INVISIBLE);
-            pictureQuestionTextView.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
 
-        }
 
         if (category.equals("Ultimate")) {
             isUltimate = true;
@@ -202,43 +197,7 @@ private String category;
                     setUpMusicQuestion();
                 }
                 if (ultimateCategory.equals("Pictures")) {
-                    questionTextView.setVisibility(View.INVISIBLE);
-                    pictureQuestionTextView.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.VISIBLE);
-                    try {
-                        final File localFile = File.createTempFile("pictures", "JPG");
-                        StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".JPG");
-                        myRef.getFile(localFile)
-                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                        Glide.with(QuestionActivity.this).load(localFile).addListener(new RequestListener<Drawable>() {
-                                            @Override
-                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                progressBar.setVisibility(View.INVISIBLE);
-                                                questionImageView.setImageResource(R.drawable.error_load);
-                                                questionImageView.setVisibility(View.VISIBLE);
-                                                return false;
-                                            }
-
-                                            @Override
-                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                                progressBar.setVisibility(View.INVISIBLE);
-                                                questionImageView.setImageDrawable(resource);
-                                                questionImageView.setVisibility(View.VISIBLE);
-                                                return true;
-                                            }
-                                        }).into(questionImageView);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    setupPictureQuestion();
                 }
                 myRef.document(ultimateCategory + "Question" + questionsToAsk.get(currentQuestionIndex)).get()
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -296,40 +255,8 @@ private String category;
                     setUpMusicQuestion();
                 }
                 if (category.equals("Pictures")) {
-                    try {
-                        final File localFile = File.createTempFile("pictures", "JPG");
-                        StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".JPG");
-                        myRef.getFile(localFile)
-                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                        Glide.with(QuestionActivity.this).load(localFile).addListener(new RequestListener<Drawable>() {
-                                            @Override
-                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                progressBar.setVisibility(View.INVISIBLE);
-                                                questionImageView.setImageResource(R.drawable.error_load);
-                                                questionImageView.setVisibility(View.VISIBLE);
-                                                return false;
-                                            }
+                    setupPictureQuestion();
 
-                                            @Override
-                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                                progressBar.setVisibility(View.INVISIBLE);
-                                                questionImageView.setImageDrawable(resource);
-                                                questionImageView.setVisibility(View.VISIBLE);
-                                                return true;
-                                            }
-                                        }).into(questionImageView);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
                 myRef.document(category + "Question" + questionsToAsk.get(currentQuestionIndex)).get()
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -366,6 +293,47 @@ private String category;
             }
         }
     }
+
+    private void setupPictureQuestion() {
+        questionTextView.setVisibility(View.INVISIBLE);
+        pictureQuestionTextView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        try {
+            final File localFile = File.createTempFile("pictures", "JPG");
+            StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".JPG");
+            myRef.getFile(localFile)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            Glide.with(QuestionActivity.this).load(localFile).addListener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    questionImageView.setImageResource(R.drawable.error_load);
+                                    questionImageView.setVisibility(View.VISIBLE);
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    questionImageView.setImageDrawable(resource);
+                                    questionImageView.setVisibility(View.VISIBLE);
+                                    return true;
+                                }
+                            }).into(questionImageView);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void setUpMusicQuestion() {
         answerOne.setEnabled(false);
