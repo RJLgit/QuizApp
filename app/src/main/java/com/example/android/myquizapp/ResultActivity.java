@@ -98,7 +98,6 @@ public class ResultActivity extends AppCompatActivity {
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
                 .build();
         soundPool = new SoundPool.Builder()
                 .setMaxStreams(1)
@@ -332,7 +331,7 @@ public class ResultActivity extends AppCompatActivity {
                     }
                 });
             }
-        } 
+        }
     }
 
     private void updateDatabaseScores() {
