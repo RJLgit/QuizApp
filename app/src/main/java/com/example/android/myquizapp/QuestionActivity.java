@@ -7,7 +7,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.media.AudioAttributes;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Handler;
@@ -112,9 +114,12 @@ private String category;
     public boolean isInBackground;
     private ProgressBar progressBar;
     private UserResults userResults = UserResults.getInstance();
-    private static MediaPlayer correctSound;
-    private static MediaPlayer incorrectSound;
+    /*private static MediaPlayer correctSound;
+    private static MediaPlayer incorrectSound;*/
     private String soundSetting;
+    private SoundPool soundPool;
+    private int correctSound;
+    private int incorrectSound;
 
     //private ConnectivityReceiver mConnectivityReceiver;
     @Override
@@ -201,6 +206,8 @@ private String category;
         super.onDestroy();
         isInBackground = true;
         releasePlayer();
+        soundPool.release();
+        soundPool = null;
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
         /*if (mConnectivityReceiver != null) {
             unregisterReceiver(mConnectivityReceiver);
@@ -255,11 +262,13 @@ private String category;
         if (buttonPressed.getText().equals(currentQuestion.getCorrectAnswer())) {
             mCurrentScore++;
            if (soundSetting.equals("On")) {
-                correctSound.start();
+                /*correctSound.start();*/
+               soundPool.play(correctSound, 1, 1, 0, 0, 1);
             }
         } else {
             if (soundSetting.equals("On")) {
-                incorrectSound.start();
+                /*incorrectSound.start();*/
+                soundPool.play(incorrectSound, 1, 1, 0, 0, 1);
            }
         }
         userResults.questions.add(currentQuestion.getQuestion());
@@ -370,7 +379,19 @@ private String category;
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         isInBackground = false;
         setContentView(R.layout.activity_question);
-       if (correctSound != null && correctSound.isPlaying()) {
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+        soundPool = new SoundPool.Builder()
+                .setMaxStreams(1)
+                .setAudioAttributes(audioAttributes)
+                .build();
+        correctSound = soundPool.load(this, R.raw.correct_sound, 1);
+        incorrectSound = soundPool.load(this, R.raw.incorrect_sound, 1);
+
+
+     /*  if (correctSound != null && correctSound.isPlaying()) {
            correctSound.stop();
        }
        if (incorrectSound != null && incorrectSound.isPlaying()) {
@@ -378,7 +399,7 @@ private String category;
        }
 
        incorrectSound = MediaPlayer.create(this, R.raw.incorrect_sound);
-        correctSound = MediaPlayer.create(this, R.raw.correct_sound);
+        correctSound = MediaPlayer.create(this, R.raw.correct_sound);*/
        /*switch (soundSetting) {
            case ("Off") :
                incorrectSound.setVolume(0, 0);
