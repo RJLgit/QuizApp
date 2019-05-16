@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
+
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -83,11 +84,12 @@ public class ResultActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ResultsAdapter mResultsAdapter;
     private UserResults userResults = UserResults.getInstance();
-    private SoundPool soundPool;
+    private SoundPool mySoundPool;
     private int noTopScoreSound;
     private int yourTopScoreSound;
     private int globalTopScoreSound;
     private String soundSetting;
+    private int streamId = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,13 +101,13 @@ public class ResultActivity extends AppCompatActivity {
                 .setUsage(AudioAttributes.USAGE_GAME)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .build();
-        soundPool = new SoundPool.Builder()
+        mySoundPool = new SoundPool.Builder()
                 .setMaxStreams(1)
                 .setAudioAttributes(audioAttributes)
                 .build();
-        noTopScoreSound = soundPool.load(this, R.raw.fail_sound, 1);
-        yourTopScoreSound = soundPool.load(this, R.raw.your_top_score_sound, 1);
-        globalTopScoreSound = soundPool.load(this, R.raw.global_top_score_sound, 1);
+        noTopScoreSound = mySoundPool.load(this, R.raw.fail_sound, 1);
+        yourTopScoreSound = mySoundPool.load(this, R.raw.your_top_score_sound, 1);
+        globalTopScoreSound = mySoundPool.load(this, R.raw.global_top_score_sound, 1);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
 
@@ -236,8 +238,8 @@ public class ResultActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        soundPool.release();
-        soundPool = null;
+        mySoundPool.release();
+        mySoundPool = null;
     }
 
     private String updateDataHelperMethod(DocumentSnapshot documentSnapshot, DocumentSnapshot myGlobalSnapshot, Transaction transaction) {
@@ -306,28 +308,45 @@ public class ResultActivity extends AppCompatActivity {
             Log.d(TAG, "playSounds: ");
             if (!yourTop && !globalTop) {
                 Log.d(TAG, "playSounds: no top");
-                soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                mySoundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
                     @Override
                     public void onLoadComplete(SoundPool soundPool, int i, int i1) {
-                        soundPool.play(noTopScoreSound, 1, 1, 1, 0, 1);
+                        Log.d(TAG, "onLoadComplete: ");
+
+                        if (streamId != 0) {
+
+                        } else {
+                            streamId = soundPool.play(noTopScoreSound, 1, 1, 1, 0, 1);
+                        }
                     }
                 });
 
             } else if (yourTop && !globalTop) {
                 Log.d(TAG, "playSounds: yourtop");
-                soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                mySoundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
                     @Override
                     public void onLoadComplete(SoundPool soundPool, int i, int i1) {
-                        soundPool.play(yourTopScoreSound, 1, 1, 1, 0, 1);
+                        Log.d(TAG, "onLoadComplete: ");
+
+                        if (streamId != 0) {
+
+                        } else {
+                            streamId = soundPool.play(yourTopScoreSound, 1, 1, 1, 0, 1);
+                        }
                     }
                 });
 
             } else if (globalTop) {
                 Log.d(TAG, "playSounds: globaltop");
-                soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                mySoundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
                     @Override
                     public void onLoadComplete(SoundPool soundPool, int i, int i1) {
-                        soundPool.play(globalTopScoreSound, 1, 1, 1, 0, 1);
+
+                        if (streamId != 0) {
+
+                        } else {
+                            streamId = soundPool.play(globalTopScoreSound, 1, 1, 1, 0, 1);
+                        }
                     }
                 });
             }
