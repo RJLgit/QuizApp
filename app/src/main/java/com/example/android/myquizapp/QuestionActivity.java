@@ -114,14 +114,356 @@ private String category;
     public boolean isInBackground;
     private ProgressBar progressBar;
     private UserResults userResults = UserResults.getInstance();
-    /*private static MediaPlayer correctSound;
-    private static MediaPlayer incorrectSound;*/
+   private boolean isNewGame;
     private String soundSetting;
     private SoundPool soundPool;
     private int correctSound;
     private int incorrectSound;
+    private Toolbar myToolbar;
 
-    //private ConnectivityReceiver mConnectivityReceiver;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        soundSetting = sharedPreferences.getString("sounds_preference", "On");
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        isInBackground = false;
+        setContentView(R.layout.activity_question);
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+        soundPool = new SoundPool.Builder()
+                .setMaxStreams(1)
+                .setAudioAttributes(audioAttributes)
+                .build();
+        correctSound = soundPool.load(this, R.raw.correct_sound, 1);
+        incorrectSound = soundPool.load(this, R.raw.incorrect_sound, 1);
+
+        questionTextView = findViewById(R.id.questionView);
+        questionImageView = findViewById(R.id.imageView);
+        pictureQuestionTextView = findViewById(R.id.pictureQuestionTextView);
+        mPlayerView = findViewById(R.id.playerView);
+        mStorageReference = FirebaseStorage.getInstance().getReference();
+        answerOne = findViewById(R.id.buttonA);
+        answerTwo = findViewById(R.id.buttonD);
+        answerThree = findViewById(R.id.buttonB);
+        answerFour = findViewById(R.id.buttonC);
+        progressBar = findViewById(R.id.imageProgressBar);
+        isNewGame = !getIntent().hasExtra(REMAINING_QUESTIONS_KEY);
+
+        questionTextView.setBackgroundResource(R.drawable.question_mark);
+
+        questionTextView.getBackground().setAlpha(10);
+
+        myToolbar = (Toolbar) findViewById(R.id.my_toolbar_question);
+        myToolbar.setTitle("Answer this question");
+        setSupportActionBar(myToolbar);
+        ActionBar ab = getSupportActionBar();
+        if (getIntent().hasExtra("Username") && (getIntent().getStringExtra("Username") != null)) {
+            mUsername = getIntent().getStringExtra("Username");
+            ab.setSubtitle("Logged in as " + getIntent().getStringExtra("Username").toString());
+        } else {
+            mFirebaseAuth = FirebaseAuth.getInstance();
+            if (mFirebaseAuth.getCurrentUser() != null) {
+                mUsername = mFirebaseAuth.getCurrentUser().getDisplayName();
+                ab.setSubtitle("Logged in as " + mUsername);
+            } else {
+                Intent startMainActIntent = new Intent(this, MainActivity.class);
+                startActivity(startMainActIntent);
+            }
+        }
+
+        category = getIntent().getStringExtra("CategoryClicked");
+        if (category.equals("Pictures")) {
+            questionTextView.setVisibility(View.INVISIBLE);
+            pictureQuestionTextView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+
+        }
+        if (category.equals("Music")) {
+            questionTextView.setVisibility(View.INVISIBLE);
+            pictureQuestionTextView.setVisibility(View.VISIBLE);
+            mPlayerView.setVisibility(View.VISIBLE);
+            mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(
+                    getResources(), R.drawable.question_mark
+            ));
+            pictureQuestionTextView.setText("Who wrote this music?");
+        }
+        if (category.equals("Ultimate")) {
+            isUltimate = true;
+            setQuestionsVariables();
+
+
+            String ultimateCategory = getUltimateCategory(questionsLeft);
+            Log.d(TAG, "onCreate: " + ultimateCategory);
+            mCurrentScore = QuizUtils.getCurrentScore(getApplicationContext());
+            myRef = db.collection("QuizQuestions").document(ultimateCategory).collection(ultimateCategory + "Questions");
+            if (questionsLeft == 0) {
+                Intent intent = new Intent(this, ResultActivity.class);
+                intent.putExtra("Username", mUsername);
+                intent.putExtra("CurrentScore", mCurrentScore);
+                intent.putExtra("Category", category);
+                startActivity(intent);
+            } else {
+                if (ultimateCategory.equals("Music")) {
+                    answerOne.setEnabled(false);
+                    answerTwo.setEnabled(false);
+                    answerThree.setEnabled(false);
+                    answerFour.setEnabled(false);
+                    questionTextView.setVisibility(View.INVISIBLE);
+                    pictureQuestionTextView.setVisibility(View.VISIBLE);
+                    mPlayerView.setVisibility(View.VISIBLE);
+                    mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(
+                            getResources(), R.drawable.question_mark
+                    ));
+                    pictureQuestionTextView.setText("Who wrote this music?");
+
+                    try {
+                        final File localFile = File.createTempFile("Music", "mp3");
+                        StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + questionsToAsk.get(currentQuestionIndex) + ".mp3");
+                        myRef.getFile(localFile)
+                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                        String toURI = localFile.toURI().toString();
+                                        Uri uri = Uri.parse(toURI);
+                                        initializeMediaSession();
+                                        initializePlayer(uri);
+                                        if (isInBackground) {
+                                            releasePlayer();
+
+                                        }
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (ultimateCategory.equals("Pictures")) {
+                    questionTextView.setVisibility(View.INVISIBLE);
+                    pictureQuestionTextView.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
+                    try {
+                        final File localFile = File.createTempFile("pictures", "JPG");
+                        StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".JPG");
+                        myRef.getFile(localFile)
+                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                        Glide.with(QuestionActivity.this).load(localFile).addListener(new RequestListener<Drawable>() {
+                                            @Override
+                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                progressBar.setVisibility(View.INVISIBLE);
+                                                questionImageView.setImageResource(R.drawable.error_load);
+                                                questionImageView.setVisibility(View.VISIBLE);
+                                                return false;
+                                            }
+
+                                            @Override
+                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                progressBar.setVisibility(View.INVISIBLE);
+                                                questionImageView.setImageDrawable(resource);
+                                                questionImageView.setVisibility(View.VISIBLE);
+                                                return true;
+                                            }
+                                        }).into(questionImageView);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                myRef.document(ultimateCategory + "Question" + questionsToAsk.get(currentQuestionIndex)).get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    currentQuestion = documentSnapshot.toObject(QuizQuestion.class);
+                                    if (category.equals("Pictures")) {
+                                        pictureQuestionTextView.setText(currentQuestion.getQuestion());
+                                    } else {
+                                        questionTextView.setText(currentQuestion.getQuestion());
+                                    }
+                                    ArrayList<String> mAnswers = initAnswers(currentQuestion);
+                                    answerOne.setText(mAnswers.get(0));
+                                    answerTwo.setText(mAnswers.get(1));
+                                    answerThree.setText(mAnswers.get(2));
+                                    answerFour.setText(mAnswers.get(3));
+
+                                    answerOne.setOnClickListener(QuestionActivity.this);
+                                    answerTwo.setOnClickListener(QuestionActivity.this);
+                                    answerThree.setOnClickListener(QuestionActivity.this);
+                                    answerFour.setOnClickListener(QuestionActivity.this);
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(TAG, "onFailure: faileddd");
+                            }
+                        });
+
+
+            }
+
+
+
+        } else {
+            isUltimate = false;
+            setQuestionsVariables();
+
+            myRef = db.collection("QuizQuestions").document(category).collection(category + "Questions");
+
+
+            mCurrentScore = QuizUtils.getCurrentScore(getApplicationContext());
+
+            if (questionsLeft == 0) {
+                Intent intent = new Intent(this, ResultActivity.class);
+                intent.putExtra("Username", mUsername);
+                intent.putExtra("CurrentScore", mCurrentScore);
+                intent.putExtra("Category", category);
+                startActivity(intent);
+            } else {
+                if (category.equals("Music")) {
+                    answerOne.setEnabled(false);
+                    answerTwo.setEnabled(false);
+                    answerThree.setEnabled(false);
+                    answerFour.setEnabled(false);
+
+                    try {
+                        final File localFile = File.createTempFile("Music", "mp3");
+                        StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + questionsToAsk.get(currentQuestionIndex) + ".mp3");
+                        myRef.getFile(localFile)
+                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                        String toURI = localFile.toURI().toString();
+                                        Uri uri = Uri.parse(toURI);
+                                        initializeMediaSession();
+                                        initializePlayer(uri);
+                                        if (isInBackground) {
+                                            releasePlayer();
+                                        }
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (category.equals("Pictures")) {
+                    try {
+                        final File localFile = File.createTempFile("pictures", "JPG");
+                        StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".JPG");
+                        myRef.getFile(localFile)
+                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                        Glide.with(QuestionActivity.this).load(localFile).addListener(new RequestListener<Drawable>() {
+                                            @Override
+                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                progressBar.setVisibility(View.INVISIBLE);
+                                                questionImageView.setImageResource(R.drawable.error_load);
+                                                questionImageView.setVisibility(View.VISIBLE);
+                                                return false;
+                                            }
+
+                                            @Override
+                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                progressBar.setVisibility(View.INVISIBLE);
+                                                questionImageView.setImageDrawable(resource);
+                                                questionImageView.setVisibility(View.VISIBLE);
+                                                return true;
+                                            }
+                                        }).into(questionImageView);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                myRef.document(category + "Question" + questionsToAsk.get(currentQuestionIndex)).get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    currentQuestion = documentSnapshot.toObject(QuizQuestion.class);
+                                    if (category.equals("Pictures")) {
+                                        pictureQuestionTextView.setText(currentQuestion.getQuestion());
+                                    } else {
+                                        questionTextView.setText(currentQuestion.getQuestion());
+                                    }
+                                    ArrayList<String> mAnswers = initAnswers(currentQuestion);
+                                    answerOne.setText(mAnswers.get(0));
+                                    answerTwo.setText(mAnswers.get(1));
+                                    answerThree.setText(mAnswers.get(2));
+                                    answerFour.setText(mAnswers.get(3));
+
+                                    answerOne.setOnClickListener(QuestionActivity.this);
+                                    answerTwo.setOnClickListener(QuestionActivity.this);
+                                    answerThree.setOnClickListener(QuestionActivity.this);
+                                    answerFour.setOnClickListener(QuestionActivity.this);
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(TAG, "onFailure: faileddd");
+                            }
+                        });
+
+
+            }
+        }
+    }
+
+    private void setQuestionsVariables() {
+        if (isNewGame) {
+            userResults.clear();
+            QuizUtils.setCurrentScore(getApplicationContext(), 0);
+
+            currentQuestionIndex = 0;
+            if (isUltimate) {
+                questionsLeft = QuestionActivity.totalUltimateQuestions;
+                questionsToAsk = generateUltimateQuestionsToAsk();
+            } else {
+                questionsLeft = QuestionActivity.totalQuestions;
+                questionsToAsk = generateQuestionsToAsk();
+            }
+
+            myToolbar.setTitle("Question " + (currentQuestionIndex + 1) + " of " + (questionsLeft + currentQuestionIndex));
+
+        } else {
+            currentQuestionIndex = getIntent().getIntExtra(CURRENT_QUESTION_KEY, 1);
+            questionsLeft = getIntent().getIntExtra(REMAINING_QUESTIONS_KEY, 0);
+            questionsToAsk = getIntent().getIntegerArrayListExtra(QUESTIONS_TO_ASK_KEY);
+            myToolbar.setTitle("Question " + (currentQuestionIndex + 1) + " of " + (questionsLeft + currentQuestionIndex));
+        }
+    }
+
+
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {
 
@@ -193,12 +535,7 @@ private String category;
 
     }
 
-/*    @Override
-    protected void onStop() {
-        super.onStop();
-        mExoPlayer.release();
-        mExoPlayer = null;
-    }*/
+
 
     @Override
     protected void onDestroy() {
@@ -209,13 +546,6 @@ private String category;
         soundPool.release();
         soundPool = null;
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
-        /*if (mConnectivityReceiver != null) {
-            unregisterReceiver(mConnectivityReceiver);
-            mConnectivityReceiver = null;
-        }*/
-
-
-
     }
 
     @Override
@@ -255,19 +585,15 @@ private String category;
         answerThree.setEnabled(false);
         answerFour.setEnabled(false);
         showCorrectAnswer();
-        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String soundSetting = sharedPreferences.getString("sounds_preference", "On");*/
 
         Button buttonPressed = (Button) view;
         if (buttonPressed.getText().equals(currentQuestion.getCorrectAnswer())) {
             mCurrentScore++;
            if (soundSetting.equals("On")) {
-                /*correctSound.start();*/
                soundPool.play(correctSound, 1, 1, 0, 0, 1);
             }
         } else {
             if (soundSetting.equals("On")) {
-                /*incorrectSound.start();*/
                 soundPool.play(incorrectSound, 1, 1, 0, 0, 1);
            }
         }
@@ -370,413 +696,6 @@ private String category;
         }
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        soundSetting = sharedPreferences.getString("sounds_preference", "On");
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        isInBackground = false;
-        setContentView(R.layout.activity_question);
-        AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_GAME)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build();
-        soundPool = new SoundPool.Builder()
-                .setMaxStreams(1)
-                .setAudioAttributes(audioAttributes)
-                .build();
-        correctSound = soundPool.load(this, R.raw.correct_sound, 1);
-        incorrectSound = soundPool.load(this, R.raw.incorrect_sound, 1);
-
-
-     /*  if (correctSound != null && correctSound.isPlaying()) {
-           correctSound.stop();
-       }
-       if (incorrectSound != null && incorrectSound.isPlaying()) {
-           incorrectSound.stop();
-       }
-
-       incorrectSound = MediaPlayer.create(this, R.raw.incorrect_sound);
-        correctSound = MediaPlayer.create(this, R.raw.correct_sound);*/
-       /*switch (soundSetting) {
-           case ("Off") :
-               incorrectSound.setVolume(0, 0);
-               correctSound.setVolume(0, 0);
-           case ("Low") :
-               incorrectSound.setVolume(0.25f, 0.25f);
-               correctSound.setVolume(0.25f, 0.25f);
-           case ("Medium") :
-               incorrectSound.setVolume(0.5f, 0.5f);
-               correctSound.setVolume(0.5f, 0.5f);
-           case ("High") :
-               incorrectSound.setVolume(0.75f, 0.75f);
-               correctSound.setVolume(0.75f, 0.75f);
-               default:
-                   incorrectSound.setVolume(0.5f, 0.5f);
-                   correctSound.setVolume(0.5f, 0.5f);
-       }*/
-
-
-
-
-
-        questionTextView = findViewById(R.id.questionView);
-        questionImageView = findViewById(R.id.imageView);
-        pictureQuestionTextView = findViewById(R.id.pictureQuestionTextView);
-        mPlayerView = findViewById(R.id.playerView);
-        mStorageReference = FirebaseStorage.getInstance().getReference();
-        answerOne = findViewById(R.id.buttonA);
-        answerTwo = findViewById(R.id.buttonD);
-        answerThree = findViewById(R.id.buttonB);
-        answerFour = findViewById(R.id.buttonC);
-        progressBar = findViewById(R.id.imageProgressBar);
-        boolean isNewGame = !getIntent().hasExtra(REMAINING_QUESTIONS_KEY);
-
-
-            /*mConnectivityReceiver = new ConnectivityReceiver(this, this);
-            if (!ConnectionUtils.haveNetworkConnection(this)) {
-                ConnectionUtils.showDialog(this);
-            }
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            registerReceiver(mConnectivityReceiver, intentFilter);*/
-
-
-        questionTextView.setBackgroundResource(R.drawable.question_mark);
-
-        questionTextView.getBackground().setAlpha(10);
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_question);
-        myToolbar.setTitle("Answer this question");
-        setSupportActionBar(myToolbar);
-        ActionBar ab = getSupportActionBar();
-        if (getIntent().hasExtra("Username") && (getIntent().getStringExtra("Username") != null)) {
-            mUsername = getIntent().getStringExtra("Username");
-            ab.setSubtitle("Logged in as " + getIntent().getStringExtra("Username").toString());
-        } else {
-            mFirebaseAuth = FirebaseAuth.getInstance();
-            if (mFirebaseAuth.getCurrentUser() != null) {
-                mUsername = mFirebaseAuth.getCurrentUser().getDisplayName();
-                ab.setSubtitle("Logged in as " + mUsername);
-            } else {
-                Intent startMainActIntent = new Intent(this, MainActivity.class);
-                startActivity(startMainActIntent);
-            }
-        }
-
-        category = getIntent().getStringExtra("CategoryClicked");
-        if (category.equals("Pictures")) {
-            questionTextView.setVisibility(View.INVISIBLE);
-            //questionImageView.setVisibility(View.VISIBLE);
-            pictureQuestionTextView.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-
-        }
-        if (category.equals("Music")) {
-            questionTextView.setVisibility(View.INVISIBLE);
-            pictureQuestionTextView.setVisibility(View.VISIBLE);
-            mPlayerView.setVisibility(View.VISIBLE);
-            mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(
-                    getResources(), R.drawable.question_mark
-            ));
-            pictureQuestionTextView.setText("Who wrote this music?");
-        }
-        if (category.equals("Ultimate")) {
-            isUltimate = true;
-            if (isNewGame) {
-                userResults.clear();
-                QuizUtils.setCurrentScore(getApplicationContext(), 0);
-
-                currentQuestionIndex = 0;
-                questionsLeft = QuestionActivity.totalUltimateQuestions;
-
-                questionsToAsk = generateUltimateQuestionsToAsk();
-                myToolbar.setTitle("Question " + (currentQuestionIndex + 1) + " of " + (questionsLeft + currentQuestionIndex));
-
-            } else {
-                currentQuestionIndex = getIntent().getIntExtra(CURRENT_QUESTION_KEY, 1);
-                questionsLeft = getIntent().getIntExtra(REMAINING_QUESTIONS_KEY, 0);
-                questionsToAsk = getIntent().getIntegerArrayListExtra(QUESTIONS_TO_ASK_KEY);
-                myToolbar.setTitle("Question " + (currentQuestionIndex + 1) + " of " + (questionsLeft + currentQuestionIndex));
-            }
-
-            String ultimateCategory = getUltimateCategory(questionsLeft);
-            Log.d(TAG, "onCreate: " + ultimateCategory);
-            mCurrentScore = QuizUtils.getCurrentScore(getApplicationContext());
-            myRef = db.collection("QuizQuestions").document(ultimateCategory).collection(ultimateCategory + "Questions");
-            if (questionsLeft == 0) {
-                Intent intent = new Intent(this, ResultActivity.class);
-                intent.putExtra("Username", mUsername);
-                intent.putExtra("CurrentScore", mCurrentScore);
-                intent.putExtra("Category", category);
-                startActivity(intent);
-            } else {
-                if (ultimateCategory.equals("Music")) {
-                    answerOne.setEnabled(false);
-                    answerTwo.setEnabled(false);
-                    answerThree.setEnabled(false);
-                    answerFour.setEnabled(false);
-                    questionTextView.setVisibility(View.INVISIBLE);
-                    pictureQuestionTextView.setVisibility(View.VISIBLE);
-                    mPlayerView.setVisibility(View.VISIBLE);
-                    mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(
-                            getResources(), R.drawable.question_mark
-                    ));
-                    pictureQuestionTextView.setText("Who wrote this music?");
-
-                    try {
-                        final File localFile = File.createTempFile("Music", "mp3");
-                        StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + questionsToAsk.get(currentQuestionIndex) + ".mp3");
-                        myRef.getFile(localFile)
-                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                        String toURI = localFile.toURI().toString();
-                                        Uri uri = Uri.parse(toURI);
-                                        initializeMediaSession();
-                                        initializePlayer(uri);
-                                        if (isInBackground) {
-                                            releasePlayer();
-
-                                        }
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (ultimateCategory.equals("Pictures")) {
-                    questionTextView.setVisibility(View.INVISIBLE);
-                    //questionImageView.setVisibility(View.VISIBLE);
-                    pictureQuestionTextView.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.VISIBLE);
-                    try {
-                        final File localFile = File.createTempFile("pictures", "JPG");
-                        StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".JPG");
-                        myRef.getFile(localFile)
-                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                       /* String toURI = localFile.toURI().toString();
-                                        Uri uri = Uri.parse(toURI);*/
-                                        Glide.with(QuestionActivity.this).load(localFile).addListener(new RequestListener<Drawable>() {
-                                            @Override
-                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                progressBar.setVisibility(View.INVISIBLE);
-                                                questionImageView.setImageResource(R.drawable.error_load);
-                                                questionImageView.setVisibility(View.VISIBLE);
-                                                return false;
-                                            }
-
-                                            @Override
-                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                                progressBar.setVisibility(View.INVISIBLE);
-                                                questionImageView.setImageDrawable(resource);
-                                                questionImageView.setVisibility(View.VISIBLE);
-                                                return true;
-                                            }
-                                        }).into(questionImageView);
-                                        //Picasso.get().load(localFile).into(questionImageView);
-                                        //questionImageView.setImageURI(uri);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                myRef.document(ultimateCategory + "Question" + questionsToAsk.get(currentQuestionIndex)).get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    currentQuestion = documentSnapshot.toObject(QuizQuestion.class);
-                                    if (category.equals("Pictures")) {
-                                        pictureQuestionTextView.setText(currentQuestion.getQuestion());
-                                    } else {
-                                        questionTextView.setText(currentQuestion.getQuestion());
-                                    }
-                                    ArrayList<String> mAnswers = initAnswers(currentQuestion);
-                                    answerOne.setText(mAnswers.get(0));
-                                    answerTwo.setText(mAnswers.get(1));
-                                    answerThree.setText(mAnswers.get(2));
-                                    answerFour.setText(mAnswers.get(3));
-
-                                    answerOne.setOnClickListener(QuestionActivity.this);
-                                    answerTwo.setOnClickListener(QuestionActivity.this);
-                                    answerThree.setOnClickListener(QuestionActivity.this);
-                                    answerFour.setOnClickListener(QuestionActivity.this);
-                                }
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(TAG, "onFailure: faileddd");
-                            }
-                        });
-
-
-            }
-
-
-
-        } else {
-            isUltimate = false;
-
-
-            if (isNewGame) {
-                userResults.clear();
-
-                QuizUtils.setCurrentScore(getApplicationContext(), 0);
-
-                currentQuestionIndex = 0;
-                questionsLeft = QuestionActivity.totalQuestions;
-
-                questionsToAsk = generateQuestionsToAsk();
-                myToolbar.setTitle("Question " + (currentQuestionIndex + 1) + " of " + (questionsLeft + currentQuestionIndex));
-
-            } else {
-                currentQuestionIndex = getIntent().getIntExtra(CURRENT_QUESTION_KEY, 1);
-                questionsLeft = getIntent().getIntExtra(REMAINING_QUESTIONS_KEY, 0);
-                questionsToAsk = getIntent().getIntegerArrayListExtra(QUESTIONS_TO_ASK_KEY);
-                myToolbar.setTitle("Question " + (currentQuestionIndex + 1) + " of " + (questionsLeft + currentQuestionIndex));
-            }
-
-
-
-            myRef = db.collection("QuizQuestions").document(category).collection(category + "Questions");
-
-
-            mCurrentScore = QuizUtils.getCurrentScore(getApplicationContext());
-
-            if (questionsLeft == 0) {
-                Intent intent = new Intent(this, ResultActivity.class);
-                intent.putExtra("Username", mUsername);
-                intent.putExtra("CurrentScore", mCurrentScore);
-                intent.putExtra("Category", category);
-                startActivity(intent);
-            } else {
-                if (category.equals("Music")) {
-                    answerOne.setEnabled(false);
-                    answerTwo.setEnabled(false);
-                    answerThree.setEnabled(false);
-                    answerFour.setEnabled(false);
-
-                    try {
-                        final File localFile = File.createTempFile("Music", "mp3");
-                        StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + questionsToAsk.get(currentQuestionIndex) + ".mp3");
-                        myRef.getFile(localFile)
-                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                        String toURI = localFile.toURI().toString();
-                                        Uri uri = Uri.parse(toURI);
-                                        initializeMediaSession();
-                                        initializePlayer(uri);
-                                        if (isInBackground) {
-                                            releasePlayer();
-                                        }
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (category.equals("Pictures")) {
-                    try {
-                        final File localFile = File.createTempFile("pictures", "JPG");
-                        StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + questionsToAsk.get(currentQuestionIndex) + ".JPG");
-                        myRef.getFile(localFile)
-                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                       /* String toURI = localFile.toURI().toString();
-                                       Uri uri = Uri.parse(toURI);
-
-                                        Log.d(TAG, "onSuccess: " + uri);*/
-                                      //questionImageView.setImageURI(uri);
-
-                                        Glide.with(QuestionActivity.this).load(localFile).addListener(new RequestListener<Drawable>() {
-                                            @Override
-                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                progressBar.setVisibility(View.INVISIBLE);
-                                                questionImageView.setImageResource(R.drawable.error_load);
-                                                questionImageView.setVisibility(View.VISIBLE);
-                                                return false;
-                                            }
-
-                                            @Override
-                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                                progressBar.setVisibility(View.INVISIBLE);
-                                                questionImageView.setImageDrawable(resource);
-                                                questionImageView.setVisibility(View.VISIBLE);
-                                                return true;
-                                            }
-                                        }).into(questionImageView);
-                                       //Picasso.get().load(uri).placeholder(R.drawable.question_mark).into(questionImageView);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                myRef.document(category + "Question" + questionsToAsk.get(currentQuestionIndex)).get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    currentQuestion = documentSnapshot.toObject(QuizQuestion.class);
-                                    if (category.equals("Pictures")) {
-                                        pictureQuestionTextView.setText(currentQuestion.getQuestion());
-                                    } else {
-                                        questionTextView.setText(currentQuestion.getQuestion());
-                                    }
-                                    ArrayList<String> mAnswers = initAnswers(currentQuestion);
-                                    answerOne.setText(mAnswers.get(0));
-                                    answerTwo.setText(mAnswers.get(1));
-                                    answerThree.setText(mAnswers.get(2));
-                                    answerFour.setText(mAnswers.get(3));
-
-                                    answerOne.setOnClickListener(QuestionActivity.this);
-                                    answerTwo.setOnClickListener(QuestionActivity.this);
-                                    answerThree.setOnClickListener(QuestionActivity.this);
-                                    answerFour.setOnClickListener(QuestionActivity.this);
-                                }
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(TAG, "onFailure: faileddd");
-                            }
-                        });
-
-
-            }
-        }
-    }
 
     private String getUltimateCategory(int questionsLeft) {
 
