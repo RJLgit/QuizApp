@@ -123,6 +123,7 @@ private String category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         soundSetting = sharedPreferences.getString("sounds_preference", "On");
@@ -132,6 +133,7 @@ private String category;
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
                 .build();
         soundPool = new SoundPool.Builder()
                 .setMaxStreams(1)
@@ -445,7 +447,7 @@ private String category;
 
     @Override
     protected void onDestroy() {
-
+        Log.d(TAG, "onDestroy: ");
         super.onDestroy();
         isInBackground = true;
         releasePlayer();
@@ -496,11 +498,18 @@ private String category;
         if (buttonPressed.getText().equals(currentQuestion.getCorrectAnswer())) {
             mCurrentScore++;
            if (soundSetting.equals("On")) {
-               soundPool.play(correctSound, 1, 1, 0, 0, 1);
+
+                       soundPool.play(correctSound, 1, 1, 0, 0, 1);
+
+
             }
         } else {
             if (soundSetting.equals("On")) {
-                soundPool.play(incorrectSound, 1, 1, 0, 0, 1);
+
+                        soundPool.play(incorrectSound, 1, 1, 0, 0, 1);
+
+
+
            }
         }
         userResults.questions.add(currentQuestion.getQuestion());

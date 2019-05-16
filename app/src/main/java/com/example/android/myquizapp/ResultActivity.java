@@ -4,6 +4,8 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.SoundPool;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -79,10 +81,27 @@ public class ResultActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ResultsAdapter mResultsAdapter;
     private UserResults userResults = UserResults.getInstance();
+    private SoundPool soundPool;
+    private int noTopScoreSound;
+    private int yourTopScoreSound;
+    private int globalTopScoreSound;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                .build();
+        soundPool = new SoundPool.Builder()
+                .setMaxStreams(2)
+                .setAudioAttributes(audioAttributes)
+                .build();
+        noTopScoreSound = soundPool.load(this, R.raw.fail_sound, 1);
+        yourTopScoreSound = soundPool.load(this, R.raw.your_top_score_sound, 1);
+        globalTopScoreSound = soundPool.load(this, R.raw.global_top_score_sound, 1);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
 
@@ -178,6 +197,7 @@ public class ResultActivity extends AppCompatActivity {
                 descriptionOfScoreTextView.setVisibility(View.VISIBLE);
                 //yourScoreImageView.setVisibility(View.VISIBLE);
                 mProgressBar.setVisibility(View.INVISIBLE);
+                playSounds(yourHighScore, globalHighScore);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -208,6 +228,14 @@ public class ResultActivity extends AppCompatActivity {
         mDatabaseReference.push().setValue(qr);*/
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        soundPool.release();
+        soundPool = null;
+    }
+
     private String updateDataHelperMethod(DocumentSnapshot documentSnapshot, DocumentSnapshot myGlobalSnapshot, Transaction transaction) {
         TopScores myRes = documentSnapshot.toObject(TopScores.class);
         final int highScore = myRes.getScoreByCategory(category);
@@ -221,8 +249,10 @@ public class ResultActivity extends AppCompatActivity {
         if (intPercentScore > highScore) {
             yourHighScore = true;
         }
+
         if (yourHighScore && !globalHighScore) {
             toDisplay = "Congratulations! This is your new top score!";
+
             //QuizAppWidget.newTopScore(category, intPercentScore);
             /*ComponentName componentName = new ComponentName(getApplicationContext(), QuizAppWidget.class);
             RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.quiz_app_widget);
@@ -234,12 +264,15 @@ public class ResultActivity extends AppCompatActivity {
             */
         } else if (globalHighScore) {
             toDisplay = "Congratulations! This is the highest score ever achieved!";
+
             Map<String, Object> updates = new HashMap<>();
             updates.put(category.toLowerCase(), FieldValue.serverTimestamp());
             updateGlobalReference.update(updates);
+
             /*QuizAppWidget.newTopScore(category, intPercentScore);*/
         } else {
             toDisplay = "Unlucky! This is not a high score.";
+
         }
         //So all data references are written to during the transaction
         String lastChecked = new Date().toString();
@@ -258,7 +291,41 @@ public class ResultActivity extends AppCompatActivity {
             GlobalScores updGlobal = new GlobalScores(new Date().toString(), intPercentScore, mFirebaseAuth.getCurrentUser().getDisplayName());
             transaction.set(globalDocumentReference , updGlobal, SetOptions.merge());
         }
+
         return toDisplay;
+    }
+
+
+
+    private void playSounds(boolean yourTop, boolean globalTop) {
+        Log.d(TAG, "playSounds: ");
+        if (!yourTop && !globalTop) {
+            Log.d(TAG, "playSounds: no top");
+            soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                @Override
+                public void onLoadComplete(SoundPool soundPool, int i, int i1) {
+                    soundPool.play(noTopScoreSound, 1, 1, 1, 0, 1);
+                }
+            });
+
+        } else if (yourTop && !globalTop) {
+            Log.d(TAG, "playSounds: yourtop");
+            soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                @Override
+                public void onLoadComplete(SoundPool soundPool, int i, int i1) {
+                    soundPool.play(yourTopScoreSound, 1, 1, 1, 0, 1);
+                }
+            });
+
+        } else if (globalTop) {
+            Log.d(TAG, "playSounds: globaltop");
+            soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                @Override
+                public void onLoadComplete(SoundPool soundPool, int i, int i1) {
+                    soundPool.play(globalTopScoreSound, 1, 1, 1, 0, 1);
+                }
+            });
+        }
     }
 
     private void updateDatabaseScores() {
