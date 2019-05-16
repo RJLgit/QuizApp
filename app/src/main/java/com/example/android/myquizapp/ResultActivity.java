@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.provider.Settings;
@@ -13,6 +14,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
@@ -85,10 +87,13 @@ public class ResultActivity extends AppCompatActivity {
     private int noTopScoreSound;
     private int yourTopScoreSound;
     private int globalTopScoreSound;
+    private String soundSetting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        soundSetting = sharedPreferences.getString("sounds_preference", "On");
 
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
@@ -96,7 +101,7 @@ public class ResultActivity extends AppCompatActivity {
                 .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
                 .build();
         soundPool = new SoundPool.Builder()
-                .setMaxStreams(2)
+                .setMaxStreams(1)
                 .setAudioAttributes(audioAttributes)
                 .build();
         noTopScoreSound = soundPool.load(this, R.raw.fail_sound, 1);
@@ -298,34 +303,36 @@ public class ResultActivity extends AppCompatActivity {
 
 
     private void playSounds(boolean yourTop, boolean globalTop) {
-        Log.d(TAG, "playSounds: ");
-        if (!yourTop && !globalTop) {
-            Log.d(TAG, "playSounds: no top");
-            soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-                @Override
-                public void onLoadComplete(SoundPool soundPool, int i, int i1) {
-                    soundPool.play(noTopScoreSound, 1, 1, 1, 0, 1);
-                }
-            });
+        if (soundSetting.equals("On")) {
+            Log.d(TAG, "playSounds: ");
+            if (!yourTop && !globalTop) {
+                Log.d(TAG, "playSounds: no top");
+                soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                    @Override
+                    public void onLoadComplete(SoundPool soundPool, int i, int i1) {
+                        soundPool.play(noTopScoreSound, 1, 1, 1, 0, 1);
+                    }
+                });
 
-        } else if (yourTop && !globalTop) {
-            Log.d(TAG, "playSounds: yourtop");
-            soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-                @Override
-                public void onLoadComplete(SoundPool soundPool, int i, int i1) {
-                    soundPool.play(yourTopScoreSound, 1, 1, 1, 0, 1);
-                }
-            });
+            } else if (yourTop && !globalTop) {
+                Log.d(TAG, "playSounds: yourtop");
+                soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                    @Override
+                    public void onLoadComplete(SoundPool soundPool, int i, int i1) {
+                        soundPool.play(yourTopScoreSound, 1, 1, 1, 0, 1);
+                    }
+                });
 
-        } else if (globalTop) {
-            Log.d(TAG, "playSounds: globaltop");
-            soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-                @Override
-                public void onLoadComplete(SoundPool soundPool, int i, int i1) {
-                    soundPool.play(globalTopScoreSound, 1, 1, 1, 0, 1);
-                }
-            });
-        }
+            } else if (globalTop) {
+                Log.d(TAG, "playSounds: globaltop");
+                soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                    @Override
+                    public void onLoadComplete(SoundPool soundPool, int i, int i1) {
+                        soundPool.play(globalTopScoreSound, 1, 1, 1, 0, 1);
+                    }
+                });
+            }
+        } 
     }
 
     private void updateDatabaseScores() {
