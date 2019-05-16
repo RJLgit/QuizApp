@@ -195,38 +195,8 @@ private String category;
                 if (ultimateCategory.equals("Pictures")) {
                     setupPictureQuestion();
                 }
-                myRef.document(ultimateCategory + "Question" + questionsToAsk.get(currentQuestionIndex)).get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    currentQuestion = documentSnapshot.toObject(QuizQuestion.class);
-                                    if (category.equals("Pictures")) {
-                                        pictureQuestionTextView.setText(currentQuestion.getQuestion());
-                                    } else {
-                                        questionTextView.setText(currentQuestion.getQuestion());
-                                    }
-                                    ArrayList<String> mAnswers = initAnswers(currentQuestion);
-                                    answerOne.setText(mAnswers.get(0));
-                                    answerTwo.setText(mAnswers.get(1));
-                                    answerThree.setText(mAnswers.get(2));
-                                    answerFour.setText(mAnswers.get(3));
-
-                                    answerOne.setOnClickListener(QuestionActivity.this);
-                                    answerTwo.setOnClickListener(QuestionActivity.this);
-                                    answerThree.setOnClickListener(QuestionActivity.this);
-                                    answerFour.setOnClickListener(QuestionActivity.this);
-                                }
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(TAG, "onFailure: faileddd");
-                            }
-                        });
-
-
+                String myRefDocPathUlt = ultimateCategory + "Question" + questionsToAsk.get(currentQuestionIndex);
+                setupAnswers(myRefDocPathUlt);
             }
 
 
@@ -234,10 +204,7 @@ private String category;
         } else {
             isUltimate = false;
             setQuestionsVariables();
-
             myRef = db.collection("QuizQuestions").document(category).collection(category + "Questions");
-
-
             mCurrentScore = QuizUtils.getCurrentScore(getApplicationContext());
 
             if (questionsLeft == 0) {
@@ -248,42 +215,44 @@ private String category;
                 }
                 if (category.equals("Pictures")) {
                     setupPictureQuestion();
-
                 }
-                myRef.document(category + "Question" + questionsToAsk.get(currentQuestionIndex)).get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    currentQuestion = documentSnapshot.toObject(QuizQuestion.class);
-                                    if (category.equals("Pictures")) {
-                                        pictureQuestionTextView.setText(currentQuestion.getQuestion());
-                                    } else {
-                                        questionTextView.setText(currentQuestion.getQuestion());
-                                    }
-                                    ArrayList<String> mAnswers = initAnswers(currentQuestion);
-                                    answerOne.setText(mAnswers.get(0));
-                                    answerTwo.setText(mAnswers.get(1));
-                                    answerThree.setText(mAnswers.get(2));
-                                    answerFour.setText(mAnswers.get(3));
-
-                                    answerOne.setOnClickListener(QuestionActivity.this);
-                                    answerTwo.setOnClickListener(QuestionActivity.this);
-                                    answerThree.setOnClickListener(QuestionActivity.this);
-                                    answerFour.setOnClickListener(QuestionActivity.this);
-                                }
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(TAG, "onFailure: faileddd");
-                            }
-                        });
-
-
+                String myRefDocPath = category + "Question" + questionsToAsk.get(currentQuestionIndex);
+                setupAnswers(myRefDocPath);
             }
         }
+    }
+
+    private void setupAnswers(String myRefDocPath) {
+        myRef.document(myRefDocPath).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            currentQuestion = documentSnapshot.toObject(QuizQuestion.class);
+                            if (category.equals("Pictures")) {
+                                pictureQuestionTextView.setText(currentQuestion.getQuestion());
+                            } else {
+                                questionTextView.setText(currentQuestion.getQuestion());
+                            }
+                            ArrayList<String> mAnswers = initAnswers(currentQuestion);
+                            answerOne.setText(mAnswers.get(0));
+                            answerTwo.setText(mAnswers.get(1));
+                            answerThree.setText(mAnswers.get(2));
+                            answerFour.setText(mAnswers.get(3));
+
+                            answerOne.setOnClickListener(QuestionActivity.this);
+                            answerTwo.setOnClickListener(QuestionActivity.this);
+                            answerThree.setOnClickListener(QuestionActivity.this);
+                            answerFour.setOnClickListener(QuestionActivity.this);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "onFailure: faileddd");
+                    }
+                });
     }
 
     private void loadResultsActivity() {
