@@ -181,15 +181,7 @@ private String category;
             progressBar.setVisibility(View.VISIBLE);
 
         }
-        if (category.equals("Music")) {
-            questionTextView.setVisibility(View.INVISIBLE);
-            pictureQuestionTextView.setVisibility(View.VISIBLE);
-            mPlayerView.setVisibility(View.VISIBLE);
-            mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(
-                    getResources(), R.drawable.question_mark
-            ));
-            pictureQuestionTextView.setText("Who wrote this music?");
-        }
+
         if (category.equals("Ultimate")) {
             isUltimate = true;
             setQuestionsVariables();
@@ -207,43 +199,7 @@ private String category;
                 startActivity(intent);
             } else {
                 if (ultimateCategory.equals("Music")) {
-                    answerOne.setEnabled(false);
-                    answerTwo.setEnabled(false);
-                    answerThree.setEnabled(false);
-                    answerFour.setEnabled(false);
-                    questionTextView.setVisibility(View.INVISIBLE);
-                    pictureQuestionTextView.setVisibility(View.VISIBLE);
-                    mPlayerView.setVisibility(View.VISIBLE);
-                    mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(
-                            getResources(), R.drawable.question_mark
-                    ));
-                    pictureQuestionTextView.setText("Who wrote this music?");
-
-                    try {
-                        final File localFile = File.createTempFile("Music", "mp3");
-                        StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + questionsToAsk.get(currentQuestionIndex) + ".mp3");
-                        myRef.getFile(localFile)
-                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                        String toURI = localFile.toURI().toString();
-                                        Uri uri = Uri.parse(toURI);
-                                        initializeMediaSession();
-                                        initializePlayer(uri);
-                                        if (isInBackground) {
-                                            releasePlayer();
-
-                                        }
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    setUpMusicQuestion();
                 }
                 if (ultimateCategory.equals("Pictures")) {
                     questionTextView.setVisibility(View.INVISIBLE);
@@ -337,35 +293,7 @@ private String category;
                 startActivity(intent);
             } else {
                 if (category.equals("Music")) {
-                    answerOne.setEnabled(false);
-                    answerTwo.setEnabled(false);
-                    answerThree.setEnabled(false);
-                    answerFour.setEnabled(false);
-
-                    try {
-                        final File localFile = File.createTempFile("Music", "mp3");
-                        StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + questionsToAsk.get(currentQuestionIndex) + ".mp3");
-                        myRef.getFile(localFile)
-                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                        String toURI = localFile.toURI().toString();
-                                        Uri uri = Uri.parse(toURI);
-                                        initializeMediaSession();
-                                        initializePlayer(uri);
-                                        if (isInBackground) {
-                                            releasePlayer();
-                                        }
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    setUpMusicQuestion();
                 }
                 if (category.equals("Pictures")) {
                     try {
@@ -438,6 +366,47 @@ private String category;
             }
         }
     }
+
+    private void setUpMusicQuestion() {
+        answerOne.setEnabled(false);
+        answerTwo.setEnabled(false);
+        answerThree.setEnabled(false);
+        answerFour.setEnabled(false);
+        questionTextView.setVisibility(View.INVISIBLE);
+        pictureQuestionTextView.setVisibility(View.VISIBLE);
+        mPlayerView.setVisibility(View.VISIBLE);
+        mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(
+                getResources(), R.drawable.question_mark
+        ));
+        pictureQuestionTextView.setText("Who wrote this music?");
+
+        try {
+            final File localFile = File.createTempFile("Music", "mp3");
+            StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + questionsToAsk.get(currentQuestionIndex) + ".mp3");
+            myRef.getFile(localFile)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            String toURI = localFile.toURI().toString();
+                            Uri uri = Uri.parse(toURI);
+                            initializeMediaSession();
+                            initializePlayer(uri);
+                            if (isInBackground) {
+                                releasePlayer();
+
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void setQuestionsVariables() {
         if (isNewGame) {
