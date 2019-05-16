@@ -187,11 +187,7 @@ private String category;
             mCurrentScore = QuizUtils.getCurrentScore(getApplicationContext());
             myRef = db.collection("QuizQuestions").document(ultimateCategory).collection(ultimateCategory + "Questions");
             if (questionsLeft == 0) {
-                Intent intent = new Intent(this, ResultActivity.class);
-                intent.putExtra("Username", mUsername);
-                intent.putExtra("CurrentScore", mCurrentScore);
-                intent.putExtra("Category", category);
-                startActivity(intent);
+                loadResultsActivity();
             } else {
                 if (ultimateCategory.equals("Music")) {
                     setUpMusicQuestion();
@@ -245,11 +241,7 @@ private String category;
             mCurrentScore = QuizUtils.getCurrentScore(getApplicationContext());
 
             if (questionsLeft == 0) {
-                Intent intent = new Intent(this, ResultActivity.class);
-                intent.putExtra("Username", mUsername);
-                intent.putExtra("CurrentScore", mCurrentScore);
-                intent.putExtra("Category", category);
-                startActivity(intent);
+                loadResultsActivity();
             } else {
                 if (category.equals("Music")) {
                     setUpMusicQuestion();
@@ -292,6 +284,14 @@ private String category;
 
             }
         }
+    }
+
+    private void loadResultsActivity() {
+        Intent intent = new Intent(this, ResultActivity.class);
+        intent.putExtra("Username", mUsername);
+        intent.putExtra("CurrentScore", mCurrentScore);
+        intent.putExtra("Category", category);
+        startActivity(intent);
     }
 
     private void setupPictureQuestion() {
