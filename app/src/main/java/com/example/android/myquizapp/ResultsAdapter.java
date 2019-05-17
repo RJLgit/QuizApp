@@ -76,7 +76,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
             mButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(mContext, "Clicked Report", Toast.LENGTH_SHORT).show();
+                    ResultActivity.reportQuestion(getAdapterPosition());
+                    Toast.makeText(mContext, "Clicked Report" + getAdapterPosition(), Toast.LENGTH_SHORT).show();
                 }
             });
         }

@@ -3,6 +3,7 @@ package com.example.android.myquizapp;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioAttributes;
@@ -40,6 +41,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -57,6 +59,7 @@ import java.util.Map;
 public class ResultActivity extends AppCompatActivity {
     private static final String TAG = "ResultActivity";
     TextView res;
+    private static Context context;
     private String mUsername;
     private ProgressBar mProgressBar;
     private String uniqueUserId;
@@ -83,20 +86,68 @@ public class ResultActivity extends AppCompatActivity {
     private TextView descriptionOfScoreTextView;
     private RecyclerView mRecyclerView;
     private ResultsAdapter mResultsAdapter;
-    private UserResults userResults = UserResults.getInstance();
+    private static UserResults userResults;
     private SoundPool mySoundPool;
     private int noTopScoreSound;
     private int yourTopScoreSound;
     private int globalTopScoreSound;
     private String soundSetting;
     private int streamId = 0;
+
+    public static void reportQuestion(int adapterPosition) {
+        String reportCategory = userResults.getCategories().get(adapterPosition);
+        Integer reportNumber = userResults.getQuestionIds().get(adapterPosition);
+        String fileTitle = reportCategory + "Question" + reportNumber;
+        int reportNumbers = 1;
+        FirebaseFirestore myDb = FirebaseFirestore.getInstance();
+        final DocumentReference myRef = myDb.collection("QuizQuestions").document(reportCategory).collection(reportCategory + "Reports").document(fileTitle);
+        myRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    Reports r = documentSnapshot.toObject(Reports.class);
+                    int currentNum = r.getNumberOfReports();
+                    Reports reports = new Reports();
+                    reports.setNumberOfReports(currentNum + 1);
+                    myRef.set(reports).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(ResultActivity.getAppContext(), "Updated reports", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Reports reports = new Reports();
+                    reports.setNumberOfReports(1);
+                    myRef.set(reports).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(ResultActivity.getAppContext(), "Updated reports", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+
+
+
+
+
+
+
+    }
+
+    public static Context getAppContext() {
+        return ResultActivity.context;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+        userResults = UserResults.getInstance();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         soundSetting = sharedPreferences.getString("sounds_preference", "On");
-
+        ResultActivity.context = getApplicationContext();
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
