@@ -254,6 +254,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         i.putExtra("CategoryClicked", cat);
         i.putExtra("Username", mUsername);
         startActivity(i);
+        overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
         Toast.makeText(this, "Category clicked " + cat, Toast.LENGTH_SHORT).show();
     }
 

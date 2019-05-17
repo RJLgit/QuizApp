@@ -262,6 +262,7 @@ private String category;
         intent.putExtra("CurrentScore", mCurrentScore);
         intent.putExtra("Category", category);
         startActivity(intent);
+        overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
     }
 
     private void setupPictureQuestion() {
@@ -533,6 +534,7 @@ private String category;
                 nextQuestionIntent.putExtra("Username", mUsername);
                 finish();
                 startActivity(nextQuestionIntent);
+                overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
             }
         }, CORRECT_ANSWER_DELAY_MILLIS);
     }
@@ -772,6 +774,12 @@ private String category;
         if (s.equals("sounds_preference")) {
             soundSetting = sharedPreferences.getString("sounds_preference", "On");
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
     }
 }
 

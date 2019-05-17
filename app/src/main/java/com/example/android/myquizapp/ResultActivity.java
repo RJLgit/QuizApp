@@ -119,6 +119,7 @@ public class ResultActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent myReturnIntent = new Intent(ResultActivity.this, MainActivity.class);
                 startActivity(myReturnIntent);
+                overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
             }
         });
         resultsImageView = findViewById(R.id.resultsImageView);
@@ -557,5 +558,6 @@ public class ResultActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent(ResultActivity.this, MainActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
     }
 }
