@@ -57,4 +57,9 @@ public class SettingsActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.transition.slide_in_top, R.transition.slide_out_bot);
+    }
 }

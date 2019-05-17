@@ -62,9 +62,16 @@ public class GlobalScoreActivity extends AppCompatActivity {
                 Intent intent = new Intent(GlobalScoreActivity.this, ScoresActivity.class);
                 intent.putExtra("Username", getIntent().getStringExtra("Username"));
                 startActivity(intent);
+                overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
     }
 }

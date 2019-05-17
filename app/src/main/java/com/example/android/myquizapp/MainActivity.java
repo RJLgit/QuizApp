@@ -273,4 +273,10 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
             }
         }
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.transition.slide_in_bot, R.transition.slide_out_top);
+    }
 }

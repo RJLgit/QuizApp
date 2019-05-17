@@ -81,6 +81,7 @@ public class GlobalScoreFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.transition.slide_in_top, R.transition.slide_out_bot);
             }
         });
         startQuizRound.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +91,7 @@ public class GlobalScoreFragment extends Fragment {
                 intentQuiz.putExtra("CategoryClicked", category);
                 intentQuiz.putExtra("Username", mUsername);
                 startActivity(intentQuiz);
+                getActivity().overridePendingTransition(R.transition.slide_in_top, R.transition.slide_out_bot);
             }
         });
 

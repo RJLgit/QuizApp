@@ -61,6 +61,7 @@ public class ScoresActivity extends BaseActivity implements ScoresAdapter.ListIt
             intent.putExtra("Category", cat);
             intent.putExtra("Username", getIntent().getStringExtra("Username"));
             startActivity(intent);
+            overridePendingTransition(R.transition.slide_in_right, R.transition.slide_out_left);
         }
         //Toast.makeText(getActivity(), "Category clicked " + cat, Toast.LENGTH_SHORT).show();
     }
@@ -88,5 +89,11 @@ public class ScoresActivity extends BaseActivity implements ScoresAdapter.ListIt
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.transition.slide_in_top, R.transition.slide_out_bot);
     }
 }
