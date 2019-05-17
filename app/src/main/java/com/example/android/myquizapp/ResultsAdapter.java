@@ -7,9 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -60,6 +62,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
         private TextView mCorrectAnswersTextView;
         private LinearLayout mBackLayout;
         private ConstraintLayout mBackLayoutCon;
+        private Button mButton;
 
         public ResultsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,6 +72,13 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
             mProgressBar = itemView.findViewById(R.id.progressBarResults);
             mBackLayout = itemView.findViewById(R.id.backgroundForResultsItems);
             mBackLayoutCon = itemView.findViewById(R.id.backgroundForResultsItemsConst);
+            mButton = itemView.findViewById(R.id.report_button);
+            mButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(mContext, "Clicked Report", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         void bind(String quest, String userAns, String corrAns) {
@@ -81,6 +91,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
             } else {
                 mBackLayoutCon.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_red_light));
             }
+            mButton.setVisibility(View.VISIBLE);
+            mButton.setEnabled(true);
             mQuestionsTextView.setVisibility(View.VISIBLE);
             mUserAnswersTextView.setVisibility(View.VISIBLE);
             mCorrectAnswersTextView.setVisibility(View.VISIBLE);
