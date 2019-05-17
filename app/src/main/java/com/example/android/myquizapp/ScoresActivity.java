@@ -77,11 +77,13 @@ public class ScoresActivity extends BaseActivity implements ScoresAdapter.ListIt
                 Intent intentTwo = new Intent(ScoresActivity.this, SettingsActivity.class);
                 intentTwo.putExtra("Username", getIntent().getStringExtra("Username"));
                 startActivity(intentTwo);
+                overridePendingTransition(R.transition.slide_in_bot, R.transition.slide_out_top);
                 return true;
             case R.id.top_scores_menu:
                 Intent intent = new Intent(this, ScoresActivity.class);
                 intent.putExtra("Username", getIntent().getStringExtra("Username"));
                 startActivity(intent);
+                overridePendingTransition(R.transition.slide_in_bot, R.transition.slide_out_top);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

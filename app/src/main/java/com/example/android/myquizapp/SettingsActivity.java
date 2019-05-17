@@ -51,6 +51,7 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent intent = new Intent(SettingsActivity.this, ScoresActivity.class);
                 intent.putExtra("Username", mUsername);
                 startActivity(intent);
+                overridePendingTransition(R.transition.slide_in_bot, R.transition.slide_out_top);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

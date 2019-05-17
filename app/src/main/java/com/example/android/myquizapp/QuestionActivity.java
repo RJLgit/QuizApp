@@ -475,11 +475,13 @@ private String category;
                 Intent intentTwo = new Intent(QuestionActivity.this, SettingsActivity.class);
                 intentTwo.putExtra("Username", mUsername);
                 startActivity(intentTwo);
+                overridePendingTransition(R.transition.slide_in_bot, R.transition.slide_out_top);
                 return true;
             case R.id.top_scores_menu:
                 Intent intent = new Intent(QuestionActivity.this, ScoresActivity.class);
                 intent.putExtra("Username", mUsername);
                 startActivity(intent);
+                overridePendingTransition(R.transition.slide_in_bot, R.transition.slide_out_top);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
