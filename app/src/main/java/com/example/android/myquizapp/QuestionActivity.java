@@ -514,6 +514,13 @@ private String category;
 
            }
         }
+        if (isUltimate) {
+            userResults.categories.add(getUltimateCategory(questionsLeft));
+        } else {
+            userResults.categories.add(category);
+        }
+        userResults.questionIds.add(questionsToAsk.get(currentQuestionIndex));
+
         userResults.questions.add(currentQuestion.getQuestion());
         userResults.correctAnswers.add(currentQuestion.getCorrectAnswer());
         userResults.userAnswers.add(buttonPressed.getText().toString());

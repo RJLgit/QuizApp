@@ -8,11 +8,15 @@ public class UserResults {
     public ArrayList<String> questions;
     public ArrayList<String> userAnswers;
     public ArrayList<String> correctAnswers;
+    public ArrayList<String> categories;
+    public ArrayList<Integer> questionIds;
 
     private UserResults() {
         questions = new ArrayList<>();
         userAnswers = new ArrayList<>();
         correctAnswers = new ArrayList<>();
+        categories = new ArrayList<>();
+        questionIds = new ArrayList<>();
     }
     public static UserResults getInstance() {
         if (single_user_results == null) {
@@ -21,6 +25,12 @@ public class UserResults {
         return single_user_results;
     }
     public void clear() {
+        if (categories != null) {
+            categories.clear();
+        }
+        if (questionIds != null) {
+            questionIds.clear();
+        }
         if (questions != null) {
             questions.clear();
         }
