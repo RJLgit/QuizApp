@@ -3,36 +3,23 @@ package com.example.android.myquizapp;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RemoteViews;
 import android.widget.Spinner;
 
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-
-import java.util.Arrays;
-
-import static com.example.android.myquizapp.MainActivity.RC_SIGN_IN;
 
 /**
  * The configuration screen for the {@link QuizAppWidget QuizAppWidget} AppWidget.
@@ -281,7 +268,7 @@ public class QuizAppWidgetConfigureActivity extends Activity {
         Log.d(TAG, "onCreate: ");
         setContentView(R.layout.quiz_app_widget_configure);
 
-        mSpinner = findViewById(R.id.spinner1);
+        mSpinner = findViewById(R.id.spinner2);
         mButton = findViewById(R.id.add_button);
 
         //findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
