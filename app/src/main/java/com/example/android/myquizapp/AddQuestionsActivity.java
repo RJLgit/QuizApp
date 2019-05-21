@@ -59,19 +59,20 @@ public class AddQuestionsActivity extends AppCompatActivity {
         final QuizQuestion myQuestion = new QuizQuestion(question, correct, falseOne, falseTwo, falseThree);
         final String category = spinner.getSelectedItem().toString();
         final CollectionReference myCollRef = questionRef.document(category).collection(category + "Questions");
-        final DocumentReference myDoc = questionRef.document(category).collection(category + "Questions").document("QuestionMetaData");
+        final DocumentReference myDoc = questionRef.document("QuestionMetaData");
         myDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
                     QuestionMetaData meta = documentSnapshot.toObject(QuestionMetaData.class);
-                    final int numQues = meta.getNumQuestions() + 1;
+                    final int numQues = meta.getNumQuestions(category) + 1;
                     DocumentReference addQuesDocRef = myCollRef.document(category + "Question" + numQues);
                     addQuesDocRef.set(myQuestion).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            QuestionMetaData newMeta = new QuestionMetaData(numQues);
-                            myDoc.set(newMeta);
+
+                            myDoc.update(category, numQues);
+                            
                         }
                     });
 
