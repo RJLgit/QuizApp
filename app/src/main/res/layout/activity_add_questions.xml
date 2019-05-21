@@ -29,7 +29,7 @@
         android:layout_marginTop="20dp"
         android:text="Enter Question"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerAddQuestion" />
 
     <TextView
         android:id="@+id/correctAnswerLabel"
@@ -81,7 +81,7 @@
         android:inputType="textPersonName"
         android:hint="Enter Question"
         app:layout_constraintStart_toEndOf="@+id/questionLabel"
-        app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerAddQuestion" />
 
     <EditText
         android:id="@+id/correctAnswerEntry"
@@ -133,7 +133,7 @@
         app:layout_constraintTop_toBottomOf="@+id/secondFalseEntry" />
 
     <Spinner
-        android:id="@+id/spinner2"
+        android:id="@+id/spinnerAddQuestion"
         android:layout_width="367dp"
         android:layout_height="44dp"
         android:layout_marginStart="8dp"
