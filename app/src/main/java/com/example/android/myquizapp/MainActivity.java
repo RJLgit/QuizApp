@@ -279,4 +279,10 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.L
         super.finish();
         overridePendingTransition(R.transition.slide_in_bot, R.transition.slide_out_top);
     }
+
+    public void addQuestions(View view) {
+        Intent qIntent = new Intent(MainActivity.this, AddQuestionsActivity.class);
+        qIntent.putExtra("Username", mUsername);
+        startActivity(qIntent);
+    }
 }
