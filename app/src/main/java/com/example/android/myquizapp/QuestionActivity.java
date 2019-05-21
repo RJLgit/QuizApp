@@ -64,6 +64,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FileDownloadTask;
@@ -180,48 +181,95 @@ private String category;
 
         if (category.equals("Ultimate")) {
             isUltimate = true;
-            setQuestionsVariables();
+
+            DocumentReference metaRef = db.collection("QuizQuestions").document("QuestionMetaData");
+            metaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()) {
+                        QuestionMetaData metaData = documentSnapshot.toObject(QuestionMetaData.class);
+
+                        setUltimateQuestionsVariables(metaData.getSport(), metaData.getMusic(), metaData.getNature(), metaData.getHistory(), metaData.getGeography()
+                        , metaData.getTechnology(), metaData.getPeople(), metaData.getPictures(), metaData.getFilms(), metaData.getTV());
+                        String ultimateCategory = getUltimateCategory(questionsLeft);
+                        mCurrentScore = QuizUtils.getCurrentScore(getApplicationContext());
+                        myRef = db.collection("QuizQuestions").document(ultimateCategory).collection(ultimateCategory + "Questions");
+                        mCurrentScore = QuizUtils.getCurrentScore(getApplicationContext());
+
+                        if (questionsLeft == 0) {
+                            loadResultsActivity();
+                        } else {
+                            if (ultimateCategory.equals("Music")) {
+                                setUpMusicQuestion();
+                            }
+                            if (ultimateCategory.equals("Pictures")) {
+                                setupPictureQuestion();
+                            }
+                            String myRefDocPath = ultimateCategory + "Question" + questionsToAsk.get(currentQuestionIndex);
+                            setupAnswers(myRefDocPath);
+                        }
+                    }
+                }
+            });
 
 
-            String ultimateCategory = getUltimateCategory(questionsLeft);
-            Log.d(TAG, "onCreate: " + ultimateCategory);
-            mCurrentScore = QuizUtils.getCurrentScore(getApplicationContext());
-            myRef = db.collection("QuizQuestions").document(ultimateCategory).collection(ultimateCategory + "Questions");
-            if (questionsLeft == 0) {
-                loadResultsActivity();
-            } else {
-                if (ultimateCategory.equals("Music")) {
-                    setUpMusicQuestion();
-                }
-                if (ultimateCategory.equals("Pictures")) {
-                    setupPictureQuestion();
-                }
-                String myRefDocPathUlt = ultimateCategory + "Question" + questionsToAsk.get(currentQuestionIndex);
-                setupAnswers(myRefDocPathUlt);
-            }
 
 
 
         } else {
             isUltimate = false;
-            setQuestionsVariables();
-            myRef = db.collection("QuizQuestions").document(category).collection(category + "Questions");
-            mCurrentScore = QuizUtils.getCurrentScore(getApplicationContext());
+            DocumentReference metaRef = db.collection("QuizQuestions").document("QuestionMetaData");
+            metaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()) {
+                        QuestionMetaData metaData = documentSnapshot.toObject(QuestionMetaData.class);
+                        int myNum = metaData.getNumQuestions(category);
+                        setQuestionsVariables(myNum);
+                        myRef = db.collection("QuizQuestions").document(category).collection(category + "Questions");
+                        mCurrentScore = QuizUtils.getCurrentScore(getApplicationContext());
 
-            if (questionsLeft == 0) {
-                loadResultsActivity();
-            } else {
-                if (category.equals("Music")) {
-                    setUpMusicQuestion();
+                        if (questionsLeft == 0) {
+                            loadResultsActivity();
+                        } else {
+                            if (category.equals("Music")) {
+                                setUpMusicQuestion();
+                            }
+                            if (category.equals("Pictures")) {
+                                setupPictureQuestion();
+                            }
+                            String myRefDocPath = category + "Question" + questionsToAsk.get(currentQuestionIndex);
+                            setupAnswers(myRefDocPath);
+                        }
+                    }
                 }
-                if (category.equals("Pictures")) {
-                    setupPictureQuestion();
-                }
-                String myRefDocPath = category + "Question" + questionsToAsk.get(currentQuestionIndex);
-                setupAnswers(myRefDocPath);
-            }
+            });
+
         }
     }
+
+    private void setUltimateQuestionsVariables(int sportNum, int musicNum, int natureNum, int historyNum, int geoNum, int techNum, int peopleNum, int picNum, int filmNum, int tvNum) {
+        if (isNewGame) {
+            userResults.clear();
+            QuizUtils.setCurrentScore(getApplicationContext(), 0);
+
+            currentQuestionIndex = 0;
+                questionsLeft = QuestionActivity.totalUltimateQuestions;
+                questionsToAsk = generateUltimateQuestionsToAsk(sportNum, musicNum, natureNum, historyNum, geoNum, techNum, peopleNum, picNum, filmNum, tvNum);
+
+
+
+
+                myToolbar.setTitle("Question " + (currentQuestionIndex + 1) + " of " + (questionsLeft + currentQuestionIndex));
+
+            } else {
+                currentQuestionIndex = getIntent().getIntExtra(CURRENT_QUESTION_KEY, 1);
+                questionsLeft = getIntent().getIntExtra(REMAINING_QUESTIONS_KEY, 0);
+                questionsToAsk = getIntent().getIntegerArrayListExtra(QUESTIONS_TO_ASK_KEY);
+                myToolbar.setTitle("Question " + (currentQuestionIndex + 1) + " of " + (questionsLeft + currentQuestionIndex));
+            }
+    }
+
 
     private void setupAnswers(String myRefDocPath) {
         myRef.document(myRefDocPath).get()
@@ -347,19 +395,16 @@ private String category;
     }
 
 
-    private void setQuestionsVariables() {
+    private void setQuestionsVariables(int myNum) {
         if (isNewGame) {
             userResults.clear();
             QuizUtils.setCurrentScore(getApplicationContext(), 0);
 
             currentQuestionIndex = 0;
-            if (isUltimate) {
-                questionsLeft = QuestionActivity.totalUltimateQuestions;
-                questionsToAsk = generateUltimateQuestionsToAsk();
-            } else {
+
                 questionsLeft = QuestionActivity.totalQuestions;
-                questionsToAsk = generateQuestionsToAsk();
-            }
+                questionsToAsk = generateQuestionsToAsk(myNum);
+
 
             myToolbar.setTitle("Question " + (currentQuestionIndex + 1) + " of " + (questionsLeft + currentQuestionIndex));
 
@@ -732,12 +777,12 @@ private String category;
         }
     }
 
-    private ArrayList<Integer> generateQuestionsToAsk() {
+    private ArrayList<Integer> generateQuestionsToAsk(int myNum) {
         ArrayList<Integer> results = new ArrayList<>();
 
         while (results.size() < totalQuestions) {
             Random rn = new Random();
-            int answer = rn.nextInt(QuizQuestionClass.getNumberQuestions(category)) + 1;
+            int answer = rn.nextInt(myNum) + 1;
             Integer myInt = new Integer(answer);
             if (!results.contains(myInt)) {
                 results.add(myInt);
@@ -745,13 +790,24 @@ private String category;
         }
         return results;
     }
-    private ArrayList<Integer> generateUltimateQuestionsToAsk() {
+    private ArrayList<Integer> generateUltimateQuestionsToAsk(int sportNum, int musicNum, int natureNum, int historyNum, int geoNum, int techNum, int peopleNum, int picNum, int filmNum, int tvNum) {
         ArrayList<Integer> results = new ArrayList<>();
-        int catIndex = 1;
+        ArrayList<Integer> numQuestions = new ArrayList<>();
+        numQuestions.add(sportNum);
+        numQuestions.add(musicNum);
+        numQuestions.add(natureNum);
+        numQuestions.add(historyNum);
+        numQuestions.add(geoNum);
+        numQuestions.add(techNum);
+        numQuestions.add(peopleNum);
+        numQuestions.add(picNum);
+        numQuestions.add(filmNum);
+        numQuestions.add(tvNum);
+        int catIndex = 0;
         int questionsIndex = 0;
         while (results.size() < (totalUltimateQuestions)) {
             Random rn = new Random();
-            int answer = rn.nextInt(QuizQuestionClass.getNumberQuestions(QuizQuestionClass.getCategories().get(catIndex))) + 1;
+            int answer = rn.nextInt(numQuestions.get(catIndex)) + 1;
             Integer myInt = new Integer(answer);
 
             if (results.size() == 0 || results.get(results.size() - 1).compareTo(myInt) == 1 || results.get(results.size() - 1).compareTo(myInt) == -1) {

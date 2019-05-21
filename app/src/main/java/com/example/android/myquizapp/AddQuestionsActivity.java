@@ -72,7 +72,7 @@ public class AddQuestionsActivity extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
 
                             myDoc.update(category, numQues);
-                            
+
                         }
                     });
 
