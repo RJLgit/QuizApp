@@ -1,5 +1,7 @@
 package com.example.android.myquizapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -21,6 +23,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
+import java.net.URISyntaxException;
 
 public class AddQuestionsActivity extends AppCompatActivity {
     private EditText editQuestion;
@@ -33,11 +41,18 @@ public class AddQuestionsActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference questionRef;
     private static final String TAG = "AddQuestionsActivity";
+    private static final int FILE_SELECT_CODE = 0;
+    private static final int FILE_SELECT_CODE_MUSIC = 1;
+    Uri uri;
+    String path;
+    StorageReference mStorageReference;
+    private int myQuesNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_questions);
+        mStorageReference = FirebaseStorage.getInstance().getReference();
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_add_questions);
         myToolbar.setTitle("The Ultimate Quiz App");
         setSupportActionBar(myToolbar);
@@ -65,6 +80,7 @@ public class AddQuestionsActivity extends AppCompatActivity {
         String falseThree = editFalseThree.getText().toString();
         final QuizQuestion myQuestion = new QuizQuestion(question, correct, falseOne, falseTwo, falseThree);
         final String category = spinner.getSelectedItem().toString();
+
         final CollectionReference myCollRef = questionRef.document(category).collection(category + "Questions");
         final DocumentReference myDoc = questionRef.document("QuestionMetaData");
         db.runTransaction(new Transaction.Function<Object>() {
@@ -78,7 +94,18 @@ public class AddQuestionsActivity extends AppCompatActivity {
                     transaction.update(myDoc, category, numQues);
                     DocumentReference addQuesDocRef = myCollRef.document(category + "Question" + numQues);
                     transaction.set(addQuesDocRef, myQuestion);
-
+                    if (category.equals("Pictures")) {
+                        Log.d(TAG, "apply: " + numQues);
+                        myQuesNum = numQues;
+                        showFileChooser();
+                        //File myFile = new File(path);
+           /* StorageReference myRef = mStorageReference.child("pictures/PictureQuestion21" + ".JPG");
+            UploadTask uploadTask = myRef.putFile(uri);*/
+                    }
+                    if (category.equals("Music")) {
+                        myQuesNum = numQues;
+                        showMusicFileChooser();
+                    }
                 }
                 return null;
             }
@@ -100,5 +127,80 @@ public class AddQuestionsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void showMusicFileChooser() {
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+
+            startActivityForResult(
+                    Intent.createChooser(intent, "Select a File to Upload"),
+                    FILE_SELECT_CODE_MUSIC);
+
+        } catch (android.content.ActivityNotFoundException ex) {
+            // Potentially direct the user to the Market with a Dialog
+            Toast.makeText(this, "Please install a File Manager.",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showFileChooser() {
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+
+            startActivityForResult(
+                    Intent.createChooser(intent, "Select a File to Upload"),
+                    FILE_SELECT_CODE);
+
+        } catch (android.content.ActivityNotFoundException ex) {
+            // Potentially direct the user to the Market with a Dialog
+            Toast.makeText(this, "Please install a File Manager.",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode) {
+            case FILE_SELECT_CODE:
+                if (resultCode == RESULT_OK) {
+
+
+
+                    uri = data.getData();
+                    StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + myQuesNum + ".JPG");
+                    UploadTask uploadTask = myRef.putFile(uri);
+                    try {
+                        path = FileUtils.getPath(this, uri);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case FILE_SELECT_CODE_MUSIC:
+                if (resultCode == RESULT_OK) {
+                    uri = data.getData();
+                    StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + myQuesNum + ".mp3");
+                    UploadTask uploadTask = myRef.putFile(uri);
+                    try {
+                        path = FileUtils.getPath(this, uri);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
