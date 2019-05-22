@@ -86,6 +86,11 @@ public class AddQuestionsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Object o) {
                 Toast.makeText(getApplicationContext(), "Question added", Toast.LENGTH_SHORT).show();
+                editQuestion.getText().clear();
+                editCorrect.getText().clear();
+                editFalseOne.getText().clear();
+                editFalseTwo.getText().clear();
+                editFalseThree.getText().clear();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
