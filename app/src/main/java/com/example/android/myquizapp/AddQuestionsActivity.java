@@ -1,19 +1,26 @@
 package com.example.android.myquizapp;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
 
 public class AddQuestionsActivity extends AppCompatActivity {
     private EditText editQuestion;
@@ -25,7 +32,7 @@ public class AddQuestionsActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference questionRef;
-
+    private static final String TAG = "AddQuestionsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,26 +67,33 @@ public class AddQuestionsActivity extends AppCompatActivity {
         final String category = spinner.getSelectedItem().toString();
         final CollectionReference myCollRef = questionRef.document(category).collection(category + "Questions");
         final DocumentReference myDoc = questionRef.document("QuestionMetaData");
-        myDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        db.runTransaction(new Transaction.Function<Object>() {
+
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    QuestionMetaData meta = documentSnapshot.toObject(QuestionMetaData.class);
-                    final int numQues = meta.getNumQuestions(category) + 1;
+            public Object apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+                DocumentSnapshot snapshot = transaction.get(myDoc);
+                if (snapshot.exists()) {
+                    QuestionMetaData metaData = snapshot.toObject(QuestionMetaData.class);
+                    int numQues = metaData.getNumQuestions(category) + 1;
+                    transaction.update(myDoc, category, numQues);
                     DocumentReference addQuesDocRef = myCollRef.document(category + "Question" + numQues);
-                    addQuesDocRef.set(myQuestion).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-
-                            myDoc.update(category, numQues);
-
-                        }
-                    });
-
-
+                    transaction.set(addQuesDocRef, myQuestion);
 
                 }
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Object>() {
+            @Override
+            public void onSuccess(Object o) {
+                Toast.makeText(getApplicationContext(), "Question added", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Question could not be added", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, e.getMessage());
             }
         });
+
     }
 }
