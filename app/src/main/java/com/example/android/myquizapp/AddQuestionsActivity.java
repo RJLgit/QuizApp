@@ -275,6 +275,14 @@ public class AddQuestionsActivity extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.transition.slide_in_top, R.transition.slide_out_bot);
+    }
+
+
     public static String getMimeType(Context context, Uri uri) {
         String extension;
 
