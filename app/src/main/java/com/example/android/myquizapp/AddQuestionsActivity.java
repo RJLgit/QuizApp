@@ -300,4 +300,10 @@ public class AddQuestionsActivity extends AppCompatActivity {
 
         return extension;
     }
+
+    public void returnToMainPage(View view) {
+        Intent myReturnIntent = new Intent(AddQuestionsActivity.this, MainActivity.class);
+        startActivity(myReturnIntent);
+        overridePendingTransition(R.transition.slide_in_top, R.transition.slide_out_bot);
+    }
 }
