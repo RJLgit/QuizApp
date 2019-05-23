@@ -34,17 +34,17 @@
 
             <TextView
                 android:id="@+id/questionLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="115dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="32dp"
                 android:text="Enter Question"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerAddQuestion" />
+                app:layout_constraintTop_toBottomOf="@+id/categoryLabelTextView" />
 
             <TextView
                 android:id="@+id/correctAnswerLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="115dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
@@ -54,8 +54,8 @@
 
             <TextView
                 android:id="@+id/falseAnswerOneLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="115dp"
+                android:layout_height="22dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="40dp"
                 android:text="1st False Answer"
@@ -64,33 +64,28 @@
 
             <Spinner
                 android:id="@+id/spinnerAddQuestion"
-                android:layout_width="367dp"
-                android:layout_height="44dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="210dp"
+                android:layout_height="39dp"
+                android:layout_marginStart="44dp"
                 android:entries="@array/category_arrays"
                 android:prompt="@string/category_prompt"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.714"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/my_toolbar_add_questions" />
+                app:layout_constraintBaseline_toBaselineOf="@+id/categoryLabelTextView"
+                app:layout_constraintStart_toEndOf="@+id/categoryLabelTextView" />
 
             <EditText
                 android:id="@+id/thirdFalseEntry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="44dp"
                 android:ems="10"
                 android:hint="Enter False Answer"
                 android:inputType="textPersonName"
-                app:layout_constraintStart_toEndOf="@+id/falseAnswerThreeLabel"
-                app:layout_constraintTop_toBottomOf="@+id/secondFalseEntry" />
+                app:layout_constraintBaseline_toBaselineOf="@+id/falseAnswerThreeLabel"
+                app:layout_constraintStart_toEndOf="@+id/falseAnswerThreeLabel" />
 
             <TextView
                 android:id="@+id/falseAnswerTwoLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="115dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="40dp"
@@ -103,23 +98,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="44dp"
-                android:layout_marginTop="28dp"
                 android:ems="10"
                 android:hint="Enter Question"
                 android:inputType="textPersonName"
-                app:layout_constraintStart_toEndOf="@+id/questionLabel"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerAddQuestion" />
+                app:layout_constraintBaseline_toBaselineOf="@+id/questionLabel"
+                app:layout_constraintStart_toEndOf="@+id/questionLabel" />
 
             <EditText
                 android:id="@+id/firstFalseEntry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="44dp"
                 android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="Enter False Answer"
 
                 android:inputType="textPersonName"
+                app:layout_constraintBaseline_toBaselineOf="@+id/falseAnswerOneLabel"
                 app:layout_constraintStart_toEndOf="@+id/falseAnswerOneLabel"
                 app:layout_constraintTop_toBottomOf="@+id/correctAnswerEntry" />
 
@@ -127,17 +122,18 @@
                 android:id="@+id/secondFalseEntry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="28dp"
+                android:layout_marginStart="44dp"
                 android:layout_marginTop="16dp"
                 android:ems="10"
                 android:hint="Enter False Answer"
                 android:inputType="textPersonName"
+                app:layout_constraintBaseline_toBaselineOf="@+id/falseAnswerTwoLabel"
                 app:layout_constraintStart_toEndOf="@+id/falseAnswerTwoLabel"
                 app:layout_constraintTop_toBottomOf="@+id/firstFalseEntry" />
 
             <TextView
                 android:id="@+id/falseAnswerThreeLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="115dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="40dp"
@@ -150,12 +146,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="44dp"
-                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="Enter Correct Answer"
                 android:inputType="textPersonName"
-                app:layout_constraintStart_toEndOf="@+id/correctAnswerLabel"
-                app:layout_constraintTop_toBottomOf="@+id/questionEntry" />
+                app:layout_constraintBaseline_toBaselineOf="@+id/correctAnswerLabel"
+                app:layout_constraintStart_toEndOf="@+id/correctAnswerLabel" />
 
             <Button
                 android:id="@+id/submitQuestionButton"
@@ -197,6 +192,17 @@
                 app:layout_constraintHorizontal_bias="0.24"
                 app:layout_constraintStart_toEndOf="@+id/addFile"
                 app:layout_constraintTop_toBottomOf="@+id/thirdFalseEntry" />
+
+            <TextView
+                android:id="@+id/categoryLabelTextView"
+                android:layout_width="115dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="Choose category"
+                android:textAlignment="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/my_toolbar_add_questions" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
