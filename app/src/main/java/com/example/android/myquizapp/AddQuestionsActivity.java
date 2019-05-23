@@ -15,6 +15,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -39,6 +40,7 @@ public class AddQuestionsActivity extends AppCompatActivity {
     private EditText editFalseOne;
     private EditText editFalseTwo;
     private EditText editFalseThree;
+    private TextView fileAddedTextView;
     private Spinner spinner;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -50,6 +52,8 @@ public class AddQuestionsActivity extends AppCompatActivity {
     String path;
     StorageReference mStorageReference;
     private int myQuesNum;
+    private boolean fileAdded;
+    private String isCorrectFileType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,7 @@ public class AddQuestionsActivity extends AppCompatActivity {
         editFalseTwo = findViewById(R.id.secondFalseEntry);
         editFalseThree = findViewById(R.id.thirdFalseEntry);
         spinner = findViewById(R.id.spinnerAddQuestion);
+        fileAddedTextView = findViewById(R.id.fileAddedTextView);
         mFirebaseAuth = FirebaseAuth.getInstance();
         questionRef = db.collection("QuizQuestions");
 
@@ -87,6 +92,12 @@ public class AddQuestionsActivity extends AppCompatActivity {
             Toast.makeText(AddQuestionsActivity.this, "Question not added. Please enter a value for all the entries above", Toast.LENGTH_LONG).show();
             return;
         }
+        if (category.equals("Music") || category.equals("Pictures")) {
+            if (!fileAdded) {
+                Toast.makeText(AddQuestionsActivity.this, "Please add a file before proceeding", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
 
         final CollectionReference myCollRef = questionRef.document(category).collection(category + "Questions");
         final DocumentReference myDoc = questionRef.document("QuestionMetaData");
@@ -98,21 +109,29 @@ public class AddQuestionsActivity extends AppCompatActivity {
                 if (snapshot.exists()) {
                     QuestionMetaData metaData = snapshot.toObject(QuestionMetaData.class);
                     int numQues = metaData.getNumQuestions(category) + 1;
-                    transaction.update(myDoc, category, numQues);
-                    DocumentReference addQuesDocRef = myCollRef.document(category + "Question" + numQues);
-                    transaction.set(addQuesDocRef, myQuestion);
+
                     if (category.equals("Pictures")) {
                         Log.d(TAG, "apply: " + numQues);
                         myQuesNum = numQues;
-                        showFileChooser();
+                        StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + myQuesNum + ".JPG");
+                        myRef.putFile(uri);
+
                         //File myFile = new File(path);
            /* StorageReference myRef = mStorageReference.child("pictures/PictureQuestion21" + ".JPG");
             UploadTask uploadTask = myRef.putFile(uri);*/
                     }
                     if (category.equals("Music")) {
                         myQuesNum = numQues;
-                        showMusicFileChooser();
+                        StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + myQuesNum + ".mp3");
+                        myRef.putFile(uri);
+
+
                     }
+
+                        transaction.update(myDoc, category, numQues);
+                        DocumentReference addQuesDocRef = myCollRef.document(category + "Question" + numQues);
+                        transaction.set(addQuesDocRef, myQuestion);
+
                 }
                 return null;
             }
@@ -125,6 +144,7 @@ public class AddQuestionsActivity extends AppCompatActivity {
                 editFalseOne.getText().clear();
                 editFalseTwo.getText().clear();
                 editFalseThree.getText().clear();
+                fileAddedTextView.setText("File Not Added");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -134,6 +154,17 @@ public class AddQuestionsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void addFileForQuestion(View v) {
+        String category = spinner.getSelectedItem().toString();
+        if (category.equals("Music")) {
+            showMusicFileChooser();
+        } else if (category.equals("Pictures")) {
+            showFileChooser();
+        } else {
+            Toast.makeText(AddQuestionsActivity.this, "Only add files for music and picture questions", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void showMusicFileChooser() {
@@ -154,6 +185,7 @@ public class AddQuestionsActivity extends AppCompatActivity {
             Toast.makeText(this, "Please install a File Manager.",
                     Toast.LENGTH_SHORT).show();
         }
+
     }
 
     private void showFileChooser() {
@@ -187,8 +219,17 @@ public class AddQuestionsActivity extends AppCompatActivity {
                     uri = data.getData();
                     String extension = AddQuestionsActivity.getMimeType(AddQuestionsActivity.this, uri);
                     Log.d(TAG, "onActivityResult: " + extension);
-
                     if (extension.equals("jpg")) {
+                        isCorrectFileType = "File accepted";
+                        fileAddedTextView.setText(isCorrectFileType);
+                        fileAdded = true;
+                    } else {
+                        isCorrectFileType = "File not accepted. Incorrect file type";
+                        fileAddedTextView.setText(isCorrectFileType);
+                    }
+
+
+                   /* if (extension.equals("jpg")) {
                         StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + myQuesNum + ".JPG");
                         UploadTask uploadTask = myRef.putFile(uri);
                         try {
@@ -197,8 +238,9 @@ public class AddQuestionsActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     } else {
+                        correctFile = false;
                         Toast.makeText(AddQuestionsActivity.this, "File type must have extension jpg. Question not added", Toast.LENGTH_LONG).show();
-                    }
+                    }*/
                 }
                 break;
             case FILE_SELECT_CODE_MUSIC:
@@ -207,6 +249,15 @@ public class AddQuestionsActivity extends AppCompatActivity {
                     String extension = AddQuestionsActivity.getMimeType(AddQuestionsActivity.this, uri);
                     Log.d(TAG, "onActivityResult: " + extension);
                     if (extension.equals("mp3")) {
+                        isCorrectFileType = "File accepted";
+                        fileAddedTextView.setText(isCorrectFileType);
+                        fileAdded = true;
+                    } else {
+                        isCorrectFileType = "File not accepted. Incorrect file type";
+                        fileAddedTextView.setText(isCorrectFileType);
+                    }
+
+                   /* if (extension.equals("mp3")) {
                         StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + myQuesNum + ".mp3");
                         UploadTask uploadTask = myRef.putFile(uri);
                         try {
@@ -215,8 +266,9 @@ public class AddQuestionsActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     } else {
+                        correctFile = false;
                         Toast.makeText(AddQuestionsActivity.this, "File type must have extension mp3. Question not added", Toast.LENGTH_LONG).show();
-                    }
+                    }*/
                 }
                 break;
         }
