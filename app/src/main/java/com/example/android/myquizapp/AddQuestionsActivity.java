@@ -1,5 +1,7 @@
 package com.example.android.myquizapp;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -73,13 +76,17 @@ public class AddQuestionsActivity extends AppCompatActivity {
 
 
     public void submitQuestion(View view) {
-        String question = editQuestion.getText().toString();
-        String correct = editCorrect.getText().toString();
-        String falseOne = editFalseOne.getText().toString();
-        String falseTwo = editFalseTwo.getText().toString();
-        String falseThree = editFalseThree.getText().toString();
+        String question = editQuestion.getText().toString().trim();
+        String correct = editCorrect.getText().toString().trim();
+        String falseOne = editFalseOne.getText().toString().trim();
+        String falseTwo = editFalseTwo.getText().toString().trim();
+        String falseThree = editFalseThree.getText().toString().trim();
         final QuizQuestion myQuestion = new QuizQuestion(question, correct, falseOne, falseTwo, falseThree);
         final String category = spinner.getSelectedItem().toString();
+        if (question.equals("") || correct.equals("") || falseOne.equals("") || falseTwo.equals("") || falseThree.equals("")) {
+            Toast.makeText(AddQuestionsActivity.this, "Question not added. Please enter a value for all the entries above", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         final CollectionReference myCollRef = questionRef.document(category).collection(category + "Questions");
         final DocumentReference myDoc = questionRef.document("QuestionMetaData");
@@ -139,7 +146,7 @@ public class AddQuestionsActivity extends AppCompatActivity {
         try {
 
             startActivityForResult(
-                    Intent.createChooser(intent, "Select a File to Upload"),
+                    Intent.createChooser(intent, "Select a .MP3 File to Upload"),
                     FILE_SELECT_CODE_MUSIC);
 
         } catch (android.content.ActivityNotFoundException ex) {
@@ -159,7 +166,7 @@ public class AddQuestionsActivity extends AppCompatActivity {
         try {
 
             startActivityForResult(
-                    Intent.createChooser(intent, "Select a File to Upload"),
+                    Intent.createChooser(intent, "Select a .JPG File to Upload"),
                     FILE_SELECT_CODE);
 
         } catch (android.content.ActivityNotFoundException ex) {
@@ -178,29 +185,59 @@ public class AddQuestionsActivity extends AppCompatActivity {
 
 
                     uri = data.getData();
-                    StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + myQuesNum + ".JPG");
-                    UploadTask uploadTask = myRef.putFile(uri);
-                    try {
-                        path = FileUtils.getPath(this, uri);
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
+                    String extension = AddQuestionsActivity.getMimeType(AddQuestionsActivity.this, uri);
+                    Log.d(TAG, "onActivityResult: " + extension);
+
+                    if (extension.equals("jpg")) {
+                        StorageReference myRef = mStorageReference.child("pictures/PictureQuestion" + myQuesNum + ".JPG");
+                        UploadTask uploadTask = myRef.putFile(uri);
+                        try {
+                            path = FileUtils.getPath(this, uri);
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(AddQuestionsActivity.this, "File type must have extension jpg. Question not added", Toast.LENGTH_LONG).show();
                     }
                 }
                 break;
             case FILE_SELECT_CODE_MUSIC:
                 if (resultCode == RESULT_OK) {
                     uri = data.getData();
-                    StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + myQuesNum + ".mp3");
-                    UploadTask uploadTask = myRef.putFile(uri);
-                    try {
-                        path = FileUtils.getPath(this, uri);
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
+                    String extension = AddQuestionsActivity.getMimeType(AddQuestionsActivity.this, uri);
+                    Log.d(TAG, "onActivityResult: " + extension);
+                    if (extension.equals("mp3")) {
+                        StorageReference myRef = mStorageReference.child("Music/MusicQuestion" + myQuesNum + ".mp3");
+                        UploadTask uploadTask = myRef.putFile(uri);
+                        try {
+                            path = FileUtils.getPath(this, uri);
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(AddQuestionsActivity.this, "File type must have extension mp3. Question not added", Toast.LENGTH_LONG).show();
                     }
                 }
                 break;
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+    public static String getMimeType(Context context, Uri uri) {
+        String extension;
+
+        //Check uri format to avoid null
+        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            //If scheme is a content
+            final MimeTypeMap mime = MimeTypeMap.getSingleton();
+            extension = mime.getExtensionFromMimeType(context.getContentResolver().getType(uri));
+        } else {
+            //If scheme is a File
+            //This will replace white spaces with %20 and also other special characters. This will avoid returning null values on file name with spaces and special characters.
+            extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(new File(uri.getPath())).toString());
+
+        }
+
+        return extension;
     }
 }
